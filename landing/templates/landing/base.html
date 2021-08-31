@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Snab</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <link rel="stylesheet" href="{% static 'landing/mdbootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/mdbootstrap/css/mdb.min.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/mdbootstrap/css/style.min.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/main.css' %}">
+
+    <style>
+        body {
+            background-image: url({% static 'landing/body-bg.jpg' %});
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            color: white;
+            min-height: 100vh;
+        }
+
+    </style>
+
+</head>
+
+{% include 'landing/header.html' %}
+<body>
+
+{% include 'landing/navbar.html' %}
+
+{% block content %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+</body>
+</html>
