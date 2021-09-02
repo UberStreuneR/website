@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <title>Snab</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-    <link rel="stylesheet" href="{% static 'landing/mdbootstrap/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'landing/mdbootstrap/css/mdb.min.css' %}">
-    <link rel="stylesheet" href="{% static 'landing/mdbootstrap/css/style.min.css' %}">
-    <link rel="stylesheet" href="{% static 'landing/main.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/css/mdb.min.css' %}">
+{#    <link rel="stylesheet" href="{% static 'landing//css/mdb.dark.min.css' %}">#}
+{#    <link rel="stylesheet" href="{% static 'landing//css/mdb.rtl.min.css' %}">#}
+
 
     <style>
         body {
@@ -31,7 +31,8 @@
 {% block content %}
 {% endblock %}
 
-{% block footer %}
-{% endblock %}
+{% include 'landing/footer.html' %}
+
+<script type="text/javascript" src="{% static 'landing/js/mdb.min.js' %}"></script>
 </body>
 </html>
