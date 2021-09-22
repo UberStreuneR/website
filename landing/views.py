@@ -5,7 +5,43 @@ from django.views.generic import View
 
 class HomeView(View):
     def get(self, *args, **kwargs):
-        return render(self.request, "landing/home.html")
+        context = {
+            "title": "home"
+        }
+        return render(self.request, "landing/home.html", context=context)
+
+
+class PriceListsView(View):
+    def get(self, *args, **kwargs):
+        context = {
+            "title": "pricelist"
+        }
+        return render(self.request, "landing/prices.html", context=context)
+
+
+class TrademarksView(View):
+    def get(self, *args, **kwargs):
+        context = {
+            "title": "trademarks"
+        }
+        return render(self.request, "landing/trademarks.html", context=context)
+
+
+class AboutView(View):
+    def get(self, *args, **kwargs):
+        context = {
+            "title": "about"
+        }
+        return render(self.request, "landing/about.html", context=context)
+
+
+class ContactsView(View):
+    def get(self, *args, **kwargs):
+        context = {
+            "title": "contacts"
+        }
+        return render(self.request, "landing/contacts.html", context=context)
+
 
 class TestView(View):
     def get(self, *args, **kwargs):

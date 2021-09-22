@@ -1,49 +1,96 @@
 {% load static %}
 
-
+<link rel="stylesheet" href="{% static 'landing/css/main.css' %}">
+<button class="sticky-top" id="side-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+    <span class="fas fa-bars fa-2x border-3 border border-secondary" style="color: black; background-color: white; padding: 10px;"></span>
+</button>
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
   <!-- Container wrapper -->
-  <div class="container">
+  <div class="container d-flex justify-content-center">
+
     <!-- Toggle button -->
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-mdb-toggle="collapse"
-      data-mdb-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <i class="fas fa-bars"></i>
-    </button>
+{#    <button#}
+{#      class="navbar-toggler"#}
+{#      type="button"#}
+{#      data-mdb-toggle="collapse"#}
+{#      data-mdb-target="#navbarSupportedContent"#}
+{#      aria-controls="navbarSupportedContent"#}
+{#      aria-expanded="false"#}
+{#      aria-label="Toggle navigation"#}
+{#    >#}
+{#      <i class="fas fa-bars"></i>#}
+{#    </button>#}
 
     <!-- Collapsible wrapper -->
-    <div class="collapse navbar-collapse d-flex justify-content-center" id="navbarSupportedContent">
+{#    <div class="collapse navbar-collapse" id="navbarSupportedContent">#}
       <!-- Navbar brand -->
-      <a class="navbar-brand mt-2 mt-lg-0" href="#">
-        <i class="fas fa-home"></i>
+      <a class="navbar-brand mt-2 mt-lg-0" href="/">
+        <i class="fas fa-home {% if title == 'home' %}active{% endif %}"></i>
       </a>
       <!-- Left links -->
       <ul class="navbar-nav mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="#">Прайс-листы</a>
+          <a class="nav-link {% if title == 'pricelist' %}active{% endif %}" href="{% url 'prices' %}">Прайс-листы</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Торговые марки</a>
+          <a class="nav-link {% if title == 'trademarks' %}active{% endif %}" href="{% url 'trademarks' %}">Торговые марки</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">О компании</a>
+          <a class="nav-link {% if title == 'about' %}active{% endif %}" href="{% url 'about' %}">О компании</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Контакты</a>
+          <a class="nav-link {% if title == 'contacts' %}active{% endif %}" href="{% url 'contacts' %}">Контакты</a>
         </li>
       </ul>
       <!-- Left links -->
     </div>
     <!-- Collapsible wrapper -->
 
-  </div>
+{#  </div>#}
   <!-- Container wrapper -->
 </nav>
 <!-- Navbar -->
+
+<!-- SideNav -->
+
+<div class="offcanvas offcanvas-start navbar-dark bg-dark w-auto" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title text-white" id="offcanvasNavbarLabel">Меню</h5>
+    <button type="button" class="btn-close text-reset bg-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="/"><span class="fas fa-home fa-lg"></span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/">Прайс-листы</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/">Торговые марки</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/">О компании</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/">Контакты</a>
+      </li>
+      {% comment %}<li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="offcanvasNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Dropdown
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="offcanvasNavbarDropdown">
+          <li><a class="dropdown-item" href="#">Action</a></li>
+          <li><a class="dropdown-item" href="#">Another action</a></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li><a class="dropdown-item" href="#">Something else here</a></li>
+        </ul>
+      </li>{% endcomment %}
+    </ul>
+  </div>
+</div>
+
+</div>

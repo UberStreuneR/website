@@ -3,27 +3,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Snab</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-    <link rel="stylesheet" href="{% static 'landing/css/mdb.min.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+    {% comment %}<link rel="stylesheet" href="{% static 'landing/css/mdb.min.css' %}">{% endcomment %}
 {#    <link rel="stylesheet" href="{% static 'landing//css/mdb.dark.min.css' %}">#}
 {#    <link rel="stylesheet" href="{% static 'landing//css/mdb.rtl.min.css' %}">#}
 
 
     <style>
         body {
-            background-image: url({% static 'landing/body-bg.jpg' %});
+        {% comment %}background-image: url({% static 'landing/body-bg.jpg' %});{% endcomment %}
+            background-color: white;
             background-repeat: no-repeat;
             background-size: 100% 100%;
-            color: white;
             min-height: 100vh;
+            font-size: 16px;
+            box-sizing: border-box;
         }
 
     </style>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
-{% include 'landing/header.html' %}
+{% comment %}{% include 'landing/header.html' %}{% endcomment %}
 <body>
 
 {% include 'landing/navbar.html' %}
@@ -33,6 +38,8 @@
 
 {% include 'landing/footer.html' %}
 
-<script type="text/javascript" src="{% static 'landing/js/mdb.min.js' %}"></script>
+{% comment %}<script type="text/javascript" src="{% static 'landing/js/mdb.min.js' %}"></script>{% endcomment %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+
 </body>
 </html>
