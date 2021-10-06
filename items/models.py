@@ -4,13 +4,21 @@ from transliterate import translit
 from django.utils.text import slugify
 
 ITEM_CATEGORIES = (
-    ('BT', 'BLUE-THINGS'),
-    ('B', 'BOLTS'),
-    ('C', 'CORDS'),
-    ('P', 'PIPES'),
-    ('R', 'RIVETS'),
-    ('BL', 'BOILERS'),
+    ('BLUE-THINGS', 'BLUE-THINGS'),
+    ('BOLTS', 'BOLTS'),
+    ('CORDS', 'CORDS'),
+    ('PIPES', 'PIPES'),
+    ('RIVETS', 'RIVETS'),
+    ('BOILERS', 'BOILERS'),
 
+)
+
+ITEM_SUBCATEGORIES = (
+    ('GAS-BOILERS', 'GAS-BOILERS'),
+    ('ELECTRIC-BOILERS', 'ELECTRIC-BOILERS'),
+    ('PELLET-BOILERS', 'PELLET-BOILERS'),
+    ('WATER-HEATERS', 'WATER-HEATERS'),
+    # THE REST OF THEM
 )
 
 STATUS_CHOICES = (
@@ -22,7 +30,8 @@ STATUS_CHOICES = (
 class Item(models.Model):
     name = models.CharField(max_length=50)
     price = models.IntegerField()
-    category = models.CharField(choices=ITEM_CATEGORIES, max_length=2, blank=True)
+    category = models.CharField(choices=ITEM_CATEGORIES, max_length=20, blank=True)
+    subcategory = models.CharField(choices=ITEM_SUBCATEGORIES, max_length=20, blank=True)
     status = models.CharField(choices=STATUS_CHOICES, max_length=2, blank=True)
     slug = models.SlugField(blank=True)
     description = models.TextField(blank=True)

@@ -1,9 +1,5 @@
-{% extends 'items/base.html' %}
-{% load static %}
-{% block items %}
-<div class="d-flex items-container">
-    <div class="items-sidebar">
-        <div class="accordion accordion-flush" id="accordionFlushExample">
+<div class="items-sidebar">
+    <div class="accordion accordion-flush" id="accordionFlushExample">
             <div class="accordion-item">
                 <h2 class="accordion-header" id="flush-headingOne">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
@@ -12,10 +8,10 @@
                 </h2>
                 <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                     <div class="accordion-body">
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Газовые котлы</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Электрические котлы</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Пеллетные котлы</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Водонагреватели</a></div>
+                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="{% url 'subcategories' 'boilers' 'gas-boilers' %}">Газовые котлы</a></div>
+                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="{% url 'subcategories' 'boilers' 'electric-boilers' %}">Электрические котлы</a></div>
+                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="{% url 'subcategories' 'boilers' 'pellet-boilers' %}">Пеллетные котлы</a></div>
+                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="{% url 'subcategories' 'boilers' 'water-heaters' %}">Водонагреватели</a></div>
                     </div>
                 </div>
             </div>
@@ -138,68 +134,5 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="items">
-        <div class="row row-cols-2 row-cols-md-2 g-4">
-            <div style="max-width: 520px;">
-                <div class="card">
-                    <div class="card-header text-danger">Нет в наличии</div>
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="{% static 'landing/images/temp/boiler.jpg' %}" style="width:120px; height: 100%; padding: 10px;" alt="">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                              <h5 class="card-title">Название оборудования</h5>
-                              <p class="card-text">Краткая информация или описание.</p>
-                              <h5 class="price">61 000 руб.</h5>
-                              <a href="#" class="btn btn-primary">Заказать товар</a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-              </div>
-            <div style="max-width: 520px;">
-                <div class="card">
-                    <div class="card-header text-success">Есть в наличии</div>
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="{% static 'landing/images/temp/boiler.jpg' %}" style="width:120px; height: 100%; padding: 10px;" alt="">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                              <h5 class="card-title">Название оборудования</h5>
-                              <p class="card-text">Краткая информация или описание. А что если описание не совсем краткое?</p>
-                              <h5 class="price">61 000 руб.</h5>
-                              <a href="#" class="btn btn-primary">Заказать товар</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-              </div>
-              <div style="max-width: 520px;">
-                <div class="card">
-                    <div class="card-header text-secondary">Ожидается</div>
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="{% static 'landing/images/temp/boiler.jpg' %}" style="width:120px; height: 100%; padding: 10px;" alt="">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                              <h5 class="card-title">Название оборудования</h5>
-                              <p class="card-text">Краткая информация или описание.</p>
-                              <h5 class="price">61 000 руб.</h5>
-                              <a href="#" class="btn btn-primary">Заказать товар</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-              </div>
-        </div>
     </div>
 </div>
-
-
-{% endblock %}

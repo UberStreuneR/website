@@ -1,0 +1,40 @@
+{% extends 'items/base.html' %}
+{% load static %}
+{% block items %}
+<div class="items-container d-flex">
+    {% include 'items/accordion.html' %}
+    <div class="items" style="margin-left: 10px;">
+        <h1 style="margin-bottom: 10px;">{{ name }}</h1>
+        {% for item in items %}
+        <div style="max-width: 800px; margin-bottom: 10px;">
+            <div class="card">
+                {% if item.status == 'A' %}
+                    <div class="card-header text-success">Есть в наличии</div>
+                {% endif %}
+                {% if item.status == 'P' %}
+                    <div class="card-header text-secondary">Ожидается</div>
+                {% endif %}
+                {% if item.status == 'N' %}
+                    <div class="card-header text-danger">Нет в наличии</div>
+                {% endif %}
+                <div class="row g-0">
+                    <div class="col-md-4 text-center">
+                        <img src="{% static 'landing/images/temp/boiler.jpg' %}" style="width:120px; height: 100%; padding: 10px;" alt="">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                          <h5 class="card-title">{{ item.name }}</h5>
+                          <p class="card-text">{{ item.description}}</p>
+                          <h5 class="price">{{ item.price }} руб.</h5>
+                          <a href="#" class="btn btn-primary">Заказать товар</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}
