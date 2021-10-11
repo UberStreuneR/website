@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import View
+from .models import Partner
 # Create your views here.
 
 
@@ -21,8 +22,10 @@ class PriceListsView(View):
 
 class TrademarksView(View):
     def get(self, *args, **kwargs):
+        partners = Partner.objects.all()
         context = {
-            "title": "trademarks"
+            "title": "trademarks",
+            'partners': partners
         }
         return render(self.request, "landing/trademarks.html", context=context)
 
@@ -43,6 +46,15 @@ class ContactsView(View):
         return render(self.request, "landing/contacts.html", context=context)
 
 
+class CartView(View):
+    def get(self, *args, **kwargs):
+        context = {
+            "title": "cart"
+        }
+        return render(self.request, "landing/cart.html", context=context)
+
+
 class TestView(View):
     def get(self, *args, **kwargs):
+
         return render(self.request, "landing/test.html")

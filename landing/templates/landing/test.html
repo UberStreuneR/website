@@ -1,68 +1,13 @@
+{% extends 'landing/base.html' %}
 {% load static %}
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% block content %}
 
-    <title>Hello, world!</title>
-    <script src="{% static 'landing/script.js' %}" defer></script>
-      <link rel="stylesheet" href="{% static 'landing/test.css' %}">
-  </head>
-  <body>
-    <div class="header">
-        <div class="dropdown" data-dropdown>
-            <button class="link" data-dropdown-button>Information</button>
-            <div class="dropdown-menu information-grid">
-                <div>
-                    <div class="dropdown-heading">Free Tutorials</div>
-                    <div class="dropdown-links">
-                        <a href="#" class="link">All</a>
-                        <a href="#" class="link">Latest</a>
-                        <a href="#" class="link">Popular</a>
-                    </div>
-                </div>
-                <div>
-                    <div class="dropdown-heading">Courses</div>
-                    <div class="dropdown-links">
-                        <a href="#" class="link">JS</a>
-                        <a href="#" class="link">CSS</a>
-                        <a href="#" class="link">React</a>
-                    </div>
-                </div>
-                <div>
-                    <div class="dropdown-heading">Blog</div>
-                    <div class="dropdown-links">
-                        <a href="#" class="link">All</a>
-                        <a href="#" class="link">Latest</a>
-                        <a href="#" class="link">Popular</a>
-                    </div>
-                </div>
-                <div>
-                    <div class="dropdown-heading">Other</div>
-                    <div class="dropdown-links">
-                        <a href="#" class="link">Twitter</a>
-                        <a href="#" class="link">Newsletter</a>
-                        <a href="#" class="link">Discord</a>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <a href="#" class="link">Pricing</a>
-        <div class="dropdown" data-dropdown>
-            <button class="link" data-dropdown-button>Login</button>
-            <div class="dropdown-menu">
-                <form class="login-form">
-                    <label for="email">Email</label>
-                    <input type="email" name="email" id="email">
-                    <label for="password">Password</label>
-                    <input type="password" name="password" id="password">
-                    <button type="submit">Login</button>
-                </form>
-            </div>
-        </div>
-    </div>
-  </body>
-</html>
+    <a tabindex="0" class="btn btn-lg btn-danger" role="button" data-bs-toggle="popover" data-bs-trigger="focus" title="Dismissible popover" data-bs-content="And here's some amazing content. It's very engaging. Right?">Dismissible popover</a>
+    <h1>{{ request.user }}</h1>
+    <script>
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+          return new bootstrap.Popover(popoverTriggerEl)
+        });
+        console.log("I am here!");</script>
+{% endblock %}

@@ -1,2 +1,24 @@
 {% extends 'landing/base.html' %}
 {% load static %}
+{% block content %}
+<div class="row row-cols-3 g-3 m-5">
+    {% comment %}{% for partner in partners %}
+    <div class="col">
+        <div class="card">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="{{ partner.image.url }}" style="width:120px; height: 100%; padding: 10px;" alt="">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ partner.name }}</h5>
+                      <p class="card-text">{{ partner.description}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}{% endcomment %}
+</div>
+{% endblock %}
+{% load static %}

@@ -36,6 +36,9 @@ class Item(models.Model):
     slug = models.SlugField(blank=True)
     description = models.TextField(blank=True)
 
+    def __str__(self):
+        return f"{self.name}, {self.category}, {self.subcategory}"
+
     def get_absolute_url(self):
         return reverse("comm", kwargs={'slug': self.slug})
 

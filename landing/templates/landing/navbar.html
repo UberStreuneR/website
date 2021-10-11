@@ -5,7 +5,7 @@
     <span class="fas fa-bars fa-2x border-3 border border-secondary" style="color: black; background-color: white; padding: 10px;"></span>
 </button>
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top" style="height: 60px;">
   <!-- Container wrapper -->
   <div class="container d-flex justify-content-center">
 
@@ -25,8 +25,8 @@
     <!-- Collapsible wrapper -->
 {#    <div class="collapse navbar-collapse" id="navbarSupportedContent">#}
       <!-- Navbar brand -->
-      <a class="navbar-brand mt-2 mt-lg-0" href="/">
-        <i class="fas fa-home {% if title == 'home' %}active{% endif %}"></i>
+      <a class="navbar-brand mt-lg-0" href="/">
+        <i class="fas fa-home {% if title == 'home' %}fa-lg active{% endif %} nav-icon"></i>
       </a>
       <!-- Left links -->
       <ul class="navbar-nav mb-2 mb-lg-0">
@@ -42,7 +42,13 @@
         <li class="nav-item">
           <a class="nav-link {% if title == 'contacts' %}active{% endif %}" href="{% url 'contacts' %}">Контакты</a>
         </li>
+
+      {% comment %}<span class="fas fa-shopping-cart fa-lg nav-icon"></span>{% endcomment %}
       </ul>
+      <a class="mt-lg-0 text-decoration-none text-white" href="{% url 'cart' %}" style="padding-left: 10px;">
+        <span class="fas fa-shopping-cart {% if title == 'cart' %}fa-lg active{% endif %} nav-icon"></span>
+        {% comment %}<span class="badge red z-depth-1 mr-1"> {{ request.user|cart_item_count }} </span>{% endcomment %}
+      </a>
       <!-- Left links -->
     </div>
     <!-- Collapsible wrapper -->
@@ -62,7 +68,7 @@
   <div class="offcanvas-body">
     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
       <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="/"><span class="fas fa-home fa-lg"></span></a>
+        <a class="nav-link active" aria-current="page" href="/"><span class="fas fa-home fa-lg nav-icon"></span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/">Прайс-листы</a>
@@ -76,6 +82,7 @@
       <li class="nav-item">
         <a class="nav-link" href="/">Контакты</a>
       </li>
+
       {% comment %}<li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="offcanvasNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
           Dropdown

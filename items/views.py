@@ -9,11 +9,21 @@ equivalents = {
     'water-heaters': 'Водонагреватели',
 }
 
+categories = {
+    'boilers': 'Котлы',
+    'blue-things': 'Синие штуки',
+    'bolts': 'Болты',
+    'cords': 'Шнуры',
+    'pipes': 'Трубы',
+    'rivets': 'Заклепки',
+}
+
 class CategoryListView(View):
     def get(self, *args, **kwargs):
         items = Item.objects.filter(category=kwargs['category'].upper())
         context = {
-            'items': items
+            'items': items,
+            'name': categories[kwargs['category']]
         }
         return render(self.request, "items/categories.html", context)
 

@@ -27,13 +27,16 @@ html {
 .items {
     width: 100%;
 }
-.fa-home {
+.nav-icon {
     opacity: 0.5;
     transition: opacity 150ms linear;
 }
-.fa-home:hover{
+.nav-icon:hover{
     opacity: 0.75;
 }
-.fa-home.active {
+.nav-icon.active {
     opacity: 1;
+}
+.nav-link.active {
+    font-size: 17px;
 }
