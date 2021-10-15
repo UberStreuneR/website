@@ -1,6 +1,7 @@
 {% extends 'items/base.html' %}
 {% load static %}
 {% block items %}
+
 <div class="d-flex items-container">
     {% include 'items/accordion.html' %}
     <div class="items" style="margin-left: 10px;">
@@ -28,10 +29,9 @@
                               <p class="card-text">{{ item.description}}</p>
                               <h5 class="price">{{ item.price }} руб.</h5>
                               {% if forloop.counter == 1 %}
-                                  <a tabindex="0" class="btn btn-primary" role="button" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Добавление товара" data-bs-content="Чтобы посмотреть все добавленные товары, кликните на иконку корзины вверху">Добавить</a>
+                                  <a tabindex="0" href="{% url 'add-to-cart' item.slug %}" class="btn btn-primary" role="button" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Добавление товара" data-bs-content="Чтобы посмотреть все добавленные товары, кликните на иконку корзины вверху">Добавить</a>
                               {% else %}
-                                  <a href="#" class="btn btn-primary">Добавить</a>
-
+                                  <a href="{% url 'add-to-cart' item.slug %}" class="btn btn-primary">Добавить</a>
                               {% endif %}
                             </div>
                         </div>
@@ -48,7 +48,6 @@
     var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
       return new bootstrap.Popover(popoverTriggerEl)
     });
-    console.log("I am here!");
 </script>
 
 {% endblock %}

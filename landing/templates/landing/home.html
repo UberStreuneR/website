@@ -3,10 +3,10 @@
 
 {% block content %}
     <div class="d-flex justify-content-center mt-4" style="height: 400px;">
-        <a href="{% url 'categories' 'blue-things' %}" class="m-1 border-3 border border-dark text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/bg1.jpg' %}); background-repeat: no-repeat; height: 100%; width: 170px;">
-            <div class="m-2 bg-dark p-2 text-white text-center">Синие штуки</div>
+        <a href="{% url 'company' 'Danfoss' %}" class="m-1 border-3 border border-dark text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/danfoss.png' %}); background-repeat: no-repeat; height: 45%; width: 300px;">
+            {% comment %}<div class="m-2 bg-dark p-2 text-white text-center">Danfoss</div>{% endcomment %}
         </a>
-        <a href="#" class="m-1 border-3 border border-dark text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/bg2.jpg' %}); background-repeat: no-repeat; height: 100%; width: 170px;">
+        {% comment %}<a href="#" class="m-1 border-3 border border-dark text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/bg2.jpg' %}); background-repeat: no-repeat; height: 100%; width: 170px;">
             <div class="m-2 bg-dark p-2 text-white text-center">Болты</div>
         </a>
         <a href="#" class="m-1 border-3 border border-dark text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/bg3.jpg' %}); background-repeat: no-repeat; height: 100%; width: 170px;">
@@ -20,6 +20,6 @@
         </a>
         <a href="{% url 'categories' 'boilers' %}" class="m-1 border-3 border border-dark text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/bg6.jpg' %}); background-repeat: no-repeat; height: 100%; width: 170px;">
             <div class="m-2 bg-dark p-2 text-white text-center">Котлы</div>
-        </a>
+        </a>{% endcomment %}
     </div>
 {% endblock %}

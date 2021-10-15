@@ -1,6 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import View
-from .models import Partner
+from .models import Partner, Order
+from clients.models import Client
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages
+
 # Create your views here.
 
 
@@ -48,13 +52,25 @@ class ContactsView(View):
 
 class CartView(View):
     def get(self, *args, **kwargs):
+        try:
+            client = self.request.user.client
+        except:
+            device = self.request.COOKIES['device']
+            client, created = Client.objects.get_or_create(device=device)
+        try:
+            order = Order.objects.get(client=client, complete=False)
+        except ObjectDoesNotExist:
+            messages.error(self.request, "Добавь сначала что-нибудь в корзину")
+            return redirect('/')
         context = {
-            "title": "cart"
+            "title": "cart",
+            'order': order
         }
         return render(self.request, "landing/cart.html", context=context)
 
 
 class TestView(View):
     def get(self, *args, **kwargs):
+        print(self.request.GET)
 
         return render(self.request, "landing/test.html")

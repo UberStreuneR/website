@@ -24,9 +24,13 @@
                     <div class="col-md-8">
                         <div class="card-body">
                           <h5 class="card-title">{{ item.name }}</h5>
-                          <p class="card-text">{{ item.description}}</p>
+                          <p class="card-text">{{ item.description }}</p>
                           <h5 class="price">{{ item.price }} руб.</h5>
-                          <a href="#" class="btn btn-primary">Заказать товар</a>
+                          {% if forloop.counter == 1 %}
+                              <a tabindex="0" href="{% url 'add-to-cart' item.slug %}" class="btn btn-primary" role="button" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Добавление товара" data-bs-content="Чтобы посмотреть все добавленные товары, кликните на иконку корзины вверху">Добавить</a>
+                          {% else %}
+                              <a href="{% url 'add-to-cart' item.slug %}" class="btn btn-primary">Добавить</a>
+                          {% endif %}
                         </div>
                     </div>
                 </div>

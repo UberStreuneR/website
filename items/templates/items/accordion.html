@@ -1,138 +1,20 @@
 <div class="items-sidebar">
     <div class="accordion accordion-flush" id="accordionFlushExample">
+            {% for category in categories %}
             <div class="accordion-item">
-                <h2 class="accordion-header" id="flush-headingOne">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                        Оборудование
+                <h2 class="accordion-header" id="flush-heading{{ forloop.counter }}">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="flush-collapse{{ forloop.counter }}">
+                        {{ category.name }}
                     </button>
                 </h2>
-                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                <div id="flush-collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{ forloop.counter }}" data-bs-parent="#accordionFlushExample">
                     <div class="accordion-body">
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="{% url 'subcategories' 'boilers' 'gas-boilers' %}">Газовые котлы</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="{% url 'subcategories' 'boilers' 'electric-boilers' %}">Электрические котлы</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="{% url 'subcategories' 'boilers' 'pellet-boilers' %}">Пеллетные котлы</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="{% url 'subcategories' 'boilers' 'water-heaters' %}">Водонагреватели</a></div>
+                        {% for subcategory in category.subcategories.all %}
+                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="{% url 'categories' company %}?category={{ category.name }}&subcategory={{ subcategory.name }}">{{ subcategory.name }}</a></div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="flush-headingTwo">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                        Очистка воды и водоподготовка
-                    </button>
-                </h2>
-                <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Магнитные преобразователи</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Обезжелезиватели</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Станции водоподготовки</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Умягчители воды</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Фильтры для воды</a></div>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="flush-headingThree">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                        Автоматика и управление
-                    </button>
-                </h2>
-                <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Контроллеры</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Терморегуляторы</a></div>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="flush-headingFour">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
-                        Радиаторы
-                    </button>
-                </h2>
-                <div id="flush-collapseFour" class="accordion-collapse collapse" aria-labelledby="flush-headingFour" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Алюминиевые</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Биметаллические</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Внутрипольные</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Стальные</a></div>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="flush-headingFive">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFive" aria-expanded="false" aria-controls="flush-collapseFive">
-                        Насосы
-                    </button>
-                </h2>
-                <div id="flush-collapseFive" class="accordion-collapse collapse" aria-labelledby="flush-headingFive" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Рассольно-водяные тепловые насосы</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Мощные тепловые насосы</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Насосные станции</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Насосы для скважин</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Циркуляционные насосы</a></div>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="flush-headingSix">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSix" aria-expanded="false" aria-controls="flush-collapseSix">
-                        Автономная канализация
-                    </button>
-                </h2>
-                <div id="flush-collapseSix" class="accordion-collapse collapse" aria-labelledby="flush-headingSix" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Genesis</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Sani</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Канализация Bio</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Канализация Тусон</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Канализация Юниджен</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Канализация Юниджен</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Эргобокс</a></div>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="flush-headingSeven">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSeven" aria-expanded="false" aria-controls="flush-collapseSeven">
-                        Арматура и коллекторы
-                    </button>
-                </h2>
-                <div id="flush-collapseSeven" class="accordion-collapse collapse" aria-labelledby="flush-headingSeven" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Запорная арматура</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Коллекторы</a></div>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="flush-headingEight">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseEight" aria-expanded="false" aria-controls="flush-collapseEight">
-                        Баки и ёмкости
-                    </button>
-                </h2>
-                <div id="flush-collapseEight" class="accordion-collapse collapse" aria-labelledby="flush-headingEight" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Баки для водоснабжения</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Баки для отопления</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Емкости для воды</a></div>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="flush-headingNine">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseNine" aria-expanded="false" aria-controls="flush-collapseNine">
-                        Электрооборудование
-                    </button>
-                </h2>
-                <div id="flush-collapseNine" class="accordion-collapse collapse" aria-labelledby="flush-headingNine" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Бесперебойное питание</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Защитные устройства</a></div>
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="#">Стабилизаторы</a></div>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
     </div>
 </div>

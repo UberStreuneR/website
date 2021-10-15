@@ -17,6 +17,7 @@ class Partner(models.Model):
 class OrderItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
+    ordered = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.quantity} of {self.item.name}"
@@ -30,6 +31,7 @@ class Order(models.Model):
     date = models.DateTimeField(default=timezone.now)
     items = models.ManyToManyField(OrderItem, blank=True)
     price = models.IntegerField(default=0)
+    complete = models.BooleanField(default=False)
 
     def get_total(self):
         total = 0

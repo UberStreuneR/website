@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load cart_template_tags %}
 <link rel="stylesheet" href="{% static 'landing/css/main.css' %}">
 <button class="sticky-top" id="side-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
     <span class="fas fa-bars fa-2x border-3 border border-secondary" style="color: black; background-color: white; padding: 10px;"></span>
@@ -47,7 +47,7 @@
       </ul>
       <a class="mt-lg-0 text-decoration-none text-white" href="{% url 'cart' %}" style="padding-left: 10px;">
         <span class="fas fa-shopping-cart {% if title == 'cart' %}fa-lg active{% endif %} nav-icon"></span>
-        {% comment %}<span class="badge red z-depth-1 mr-1"> {{ request.user|cart_item_count }} </span>{% endcomment %}
+        <span class="badge rounded-pill {% if request|cart_item_count > 0 %}bg-danger{% else %}bg-dark{% endif %}"> {{ request|cart_item_count }} </span>
       </a>
       <!-- Left links -->
     </div>

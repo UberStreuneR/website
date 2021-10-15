@@ -1,0 +1,12 @@
+{% extends 'landing/base.html' %}
+{% block content %}
+    <h1>{{ company }}</h1>
+    {% for category in categories %}
+        <h2>{{ category.name }}</h2>
+        <ul>
+        {% for subcategory in category.subcategories.all %}
+            <a href="{% url 'categories' company %}?category={{ category.name }}&subcategory={{ subcategory.name }}">{{ subcategory.name }}</a>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+{% endblock %}
