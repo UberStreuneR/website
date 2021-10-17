@@ -1,12 +1,20 @@
 {% extends 'landing/base.html' %}
 {% block content %}
-    <h1>{{ company }}</h1>
+    <h1>Продукция компании {{ company }} от официального дилера</h1>
+    <hr>
     {% for category in categories %}
         <h2>{{ category.name }}</h2>
-        <ul>
-        {% for subcategory in category.subcategories.all %}
-            <a href="{% url 'categories' company %}?category={{ category.name }}&subcategory={{ subcategory.name }}">{{ subcategory.name }}</a>
-        {% endfor %}
-        </ul>
+        <div class="row row-cols-4 g-2 mb-5">
+            {% for subcategory in category.subcategories.all %}
+                <div>
+                    <a class="d-block" style="font-size: 20px;" href="{% url 'categories' company %}?category={{ category.name }}&subcategory={{ subcategory.name }}" id="{{ forloop.counter }}">{{ subcategory.name }}</a>
+                    {% if subcategory.comment != 'nan' %}
+                    <label for="{{ forloop.counter }}" style="font-size: 14px; color: grey;">{{ subcategory.comment }}</label>
+                    {% endif %}
+                </div>
+
+            {% endfor %}
+        </div>
+        <hr>
     {% endfor %}
 {% endblock %}

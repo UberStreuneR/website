@@ -10,7 +10,12 @@
                 <div id="flush-collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{ forloop.counter }}" data-bs-parent="#accordionFlushExample">
                     <div class="accordion-body">
                         {% for subcategory in category.subcategories.all %}
-                        <div class="list-group-item"><a class="text-decoration-none text-dark" href="{% url 'categories' company %}?category={{ category.name }}&subcategory={{ subcategory.name }}">{{ subcategory.name }}</a></div>
+                        <div class="list-group-item">
+                            <a class="text-decoration-none text-dark" href="{% url 'categories' company %}?category={{ category.name }}&subcategory={{ subcategory.name }}" id="{{ subcategory.name }}">{{ subcategory.name }}</a>
+                            {% if subcategory.comment != 'nan' %}
+                            <label for="{{ subcategory.name }}" style="font-size: 12px; color: grey">{{ subcategory.comment }}</label>
+                            {% endif %}
+                        </div>
                         {% endfor %}
                     </div>
                 </div>

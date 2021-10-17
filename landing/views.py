@@ -4,6 +4,8 @@ from .models import Partner, Order
 from clients.models import Client
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
+from django.templatetags.static import static
+from items.forms import ArticleSearchForm
 
 # Create your views here.
 
@@ -62,6 +64,9 @@ class CartView(View):
         except ObjectDoesNotExist:
             messages.error(self.request, "Добавь сначала что-нибудь в корзину")
             return redirect('/')
+        if order.items.count() == 0:
+            messages.error(self.request, "Добавь сначала что-нибудь в корзину")
+            return redirect('/')
         context = {
             "title": "cart",
             'order': order
@@ -71,6 +76,16 @@ class CartView(View):
 
 class TestView(View):
     def get(self, *args, **kwargs):
-        print(self.request.GET)
+        form = ArticleSearchForm()
+        context = {
+            'form': form
+        }
+        return render(self.request, "landing/test.html", context)
+    def post(self, *args, **kwargs):
+        form = ArticleSearchForm(self.request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+        else:
+            print("Mistake")
+        return redirect("/test/")
 
-        return render(self.request, "landing/test.html")

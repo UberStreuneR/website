@@ -1,0 +1,27 @@
+{% extends 'landing/base.html' %}
+{% block content %}
+    <form action="{% url 'categories' 'Danfoss' %}" method="GET">
+        <div class="w-75">
+            <div class="input-group input-group-sm mb-3 float-end" style="width: 35%;">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Поиск по артикулу</span>
+                {{ form.article }}
+                {% comment %}<label for="article">Артикул</label>{% endcomment %}
+                <button class="btn btn-outline-secondary ms-3" type="submit">Поиск</button>
+            </div>
+        </div>
+    </form>
+    <div class="container d-flex justify-content-center align-items-start">
+        <img src="{{ item.image.url }}" alt="{{ item.article }}" style="max-width: 500px;">
+        <div class="d-flex flex-column align-items-start m-4 col-3">
+            <h2>{{ item.name }}</h2>
+            <span style="color: grey; font-size: 20px;">Артикул: {{ item.article }}</span>
+            <hr>
+            <h1 id="price">{{ item.get_cool_price }} руб</h1>
+            <label for="price" style="color: grey;">цена за штуку</label>
+            <a href="{% url 'add-to-cart' item.slug %}" class="btn btn-lg btn-success mt-4">Добавить в корзину</a>
+            <h4 class="mt-5">Производитель: {{ company.name }}</h4>
+            <img src="{{ company.image.url }}" alt="{{ company.name }}" style="max-width: 200px;">
+
+        </div>
+    </div>
+{% endblock %}

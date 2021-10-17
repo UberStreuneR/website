@@ -4,7 +4,11 @@ from landing import views as landing_views
 urlpatterns = [
     path('items/<company>/', views.CompanyListView.as_view(), name="company"),
     path('items/<company>/category/', views.CategoryListView.as_view(), name="categories"),
+    path('items/<company>/<article>/', views.ItemView.as_view(), name='item'),
     path('add-to-cart/<slug>/', views.add_item_to_cart, name='add-to-cart'),
+    path('remove-from-cart/<slug>/', views.remove_item_from_cart, name='remove-from-cart'),
+    path('remove-single-from-cart/<slug>/', views.remove_single_item_from_cart, name='remove-single-from-cart'),
+    path('discard-cart/', views.discard_cart, name='discard'),
     path('upload/', views.UploadItemsView.as_view(), name='upload'),
     path('', landing_views.HomeView.as_view(), name='home')
 ]

@@ -25,6 +25,15 @@ class OrderItem(models.Model):
     def get_total_item_price(self):
         return self.quantity * self.item.price
 
+    def get_cool_price(self):
+        price = str(self.get_total_item_price())
+        values = price.split(".")
+        values[1] = values[1][:2]
+        int_price = values[0]
+        for i in range(3, len(int_price) + 1, 4):
+            int_price = int_price[:-i] + " " + int_price[-i:]
+        return int_price + "," + values[1]
+
 
 class Order(models.Model):
     client = models.ForeignKey(Client, related_name="orders", on_delete=models.CASCADE, blank=True)
@@ -38,3 +47,14 @@ class Order(models.Model):
         for order_item in self.items.all():
             total += order_item.get_total_item_price()
         return total
+
+
+    def get_cool_price(self):
+        price = str(self.get_total())
+        values = price.split(".")
+        values[1] = values[1][:2]
+        int_price = values[0]
+        for i in range(3, len(int_price) + 1, 4):
+            int_price = int_price[:-i] + " " + int_price[-i:]
+        return int_price + "," + values[1]
+

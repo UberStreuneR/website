@@ -11,9 +11,8 @@ def cart_item_count(request):
     except:
         device = request.COOKIES['device']
         client, created = Client.objects.get_or_create(device=device)
-    user = request.user
-    if user.is_authenticated:
-        qs = Order.objects.filter(client=client, complete=False)
-        if qs.exists():
-            return qs[0].items.count()
+
+    qs = Order.objects.filter(client=client, complete=False)
+    if qs.exists():
+        return qs[0].items.count()
     return 0

@@ -3,29 +3,6 @@ from django.shortcuts import reverse
 from transliterate import translit
 from django.utils.text import slugify
 
-COMPANIES = (
-    ('danfoss', 'danfoss'),
-)
-
-
-ITEM_CATEGORIES = (
-    ('BLUE-THINGS', 'BLUE-THINGS'),
-    ('BOLTS', 'BOLTS'),
-    ('CORDS', 'CORDS'),
-    ('PIPES', 'PIPES'),
-    ('RIVETS', 'RIVETS'),
-    ('BOILERS', 'BOILERS'),
-
-)
-
-ITEM_SUBCATEGORIES = (
-    ('GAS-BOILERS', 'GAS-BOILERS'),
-    ('ELECTRIC-BOILERS', 'ELECTRIC-BOILERS'),
-    ('PELLET-BOILERS', 'PELLET-BOILERS'),
-    ('WATER-HEATERS', 'WATER-HEATERS'),
-    # THE REST OF THEM
-)
-
 STATUS_CHOICES = (
     ('A', 'Available'),
     ('P', 'Pending'),
@@ -35,7 +12,7 @@ STATUS_CHOICES = (
 
 
 class Item(models.Model):
-    name = models.CharField(max_length=50, blank=True)
+    name = models.CharField(max_length=100, blank=True)
     price = models.FloatField(default=0, null=True, blank=True)
     company = models.CharField(max_length=20, blank=True)
     category = models.CharField(max_length=50, blank=True)
@@ -44,12 +21,22 @@ class Item(models.Model):
     slug = models.SlugField(blank=True)
     article = models.CharField(max_length=30, blank=True)
     description = models.TextField(blank=True)
+    image = models.ImageField(default='static/landing/images/mainpage/default.jpg')
 
     def __str__(self):
         return f"{self.name}, {self.category}, {self.subcategory}"
 
     def get_absolute_url(self):
-        return reverse("comm", kwargs={'slug': self.slug})
+        return reverse("item", kwargs={'company': 'Danfoss', 'article': self.article})
+
+    def get_cool_price(self):
+        price = str(self.price)
+        values = price.split(".")
+        values[1] = values[1][:2]
+        int_price = values[0]
+        for i in range(3, len(int_price) + 1, 4):
+            int_price = int_price[:-i] + " " + int_price[-i:]
+        return int_price + "," + values[1]
 
     def save(self, *args, **kwargs):
         self.slug = slugify(translit(self.name, 'ru', reversed=True))

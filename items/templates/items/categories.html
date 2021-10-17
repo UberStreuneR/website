@@ -1,48 +1,67 @@
 {% extends 'items/base.html' %}
+{% load item_directory_filter %}
 {% load static %}
-{% block items %}
+{% block content %}
 
-<div class="d-flex items-container">
-    {% include 'items/accordion.html' %}
-    <div class="items" style="margin-left: 10px;">
-    <h1 style="margin-bottom: 10px;">{{ name }}</h1>
-        <div class="row row-cols-2 row-cols-md-2 g-4">
-            {% for item in items %}
-            <div style="max-width: 520px;">
-                <div class="card">
-                    {% if item.status == 'A' %}
-                        <div class="card-header text-success">Есть в наличии</div>
-                    {% endif %}
-                    {% if item.status == 'P' %}
-                        <div class="card-header text-secondary">Ожидается</div>
-                    {% endif %}
-                    {% if item.status == 'N' %}
-                        <div class="card-header text-danger">Нет в наличии</div>
-                    {% endif %}
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="{% static 'landing/images/temp/boiler.jpg' %}" style="width:120px; height: 100%; padding: 10px;" alt="">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                              <h5 class="card-title">{{ item.name }}</h5>
-                              <p class="card-text">{{ item.description}}</p>
-                              <h5 class="price">{{ item.price }} руб.</h5>
-                              {% if forloop.counter == 1 %}
-                                  <a tabindex="0" href="{% url 'add-to-cart' item.slug %}" class="btn btn-primary" role="button" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Добавление товара" data-bs-content="Чтобы посмотреть все добавленные товары, кликните на иконку корзины вверху">Добавить</a>
-                              {% else %}
-                                  <a href="{% url 'add-to-cart' item.slug %}" class="btn btn-primary">Добавить</a>
-                              {% endif %}
+<div class="d-flex flex-column">
+    <form action="{% url 'categories' 'Danfoss' %}" method="GET">
+        <div class="w-50">
+            <div class="input-group input-group-sm mb-3 float-end" style="width: 400px;">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Поиск по артикулу</span>
+                {{ form.article }}
+                {% comment %}<label for="article">Артикул</label>{% endcomment %}
+                <button class="btn btn-outline-secondary ms-3" type="submit">Поиск</button>
+            </div>
+        </div>
+    </form>
+    <div class="d-flex">
+        {% include 'items/accordion.html' %}
+        <div class="items" style="margin-left: 10px;">
+            <h1 style="margin-bottom: 10px;">{{ name }}</h1>
+            <div class="row row-cols-2 row-cols-md-2 g-4">
+                {% for item in items %}
+                    <div style="max-width: 520px;">
+                        <div class="card">
+                            {% if item.status == 'A' %}
+                                <div class="card-header text-success">Есть в наличии</div>
+                            {% endif %}
+                            {% if item.status == 'P' %}
+                                <div class="card-header text-secondary">Ожидается</div>
+                            {% endif %}
+                            {% if item.status == 'N' %}
+                                <div class="card-header text-danger">Нет в наличии</div>
+                            {% endif %}
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <a href="{% url 'item' 'Danfoss' item.article %}">
+                                        <img src="{{ item.image.url }}" style="width:180px; height: 100%; padding: 10px;" alt="">
+                                    </a>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><a href="{{ item.get_absolute_url }}" class="text-decoration-none text-black">{{ item.name }}</a></h5>
+                                        <p class="card-text">
+                                            Артикул: {{ item.article }}
+                                            {{ item.description}}
+                                        </p>
+                                        <h5 class="price">{{ item.get_cool_price }} руб.</h5>
+                                        {% if forloop.counter == 1 %}
+                                            <a tabindex="0" href="{% url 'add-to-cart' item.slug %}" class="btn btn-primary" role="button" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Добавление товара" data-bs-content="Чтобы посмотреть все добавленные товары, кликните на иконку корзины вверху">Добавить</a>
+                                        {% else %}
+                                            <a href="{% url 'add-to-cart' item.slug %}" class="btn btn-primary">Добавить</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
                     </div>
-
-                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </div>
 </div>
+
 <script>
     var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
     var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {

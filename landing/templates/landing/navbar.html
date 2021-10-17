@@ -30,12 +30,17 @@
       </a>
       <!-- Left links -->
       <ul class="navbar-nav mb-2 mb-lg-0">
-        <li class="nav-item">
+        {% comment %}<li class="nav-item">
           <a class="nav-link {% if title == 'pricelist' %}active{% endif %}" href="{% url 'prices' %}">Прайс-листы</a>
         </li>
         <li class="nav-item">
           <a class="nav-link {% if title == 'trademarks' %}active{% endif %}" href="{% url 'trademarks' %}">Торговые марки</a>
-        </li>
+        </li>{% endcomment %}
+        {% if request.user.is_staff %}
+            <li class="nav-item">
+              <a class="nav-link {% if title == 'upload' %}active{% endif %}" href="{% url 'upload' %}">Загрузить</a>
+            </li>
+        {% endif %}
         <li class="nav-item">
           <a class="nav-link {% if title == 'about' %}active{% endif %}" href="{% url 'about' %}">О компании</a>
         </li>

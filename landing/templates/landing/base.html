@@ -70,9 +70,11 @@
         </div>
         {% endfor %}
     {% endif %}
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
 
-{% block content %}
-{% endblock %}
 
 {% include 'landing/footer.html' %}
 

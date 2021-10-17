@@ -1,6 +1,9 @@
 html {
     height: 100%;
 }
+main {
+    margin: 40px;
+}
 #side-menu {
     background: transparent;
     color: white;
@@ -17,9 +20,7 @@ html {
         display: none !important;
     }
 }
-.items-container {
-    margin: 40px 0 0 30px;
-}
+
 .items-sidebar {
     width: 25%;
     margin-right: 30px;
