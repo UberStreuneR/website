@@ -1,8 +1,14 @@
 html {
     height: 100%;
+
 }
 main {
     margin: 40px;
+}
+body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 #side-menu {
     background: transparent;

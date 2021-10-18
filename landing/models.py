@@ -10,6 +10,10 @@ class Partner(models.Model):
     image = models.ImageField()
     description = models.TextField(blank=True, null=True)
 
+    def save(self, *args, **kwargs):
+        self.image = f'static/landing/images/mainpage/{self.name}.png'
+        super(Partner, self).save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.name}, partner"
 

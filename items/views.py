@@ -11,8 +11,8 @@ from django.templatetags.static import static
 import os
 
 
-def get_image_path(category, subcategory, article):
-    PATH = r"C:\Users\Public\Developer\Python\PycharmProjects\website\items\static\items\images"
+def get_image_path(company, category, subcategory, article):
+    PATH = r"C:\Users\Public\Developer\Python\PycharmProjects\website\items\static\items\images\{0}".format(str(company))
     PATH = os.path.join(PATH, category, subcategory.replace("/", "^"))
     for i in os.walk(PATH):
         for file in i[2]:
@@ -58,7 +58,7 @@ class UploadItemsView(UserPassesTestMixin, LoginRequiredMixin, View):
                 item.price = price
                 item.name = name
                 try:
-                    path = get_image_path(category, subcategory, article).replace("\\", "/")
+                    path = get_image_path(company, category, subcategory, str(article)).replace("\\", "/")
                     item.image = path
                 except AttributeError:
                     pass
@@ -106,7 +106,7 @@ class CategoryListView(View):
         context = {
             'items': items,
             'category': category,
-            'categories': Category.objects.all(),
+            'categories': Category.objects.filter(company=company),
             'company': company,
             'form': form
         }

@@ -6,7 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.templatetags.static import static
 from items.forms import ArticleSearchForm
-
+from .forms import CheckoutForm
 # Create your views here.
 
 
@@ -74,18 +74,37 @@ class CartView(View):
         return render(self.request, "landing/cart.html", context=context)
 
 
+class CheckoutView(View):
+    def get(self, *args, **kwargs):
+        form = CheckoutForm()
+
+        try:
+            client = self.request.user.client
+        except:
+            device = self.request.COOKIES['device']
+            client, created = Client.objects.get_or_create(device=device)
+        try:
+            order = Order.objects.get(client=client, complete=False)
+        except ObjectDoesNotExist:
+            messages.error(self.request, "Добавь сначала что-нибудь в корзину")
+            return redirect('/')
+        if order.items.count() == 0:
+            messages.error(self.request, "Добавь сначала что-нибудь в корзину")
+            return redirect('/')
+        context = {
+            'form': form,
+            'order': order
+        }
+        return render(self.request, "landing/checkout.html", context)
+
+
+
 class TestView(View):
     def get(self, *args, **kwargs):
-        form = ArticleSearchForm()
+        cookie = self.request.COOKIES['coo']
         context = {
-            'form': form
+            'cookie': cookie
         }
         return render(self.request, "landing/test.html", context)
-    def post(self, *args, **kwargs):
-        form = ArticleSearchForm(self.request.POST)
-        if form.is_valid():
-            print(form.cleaned_data)
-        else:
-            print("Mistake")
-        return redirect("/test/")
+
 

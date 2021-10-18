@@ -9,7 +9,10 @@ def cart_item_count(request):
     try:
         client = request.user.client
     except:
-        device = request.COOKIES['device']
+        try:
+            device = request.COOKIES['device']
+        except KeyError:
+            return 0 # Иначе не прогрузится страница, т.к. cookie еще не сгенерирован
         client, created = Client.objects.get_or_create(device=device)
 
     qs = Order.objects.filter(client=client, complete=False)

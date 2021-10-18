@@ -30,13 +30,17 @@ class Item(models.Model):
         return reverse("item", kwargs={'company': 'Danfoss', 'article': self.article})
 
     def get_cool_price(self):
+        if self.price == -1:
+            return "Цена не установлена"
+        if self.price == -2:
+            return "Цена по запросу"
         price = str(self.price)
         values = price.split(".")
         values[1] = values[1][:2]
         int_price = values[0]
         for i in range(3, len(int_price) + 1, 4):
             int_price = int_price[:-i] + " " + int_price[-i:]
-        return int_price + "," + values[1]
+        return int_price + "," + values[1] + " руб."
 
     def save(self, *args, **kwargs):
         self.slug = slugify(translit(self.name, 'ru', reversed=True))

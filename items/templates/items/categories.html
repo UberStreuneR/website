@@ -32,9 +32,9 @@
                                 <div class="card-header text-danger">Нет в наличии</div>
                             {% endif %}
                             <div class="row g-0">
-                                <div class="col-md-4">
-                                    <a href="{% url 'item' 'Danfoss' item.article %}">
-                                        <img src="{{ item.image.url }}" style="width:180px; height: 100%; padding: 10px;" alt="">
+                                <div class="col-md-4 d-flex align-items-center">
+                                    <a href="{% url 'item' company item.article %}">
+                                        <img src="{{ item.image.url }}" style="width: 150px; padding: 10px;" alt="">
                                     </a>
                                 </div>
                                 <div class="col-md-8">
@@ -44,7 +44,7 @@
                                             Артикул: {{ item.article }}
                                             {{ item.description}}
                                         </p>
-                                        <h5 class="price">{{ item.get_cool_price }} руб.</h5>
+                                        <h5 class="price">{{ item.get_cool_price }}</h5>
                                         {% if forloop.counter == 1 %}
                                             <a tabindex="0" href="{% url 'add-to-cart' item.slug %}" class="btn btn-primary" role="button" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Добавление товара" data-bs-content="Чтобы посмотреть все добавленные товары, кликните на иконку корзины вверху">Добавить</a>
                                         {% else %}

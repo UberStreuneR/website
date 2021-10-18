@@ -1,13 +1,18 @@
-{% extends 'landing/base.html' %}
-{% load static %}
-{% block content %}
-
-    <form action="{% url 'categories' 'Danfoss' %}" method="GET">
-        <div class="form-floating mb-3 col-4">
-            {{ form.article }}
-            <h1>{{ form.article.value }}</h1>
-            <label for="article">Артикул</label>
-            <button class="btn btn-secondary" type="submit">Поиск</button>
-        </div>
-    </form>
-{% endblock %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        document.cookie = 'coo=test_cookie';
+    </script>
+</head>
+<body>
+{% if cookie %}
+    {{ cookie }}
+{% endif %}
+</body>
+</html>
