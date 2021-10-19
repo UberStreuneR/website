@@ -9,10 +9,12 @@ from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 import pandas as pd
 from django.templatetags.static import static
 import os
-
+from pathlib import Path
+from transliterate import translit
+DIR = Path(__file__).resolve().parent
 
 def get_image_path(company, category, subcategory, article):
-    PATH = r"C:\Users\Public\Developer\Python\PycharmProjects\website\items\static\items\images\{0}".format(str(company))
+    PATH = os.path.join(DIR, "static", "items", "images", company)
     PATH = os.path.join(PATH, category, subcategory.replace("/", "^"))
     for i in os.walk(PATH):
         for file in i[2]:
@@ -20,6 +22,52 @@ def get_image_path(company, category, subcategory, article):
                 to_return = os.path.join(PATH, file)
                 to_return = to_return[to_return.find("static"):]
                 return to_return
+
+
+def isEnglish(s):
+    try:
+        s.encode(encoding='utf-8').decode('ascii')
+    except UnicodeDecodeError:
+        return False
+    else:
+        return True
+
+def to_eng(string):
+    result = ""
+    still_russian = False
+    for letter in string:
+        if not letter.isalpha():
+            result += letter
+            continue
+        if isEnglish(letter):
+            if still_russian:
+                result += "tagRUS"
+                still_russian = False
+            result += letter
+        else:
+            if still_russian is False:
+                result += "tagRUS"
+                still_russian = True
+            result += translit(letter, 'ru', reversed=True)
+    if still_russian:
+        result += "tagRUS"
+    return result
+
+
+def from_eng(string):
+    result = ""
+    while True:
+        if "tagRUS" in string:
+            before = string[:string.index("tagRUS")]
+            string = string[string.index("tagRUS") + 6:]
+            between = string[:string.index("tagRUS")]
+            string = string[string.index("tagRUS") + 6:]
+            result += before + translit(between, 'ru')
+        else:
+            result += string
+            break
+
+    return result
 
 
 class UploadItemsView(UserPassesTestMixin, LoginRequiredMixin, View):
@@ -58,7 +106,7 @@ class UploadItemsView(UserPassesTestMixin, LoginRequiredMixin, View):
                 item.price = price
                 item.name = name
                 try:
-                    path = get_image_path(company, category, subcategory, str(article)).replace("\\", "/")
+                    path = get_image_path(company, to_eng(category), to_eng(subcategory), str(article)).replace("\\", "/")
                     item.image = path
                 except AttributeError:
                     pass
