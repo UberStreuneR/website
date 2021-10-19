@@ -15,7 +15,7 @@ DIR = Path(__file__).resolve().parent
 
 def get_image_path(company, category, subcategory, article):
     PATH = os.path.join(DIR, "static", "items", "images", company)
-    PATH = os.path.join(PATH, category, subcategory.replace("/", "^"))
+    PATH = os.path.join(PATH, category.replace(" ", "_"), subcategory.replace("/", "^").replace(" ", "_"))
     for i in os.walk(PATH):
         for file in i[2]:
             if article in file:
