@@ -11,8 +11,8 @@
     </script>
 </head>
 <body>
-{% if cookie %}
-    {{ cookie }}
-{% endif %}
+{% for q in qs %}
+    <h1>{{ q.name }}</h1>
+{% endfor %}
 </body>
 </html>

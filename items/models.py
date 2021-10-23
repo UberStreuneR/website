@@ -12,7 +12,8 @@ STATUS_CHOICES = (
 
 
 class Item(models.Model):
-    name = models.CharField(max_length=100, blank=True)
+    name = models.CharField(max_length=256, blank=True)
+    name_lowercase = models.CharField(max_length=256, blank=True)
     price = models.FloatField(default=0, null=True, blank=True)
     company = models.CharField(max_length=20, blank=True)
     category = models.CharField(max_length=50, blank=True)
@@ -44,10 +45,13 @@ class Item(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(translit(self.name, 'ru', reversed=True))
+        if self.name[0] != " " and self.name[:-1] != " ":
+            self.name = " " + self.name + " "
+        self.name_lowercase = self.name.lower()
         super(Item, self).save(*args, **kwargs)
 
 class Category(models.Model):
-    name = models.CharField(max_length=50, blank=True, null=True)
+    name = models.CharField(max_length=256, blank=True, null=True)
     company = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
@@ -64,9 +68,9 @@ class Category(models.Model):
 
 
 class Subcategory(models.Model):
-    name = models.CharField(max_length=50, blank=True, null=True)
+    name = models.CharField(max_length=256, blank=True, null=True)
     category = models.ForeignKey(Category, related_name='subcategories', on_delete=models.CASCADE, blank=True, null=True)
-    comment = models.CharField(max_length=100, blank=True, null=True)
+    comment = models.CharField(max_length=512, blank=True, null=True)
 
     def __str__(self):
         return f"{self.name}, {self.comment}, subcategory"

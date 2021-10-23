@@ -3,7 +3,6 @@ from landing.models import Order
 from clients.models import Client
 register = template.Library()
 
-
 @register.filter
 def cart_item_count(request):
     try:

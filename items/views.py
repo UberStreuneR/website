@@ -1,3 +1,5 @@
+from functools import reduce
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from django.db.models import Q
@@ -164,11 +166,21 @@ class CategoryListView(View):
 
 class SearchView(View):
     def get(self, *args, **kwargs):
-
         print(self.request.GET)
         try:
             text = self.request.GET['text']
-            items = Item.objects.filter(Q(article=text) | Q(company=text) | Q(category=text) | Q(subcategory=text) | Q(name__icontains=text))
+            if " " in text:
+                items = Item.objects.filter(Q(article=text)
+                                            | Q(company=text)
+                                            | Q(category=text)
+                                            | Q(subcategory=text)
+                                            | reduce(lambda x, y: x & y, [Q(name_lowercase__icontains=" " + word.replace(",", "").lower()+" ") for word in text.split(" ")]))
+            else:
+                items = Item.objects.filter(Q(article=text)
+                                            | Q(company=text)
+                                            | Q(category=text)
+                                            | Q(subcategory=text)
+                                            | Q(name_lowercase__icontains=" " + text.lower() + " "))
         except:
             messages.warning(self.request, "По запросу ничего не найдено")
             return redirect("/")
@@ -183,14 +195,60 @@ class SearchView(View):
 class ItemView(View):
     def get(self, *args, **kwargs):
         item = get_object_or_404(Item, article=kwargs['article'])
-
         company = get_object_or_404(Partner, name=kwargs['company'])
+
+        dn_du = ['dn', 'Dn', 'dN', 'DN',
+                 'du', 'Du', 'dU', 'DU',
+                 'дн', 'Дн', "дН", "ДН",
+                 'ду', "Ду", "дУ", "ДУ"]
+        string = item.name
+        is_in_name = False
+        for variation in dn_du:
+            if variation in string:
+                is_in_name = True
+                to_cut = variation
+                count = 2
+                while True:
+                    try:
+                        letter = string[string.find(variation) + count]
+                        if letter.isdigit() or letter == " ":
+                            count += 1
+                        else:
+                            break
+                    except IndexError:
+                        string = string.replace(string[string.find(variation) - 1:], "")
+                if string[string.find(variation) + 2] == " ":
+                    count = 3
+                    to_cut += " "
+                elif string[string.find(variation) + 2].isdigit():
+                    count = 2
+                while True:
+                    char = string[string.find(variation) + count]
+                    if char.isdigit():
+                        to_cut += char
+                        count += 1
+                    else:
+                        break
+                string = string.replace(to_cut + " ", "")
+                break
+        if is_in_name:
+            string_keys = string.split(" ")
+            print(string_keys)
+            qs = Item.objects.filter(
+                reduce(lambda x, y: x & y, [Q(name__icontains=word.replace(",", "")) for word in string_keys]))
+
+        else:
+            qs = None
+
         form = SearchForm()
         context = {
             'item': item,
             'company': company,
-            'form': form
+            'form': form,
+
         }
+        if is_in_name:
+            context.update({'related_items': qs})
         return render(self.request, "items/item.html", context)
 
 
