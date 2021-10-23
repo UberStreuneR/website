@@ -14,8 +14,15 @@ from transliterate import translit
 DIR = Path(__file__).resolve().parent
 
 def get_image_path(company, category, subcategory, article):
+    print()
+    print()
+    print()
+    print(DIR)
+
     PATH = os.path.join(DIR, "static", "items", "images", company)
-    PATH = os.path.join(PATH, category.replace(" ", "_"), subcategory.replace("/", "^").replace(" ", "_"))
+    print(PATH)
+    PATH = os.path.join(PATH, category.replace(" ", "_").replace(",", "tagCOMMA"), subcategory.replace("/", "^").replace(" ", "_"))
+    print(PATH)
     for i in os.walk(PATH):
         for file in i[2]:
             if article in file:
@@ -105,11 +112,11 @@ class UploadItemsView(UserPassesTestMixin, LoginRequiredMixin, View):
                 item.subcategory = subcategory
                 item.price = price
                 item.name = name
-                try:
-                    path = get_image_path(company, to_eng(category), to_eng(subcategory), str(article)).replace("\\", "/")
+                path = row['Путь']
+                if type(path) == str:
                     item.image = path
-                except AttributeError:
-                    pass
+                # path = get_image_path(company, to_eng(category), to_eng(subcategory), str(article)).replace("\\", "/")
+
                 item.save()
 
                 CategoryObject, created = Category.objects.get_or_create(name=category, company=company)
