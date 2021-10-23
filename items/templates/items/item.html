@@ -18,7 +18,7 @@
             <h2>{{ item.name }}</h2>
             <span style="color: grey; font-size: 20px;">Артикул: {{ item.article }}</span>
             <hr>
-            <h1 id="price">{{ item.get_cool_price }} руб</h1>
+            <h1 id="price">{{ item.get_cool_price }}</h1>
             <label for="price" style="color: grey;">цена за штуку</label>
             <a href="{% url 'add-to-cart' item.slug %}" class="btn btn-lg btn-success mt-4">Добавить в корзину</a>
             <h4 class="mt-5">Производитель: {{ company.name }}</h4>
