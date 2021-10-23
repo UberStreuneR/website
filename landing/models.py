@@ -11,7 +11,7 @@ class Partner(models.Model):
     description = models.TextField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        self.image = f'static/landing/images/mainpage/{self.name}.png'
+        self.image = f'static/landing/images/mainpage/{self.name.lower()}.png'
         super(Partner, self).save(*args, **kwargs)
 
     def __str__(self):

@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import View, DetailView
+from django.views.generic import View
+from django.db.models import Q
 from .models import Item, Category, Subcategory
 from landing.models import Order, OrderItem, Partner
 from clients.models import Client
 from django.contrib import messages
-from .forms import ExcelItemsForm, ArticleSearchForm
+from .forms import ExcelItemsForm, SearchForm
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 import pandas as pd
 from django.templatetags.static import static
@@ -13,68 +14,61 @@ from pathlib import Path
 from transliterate import translit
 DIR = Path(__file__).resolve().parent
 
-def get_image_path(company, category, subcategory, article):
-    print()
-    print()
-    print()
-    print(DIR)
-
-    PATH = os.path.join(DIR, "static", "items", "images", company)
-    print(PATH)
-    PATH = os.path.join(PATH, category.replace(" ", "_").replace(",", "tagCOMMA"), subcategory.replace("/", "^").replace(" ", "_"))
-    print(PATH)
-    for i in os.walk(PATH):
-        for file in i[2]:
-            if article in file:
-                to_return = os.path.join(PATH, file)
-                to_return = to_return[to_return.find("static"):]
-                return to_return
-
-
-def isEnglish(s):
-    try:
-        s.encode(encoding='utf-8').decode('ascii')
-    except UnicodeDecodeError:
-        return False
-    else:
-        return True
-
-def to_eng(string):
-    result = ""
-    still_russian = False
-    for letter in string:
-        if not letter.isalpha():
-            result += letter
-            continue
-        if isEnglish(letter):
-            if still_russian:
-                result += "tagRUS"
-                still_russian = False
-            result += letter
-        else:
-            if still_russian is False:
-                result += "tagRUS"
-                still_russian = True
-            result += translit(letter, 'ru', reversed=True)
-    if still_russian:
-        result += "tagRUS"
-    return result
-
-
-def from_eng(string):
-    result = ""
-    while True:
-        if "tagRUS" in string:
-            before = string[:string.index("tagRUS")]
-            string = string[string.index("tagRUS") + 6:]
-            between = string[:string.index("tagRUS")]
-            string = string[string.index("tagRUS") + 6:]
-            result += before + translit(between, 'ru')
-        else:
-            result += string
-            break
-
-    return result
+# def get_image_path(company, category, subcategory, article):
+#     PATH = os.path.join(DIR, "static", "items", "images", company)
+#     PATH = os.path.join(PATH, category.replace(" ", "_").replace(",", "tagCOMMA"), subcategory.replace("/", "^").replace(" ", "_"))
+#     for i in os.walk(PATH):
+#         for file in i[2]:
+#             if article in file:
+#                 to_return = os.path.join(PATH, file)
+#                 to_return = to_return[to_return.find("static"):]
+#                 return to_return
+#
+#
+# def isEnglish(s):
+#     try:
+#         s.encode(encoding='utf-8').decode('ascii')
+#     except UnicodeDecodeError:
+#         return False
+#     else:
+#         return True
+#
+# def to_eng(string):
+#     result = ""
+#     still_russian = False
+#     for letter in string:
+#         if not letter.isalpha():
+#             result += letter
+#             continue
+#         if isEnglish(letter):
+#             if still_russian:
+#                 result += "tagRUS"
+#                 still_russian = False
+#             result += letter
+#         else:
+#             if still_russian is False:
+#                 result += "tagRUS"
+#                 still_russian = True
+#             result += translit(letter, 'ru', reversed=True)
+#     if still_russian:
+#         result += "tagRUS"
+#     return result
+#
+#
+# def from_eng(string):
+#     result = ""
+#     while True:
+#         if "tagRUS" in string:
+#             before = string[:string.index("tagRUS")]
+#             string = string[string.index("tagRUS") + 6:]
+#             between = string[:string.index("tagRUS")]
+#             string = string[string.index("tagRUS") + 6:]
+#             result += before + translit(between, 'ru')
+#         else:
+#             result += string
+#             break
+#
+#     return result
 
 
 class UploadItemsView(UserPassesTestMixin, LoginRequiredMixin, View):
@@ -157,7 +151,7 @@ class CategoryListView(View):
                 messages.warning(self.request, "Неправильный артикул")
                 return redirect("/")
             category = items[0].category
-        form = ArticleSearchForm()
+        form = SearchForm()
         context = {
             'items': items,
             'category': category,
@@ -165,15 +159,33 @@ class CategoryListView(View):
             'company': company,
             'form': form
         }
-
         return render(self.request, "items/categories.html", context)
+
+
+class SearchView(View):
+    def get(self, *args, **kwargs):
+
+        print(self.request.GET)
+        try:
+            text = self.request.GET['text']
+            items = Item.objects.filter(Q(article=text) | Q(company=text) | Q(category=text) | Q(subcategory=text) | Q(name__icontains=text))
+        except:
+            messages.warning(self.request, "По запросу ничего не найдено")
+            return redirect("/")
+        form = SearchForm()
+        context = {
+            'form': form,
+            'items': items
+        }
+        return render(self.request, "items/search.html", context)
 
 
 class ItemView(View):
     def get(self, *args, **kwargs):
-        item = get_object_or_404(Item, company=kwargs['company'], article=kwargs['article'])
+        item = get_object_or_404(Item, article=kwargs['article'])
+
         company = get_object_or_404(Partner, name=kwargs['company'])
-        form = ArticleSearchForm()
+        form = SearchForm()
         context = {
             'item': item,
             'company': company,

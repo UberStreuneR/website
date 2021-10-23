@@ -1,10 +1,12 @@
 {% extends 'landing/base.html' %}
 {% block content %}
-    <form action="{% url 'categories' 'Danfoss' %}" method="GET">
-        <div class="w-75">
-            <div class="input-group input-group-sm mb-3 float-end" style="width: 35%;">
-                <span class="input-group-text" id="inputGroup-sizing-sm">Поиск по артикулу</span>
-                {{ form.article }}
+<div class="d-flex flex-column align-items-center">
+
+    <form action="{% url 'search' %}" method="GET">
+        <div class="w-50">
+            <div class="input-group input-group-sm mb-3" style="width: 400px;">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Поиск</span>
+                {{ form.text }}
                 {% comment %}<label for="article">Артикул</label>{% endcomment %}
                 <button class="btn btn-outline-secondary ms-3" type="submit">Поиск</button>
             </div>
@@ -24,4 +26,5 @@
 
         </div>
     </div>
+</div>
 {% endblock %}

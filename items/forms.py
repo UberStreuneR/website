@@ -4,8 +4,8 @@ from django import forms
 class ExcelItemsForm(forms.Form):
     file = forms.FileField()
 
-class ArticleSearchForm(forms.Form):
-    article = forms.CharField(
+class SearchForm(forms.Form):
+    text = forms.CharField(
         widget=forms.TextInput(
             attrs={'class': 'form-control',
                    'id': 'article',

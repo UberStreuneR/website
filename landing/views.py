@@ -5,7 +5,7 @@ from clients.models import Client
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.templatetags.static import static
-from items.forms import ArticleSearchForm
+from items.forms import SearchForm
 from .forms import CheckoutForm
 # Create your views here.
 

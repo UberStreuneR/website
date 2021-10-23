@@ -27,7 +27,7 @@ class Item(models.Model):
         return f"{self.name}, {self.category}, {self.subcategory}"
 
     def get_absolute_url(self):
-        return reverse("item", kwargs={'company': 'Danfoss', 'article': self.article})
+        return reverse("item", kwargs={'company': self.company, 'article': self.article})
 
     def get_cool_price(self):
         if self.price == -1:

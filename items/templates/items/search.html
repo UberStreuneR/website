@@ -15,12 +15,11 @@
         </div>
     </form>
     <div class="d-flex">
-        {% include 'items/accordion.html' %}
         <div class="items" style="margin-left: 10px;">
             <h1 style="margin-bottom: 10px;">{{ name }}</h1>
-            <div class="row row-cols-2 row-cols-md-2 g-4">
+            <div class="row row-cols-2 row-cols-md-2 g-4 d-flex justify-content-center">
                 {% for item in items %}
-                    <div style="max-width: 520px;">
+                    <div style="max-width: 520px; min-width: 520px">
                         <div class="card">
                             {% if item.status == 'A' %}
                                 <div class="card-header text-success">Есть в наличии</div>
@@ -33,7 +32,7 @@
                             {% endif %}
                             <div class="row g-0">
                                 <div class="col-md-4 d-flex align-items-center">
-                                    <a href="{% url 'item' company item.article %}">
+                                    <a href="{% url 'item' item.company item.article %}">
                                         <img src="{{ item.image.url }}" style="width: 150px; padding: 10px;" alt="">
                                     </a>
                                 </div>
@@ -56,6 +55,8 @@
 
                         </div>
                     </div>
+                    {% empty %}
+                    <h2 style="width: 700px;">По вашему запросу ничего не найдено</h2>
                 {% endfor %}
             </div>
         </div>
