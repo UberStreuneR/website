@@ -1,4 +1,5 @@
 {% extends 'landing/base.html' %}
+{% load truncate_name_filter %}
 {% block content %}
 <div class="d-flex flex-column align-items-center">
 
@@ -13,18 +14,28 @@
         </div>
     </form>
     <div class="container d-flex justify-content-center align-items-start">
-        <img src="{{ item.image.url }}" alt="{{ item.article }}" style="max-width: 500px;">
+        <div class="d-flex flex-column">
+            <img src="{{ item.image.url }}" alt="{{ item.article }}" style="max-width: 500px;">
+
+        </div>
         <div class="d-flex flex-column align-items-start m-4 col-3">
-            <h2>{{ item.name }}</h2>
+            <h3>{{ item.name }} арт.{{ item.article }}</h3>
             <span style="color: grey; font-size: 20px;">Артикул: {{ item.article }}</span>
             <hr>
-            <h1 id="price">{{ item.get_cool_price }} руб</h1>
+            <h3 id="price">{{ item.get_cool_price }}</h3>
             <label for="price" style="color: grey;">цена за штуку</label>
             <a href="{% url 'add-to-cart' item.slug %}" class="btn btn-lg btn-success mt-4">Добавить в корзину</a>
             <h4 class="mt-5">Производитель: {{ company.name }}</h4>
             <img src="{{ company.image.url }}" alt="{{ company.name }}" style="max-width: 200px;">
-
         </div>
+    </div>
+    <div class="d-flex flex-column align-items-left" style="width: 700px;">
+        {% for related_item in related_items %}
+            <div class="d-flex justify-content-between">
+                <a style="font-size: 12px;" href="{{ related_item.get_absolute_url }}">{{ related_item.name }} арт.{{ related_item.article }}</a>
+                <span style="font-size: 12px;"><b>{{ related_item.get_cool_price }}</b></span>
+            </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

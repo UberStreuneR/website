@@ -1,5 +1,6 @@
 {% extends 'items/base.html' %}
 {% load item_directory_filter %}
+{% load truncate_name_filter %}
 {% load static %}
 {% block content %}
 
@@ -39,7 +40,7 @@
                                 </div>
                                 <div class="col-md-8">
                                     <div class="card-body">
-                                        <h5 class="card-title"><a href="{{ item.get_absolute_url }}" class="text-decoration-none text-black">{{ item.name }}</a></h5>
+                                        <h5 class="card-title"><a href="{{ item.get_absolute_url }}" class="text-decoration-none text-black">{{ item.name|truncate_name }}</a></h5>
                                         <p class="card-text">
                                             Артикул: {{ item.article }}
                                             {{ item.description}}
