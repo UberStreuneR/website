@@ -9,7 +9,7 @@ from clients.models import Client
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.templatetags.static import static
-from items.forms import SearchForm
+from items.forms import SearchForm, HowMuchCounterForm
 from .forms import CheckoutForm
 # Create your views here.
 
@@ -105,52 +105,18 @@ class CheckoutView(View):
 
 class TestView(View):
     def get(self, *args, **kwargs):
-
-        item = Item.objects.get(article="PVTU4240-0050")
-        dn_du = ['dn', 'Dn', 'dN', 'DN',
-                 'du', 'Du', 'dU', 'DU',
-                 'дн', 'Дн', "дН", "ДН",
-                 'ду', "Ду", "дУ", "ДУ"]
-        string = item.name
-        is_in_name = False
-        for variation in dn_du:
-            if variation in string:
-                is_in_name = True
-                to_cut = variation
-                count = 2
-                while True:
-                    try:
-                        letter = string[string.find(variation) + count]
-                        if letter.isdigit() or letter == " ":
-                            count += 1
-                        else:
-                            break
-                    except IndexError:
-                        string = string.replace(string[string.find(variation)-1:], "")
-                if string[string.find(variation) + 2] == " ":
-                    count = 3
-                    to_cut += " "
-                elif string[string.find(variation) + 2].isdigit():
-                    count = 2
-                while True:
-                    char = string[string.find(variation) + count]
-                    if char.isdigit():
-                        to_cut += char
-                        count += 1
-                    else:
-                        break
-                string = string.replace(to_cut + " ", "")
-                break
-        if is_in_name:
-            string_keys = string.split(" ")
-            print(string_keys)
-            qs = Item.objects.filter(reduce(lambda x, y: x & y, [Q(name__icontains=word.replace(",", "")) for word in string_keys]))
-
-        else:
-            qs = None
+        form = HowMuchCounterForm()
         context = {
-            'qs': qs
+            'form': form
         }
         return render(self.request, "landing/test.html", context)
-
+    def post(self, *args, **kwargs):
+        form = HowMuchCounterForm(self.request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+        else:
+            print("None")
+        print(self.request.POST)
+        print(self.request.GET)
+        return redirect("/test")
 

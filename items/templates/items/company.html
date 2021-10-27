@@ -7,7 +7,7 @@
         <div class="row row-cols-4 g-2 mb-5">
             {% for subcategory in category.subcategories.all %}
                 <div>
-                    <a class="d-block" style="font-size: 20px;" href="{% url 'categories' company %}?category={{ category.name }}&subcategory={{ subcategory.name }}" id="{{ forloop.counter }}">{{ subcategory.name }}</a>
+                    <a class="d-block" style="font-size: 20px;" href="{% url 'categories' company %}?category={{ category.name }}&subcategory={{ subcategory.name }}&page=1/" id="{{ forloop.counter }}">{{ subcategory.name }}</a>
                     {% if subcategory.comment != 'nan' %}
                     <label for="{{ forloop.counter }}" style="font-size: 14px; color: grey;">{{ subcategory.comment }}</label>
                     {% endif %}

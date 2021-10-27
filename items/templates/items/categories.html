@@ -9,7 +9,7 @@
         <div class="w-50">
             <div class="input-group input-group-sm mb-3" style="width: 400px;">
                 <span class="input-group-text" id="inputGroup-sizing-sm">Поиск</span>
-                {{ form.text }}
+                {{ s_form.text }}
                 {% comment %}<label for="article">Артикул</label>{% endcomment %}
                 <button class="btn btn-outline-secondary ms-3" type="submit">Поиск</button>
             </div>
@@ -19,9 +19,10 @@
         {% include 'items/accordion.html' %}
         <div class="items" style="margin-left: 10px;">
             <h1 style="margin-bottom: 10px;">{{ name }}</h1>
-            <div class="row row-cols-2 row-cols-md-2 g-4">
-                {% for item in items %}
-                    <div style="max-width: 520px;">
+            <div class="d-flex flex-column align-items-center {% if count < 2 %}mx-5{% endif %}s">
+                <div class="row row-cols-2 row-cols-md-2 g-4">
+                {% for item in page_obj %}
+                    <div style="max-width: 520px; min-width: 520px;">
                         <div class="card">
                             {% if item.status == 'A' %}
                                 <div class="card-header text-success">Есть в наличии</div>
@@ -46,11 +47,19 @@
                                             {{ item.description}}
                                         </p>
                                         <h5 class="price">{{ item.get_cool_price }}</h5>
-                                        {% if forloop.counter == 1 %}
-                                            <a tabindex="0" href="{% url 'add-to-cart' item.slug %}" class="btn btn-primary" role="button" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Добавление товара" data-bs-content="Чтобы посмотреть все добавленные товары, кликните на иконку корзины вверху">Добавить</a>
-                                        {% else %}
-                                            <a href="{% url 'add-to-cart' item.slug %}" class="btn btn-primary">Добавить</a>
-                                        {% endif %}
+                                            {% comment %}<a tabindex="0" href="{% url 'add-to-cart' item.slug %}" class="btn btn-success" role="button" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Добавление товара" data-bs-content="Чтобы посмотреть все добавленные товары, кликните на иконку корзины вверху">Добавить</a>{% endcomment %}
+                                        <form action="{% url 'add-to-cart' item.slug %}" method="POST">
+                                            {% csrf_token %}
+                                            <div class="d-flex align-items-center">
+                                                <a style="margin-right: 5px;" id="decrement_{{ item.article }}"><i class="fas fa-minus text-black"></i></a>
+                                                {% comment %}{{ h_form }}{% endcomment %}
+                                                <input type="text" value="0" id="counter_{{ item.article }}" name="counter" class="text-center" style="width: 40px;">
+                                                <a style="margin-left: 5px; margin-right: 10px;" id="increment_{{ item.article }}"><i class="fas fa-plus text-black"></i></a>
+                                                <button type="submit" class="btn btn-success">Добавить</button>
+                                            </div>
+
+                                        </form>
+
                                     </div>
                                 </div>
                             </div>
@@ -59,15 +68,42 @@
                     </div>
                 {% endfor %}
             </div>
+                <div class="pagination mt-5 d-flex align-items-center">
+                    {% if page_obj.has_previous %}
+                        <a style="text-decoration: none; color: black;" href="{% url 'categories' company%}?category={{ category }}&subcategory={{ subcategory }}&page=1"><i class="fas fa-2x fa-backward"></i></a>
+                        <a style="text-decoration: none; color: black;" href="{% url 'categories' company%}?category={{ category }}&subcategory={{ subcategory }}&page={{ page_obj.previous_page_number }}"><i class="fas fa-3x fa-caret-left mx-3"></i></a>
+                    {% endif %}
+
+                    <span style="font-size: 20px;" class="current">
+                        Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a style="text-decoration: none; color: black;" href="{% url 'categories' company%}?category={{ category }}&subcategory={{ subcategory }}&page={{ page_obj.next_page_number }}"><i class="fas fa-3x fa-caret-right mx-3"></i></a>
+                        <a style="text-decoration: none; color: black;" href="{% url 'categories' company%}?category={{ category }}&subcategory={{ subcategory }}&page={{ page_obj.paginator.num_pages }}"><i class="fas fa-2x fa-forward"></i></a>
+                    {% endif %}
+            </div>
+            </div>
+
         </div>
     </div>
 </div>
 
 <script>
-    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-      return new bootstrap.Popover(popoverTriggerEl)
+    var allCountersList = [].slice.call(document.querySelectorAll('input[name=counter]'));
+    var countersList = allCountersList.map((counter) => {
+        var id = counter.getAttribute("id");
+        id = id.slice(8);
+        var decrementButton = document.querySelector("a[id=decrement_" + id + "]");
+        var incrementButton = document.querySelector("a[id=increment_" + id + "]");
+        decrementButton.addEventListener("click", function() {
+            if (counter.value > 0){
+                counter.value = parseInt(counter.value) - 1;
+            }
+        });
+        incrementButton.addEventListener("click", function() {
+            counter.value = parseInt(counter.value) + 1;
+        })
     });
 </script>
-
 {% endblock %}
