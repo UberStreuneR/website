@@ -38,7 +38,7 @@ class UploadItemsView(UserPassesTestMixin, LoginRequiredMixin, View):
                 changed = row['Обновлено']
                 if changed == "нет":
                     continue
-                company = row['Брэнд']
+                company = translit(row['Брэнд'], "ru", reversed=True)
                 category = row['Категория']
                 subcategory = row['Подкатегория']
                 name = row['Наименование']
@@ -46,10 +46,18 @@ class UploadItemsView(UserPassesTestMixin, LoginRequiredMixin, View):
                 price = row['Цена']
                 comment = row['Расшифровка подкатегории']
                 item = Item.objects.get_or_create(article=article)[0]
+                try:
+                    weight = row['Вес']
+                    if weight != "-":
+                        item.weight = float(str(weight).replace(",", "."))
+                except KeyError:
+                    pass
+                measure_unit = row['Единица измерения']
+                item.measure_unit = measure_unit
                 item.company = company
                 item.category = category
                 item.subcategory = subcategory
-                item.price = price
+                item.price = float(str(price).replace(",", "."))
                 item.name = name
                 path = row['Путь']
                 if type(path) == str:
@@ -236,7 +244,8 @@ def remove_item_from_cart(request, slug):
         order.items.remove(order_item)
         order_item.delete()
         messages.success(request, "Товар был удален из корзины")
-
+        if order.items.count() == 0:
+            return redirect("/")
         if redirect_to is not None:
             return redirect(redirect_to)
         return redirect(f"/items/{item.company}/category/?category={item.category}&subcategory={item.subcategory}")
@@ -268,7 +277,6 @@ def remove_single_item_from_cart(request, slug):
 
     if order.items.filter(item__slug=slug).exists():
         if order_item.quantity == 1:
-
             order.items.remove(order_item)
             order_item.delete()
             messages.success(request, "Товар был удален из корзины")
@@ -276,6 +284,8 @@ def remove_single_item_from_cart(request, slug):
             order_item.quantity -= 1
             order_item.save()
             messages.success(request, "Количество товара в корзине было обновлено")
+        if order.items.count() == 0:
+            return redirect("/")
         if redirect_to is not None:
             return redirect(redirect_to)
         return redirect(f"/items/{item.company}/category/?category={item.category}&subcategory={item.subcategory}")

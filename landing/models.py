@@ -45,6 +45,7 @@ class Order(models.Model):
     items = models.ManyToManyField(OrderItem, blank=True)
     price = models.IntegerField(default=0)
     complete = models.BooleanField(default=False)
+    fulfilled = models.BooleanField(default=False)
 
     def get_total(self):
         total = 0

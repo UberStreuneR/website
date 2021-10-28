@@ -101,6 +101,37 @@ class CheckoutView(View):
         }
         return render(self.request, "landing/checkout.html", context)
 
+    def post(self, *args, **kwargs):
+        form = CheckoutForm(self.request.POST)
+        if form.is_valid():
+            try:
+                client = self.request.user.client
+            except:
+                device = self.request.COOKIES['device']
+                client, created = Client.objects.get_or_create(device=device)
+            try:
+                order = Order.objects.get(client=client, complete=False)
+            except ObjectDoesNotExist:
+                messages.error(self.request, "Добавь сначала что-нибудь в корзину")
+                return redirect('/')
+            if order.items.count() == 0:
+                messages.error(self.request, "Добавь сначала что-нибудь в корзину")
+                return redirect('/')
+            cd = form.cleaned_data
+            client.name = cd['name']
+            client.email = cd['email']
+            client.phone = cd['phone']
+            client.verified = True
+            client.save()
+            order.complete = True
+            order.save()
+            messages.success(self.request, "Ваш заказ принят. Ожидайте звонка от специалиста")
+            return redirect('/')
+
+        else:
+            messages.error(self.request, "Введите корректные данные")
+            return redirect('/checkout/')
+
 
 
 class TestView(View):
