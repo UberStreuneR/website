@@ -4,10 +4,11 @@
 <div class="d-flex flex-column align-items-center">
 
     <form action="{% url 'search' %}" method="GET">
+        {% csrf_token %}
         <div class="w-50">
             <div class="input-group input-group-sm mb-3" style="width: 400px;">
                 <span class="input-group-text" id="inputGroup-sizing-sm">Поиск</span>
-                {{ form.text }}
+                {{ s_form.text }}
                 {% comment %}<label for="article">Артикул</label>{% endcomment %}
                 <button class="btn btn-outline-secondary ms-3" type="submit">Поиск</button>
             </div>
@@ -23,18 +24,59 @@
             <span style="color: grey; font-size: 20px;">Артикул: {{ item.article }}</span>
             <h3 id="price">{{ item.get_cool_price }}</h3>
             <label for="price" style="color: grey;">цена за штуку</label>
-            <a href="{% url 'add-to-cart' item.slug %}" class="btn btn-lg btn-success mt-4">Добавить в корзину</a>
+            {% if item.weight %}<h3>Вес: {{ item.weight }} кг</h3>{% endif %}
+            <div class="d-flex align-items-center mt-3">
+                <form action="{% url 'add-to-cart' item.slug %}" method="POST">
+                    {% csrf_token %}
+                    <a style="margin-right: 5px;" id="decrement"><i class="fas fa-minus text-black"></i></a>
+                    {{ h_form }}
+                    <a style="margin-left: 5px; margin-right: 10px;" id="increment"><i class="fas fa-plus text-black"></i></a>
+                    <button type="submit" class="btn btn-success">Добавить в корзину</button>
+                </form>
+
+            </div>
+            {% if company.name != "Metizy" %}
             <h4 class="mt-5">Производитель: {{ company.name }}</h4>
             <img src="{{ company.image.url }}" alt="{{ company.name }}" style="max-width: 200px;">
+            {% endif %}
         </div>
     </div>
+    {% if related_items %}
+    <hr width="700px">
+    <h3>Похожие товары</h3>
+    <hr width="700px">
     <div class="d-flex flex-column align-items-left" style="width: 700px;">
-        {% for related_item in related_items %}
-            <div class="d-flex justify-content-between">
-                <a style="font-size: 12px;" href="{{ related_item.get_absolute_url }}">{{ related_item.name }} арт.{{ related_item.article }}</a>
-                <span style="font-size: 12px;"><b>{{ related_item.get_cool_price }}</b></span>
-            </div>
-        {% endfor %}
+        <table class="table">
+            <tbody>
+                {% for related_item in related_items %}
+                    <tr>
+                        <th>{{ forloop.counter }}</th>
+                        <td>
+                            <a style="font-size: 12px;" href="{{ related_item.get_absolute_url }}">{{ related_item.name }} арт.{{ related_item.article }}</a>
+                        </td>
+                        <td>
+                            <span style="font-size: 12px;"><b>{{ related_item.get_cool_price }}</b></span>
+                        </td>
+                        <td><a class="btn btn-success">Добавить</a></td>
+                    </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
+    {% endif %}
 </div>
+
+<script>
+    var decrementButton = document.querySelector("a[id=decrement]");
+    var incrementButton = document.querySelector("a[id=increment]");
+    var counter = document.querySelector("input[id=counter]");
+    decrementButton.addEventListener("click", function() {
+        if (counter.value > 0){
+            counter.value = parseInt(counter.value) - 1;
+        }
+    });
+    incrementButton.addEventListener("click", function() {
+        counter.value = parseInt(counter.value) + 1;
+    })
+</script>
 {% endblock %}

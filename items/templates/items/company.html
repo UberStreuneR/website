@@ -1,16 +1,23 @@
 {% extends 'landing/base.html' %}
 {% block content %}
-    <h1>Продукция компании {{ company }} от официального дилера</h1>
+    {% if company == "Metizy" %}
+        <h1>Метизы{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h1>
+    {% else %}
+        <h1>Продукция компании {{ company }} от официального дилера{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h1>
+
+    {% endif %}
     <hr>
+
     {% for category in categories %}
-        <h2>{{ category.name }}</h2>
+        <h2>{{ category.name }}{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}&category={{ category.name }}"> (Скачать товары)</a>{% endif %}</h2>
         <div class="row row-cols-4 g-2 mb-5">
             {% for subcategory in category.subcategories.all %}
                 <div>
-                    <a class="d-block" style="font-size: 20px;" href="{% url 'categories' company %}?category={{ category.name }}&subcategory={{ subcategory.name }}" id="{{ forloop.counter }}">{{ subcategory.name }}</a>
+                    <a class="d-block" style="font-size: 20px;" href="{% url 'categories' company %}?category={{ category.name }}&subcategory={{ subcategory.name }}&page=1/" id="{{ forloop.counter }}">{{ subcategory.name }}</a>
                     {% if subcategory.comment != 'nan' %}
                     <label for="{{ forloop.counter }}" style="font-size: 14px; color: grey;">{{ subcategory.comment }}</label>
                     {% endif %}
+                    <label for="{{ forloop.counter }}">{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}&category={{ category.name }}&subcategory={{ subcategory.name }}"> (Скачать товары)</a>{% endif %}</label>
                 </div>
 
             {% endfor %}

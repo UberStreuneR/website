@@ -1,5 +1,5 @@
 from functools import reduce
-
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from django.db.models import Q
@@ -7,71 +7,15 @@ from .models import Item, Category, Subcategory
 from landing.models import Order, OrderItem, Partner
 from clients.models import Client
 from django.contrib import messages
-from .forms import ExcelItemsForm, SearchForm
+from .forms import ExcelItemsForm, SearchForm, HowMuchCounterForm
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 import pandas as pd
+from django.http import HttpResponse
 from django.templatetags.static import static
 import os
 from pathlib import Path
 from transliterate import translit
 DIR = Path(__file__).resolve().parent
-
-# def get_image_path(company, category, subcategory, article):
-#     PATH = os.path.join(DIR, "static", "items", "images", company)
-#     PATH = os.path.join(PATH, category.replace(" ", "_").replace(",", "tagCOMMA"), subcategory.replace("/", "^").replace(" ", "_"))
-#     for i in os.walk(PATH):
-#         for file in i[2]:
-#             if article in file:
-#                 to_return = os.path.join(PATH, file)
-#                 to_return = to_return[to_return.find("static"):]
-#                 return to_return
-#
-#
-# def isEnglish(s):
-#     try:
-#         s.encode(encoding='utf-8').decode('ascii')
-#     except UnicodeDecodeError:
-#         return False
-#     else:
-#         return True
-#
-# def to_eng(string):
-#     result = ""
-#     still_russian = False
-#     for letter in string:
-#         if not letter.isalpha():
-#             result += letter
-#             continue
-#         if isEnglish(letter):
-#             if still_russian:
-#                 result += "tagRUS"
-#                 still_russian = False
-#             result += letter
-#         else:
-#             if still_russian is False:
-#                 result += "tagRUS"
-#                 still_russian = True
-#             result += translit(letter, 'ru', reversed=True)
-#     if still_russian:
-#         result += "tagRUS"
-#     return result
-#
-#
-# def from_eng(string):
-#     result = ""
-#     while True:
-#         if "tagRUS" in string:
-#             before = string[:string.index("tagRUS")]
-#             string = string[string.index("tagRUS") + 6:]
-#             between = string[:string.index("tagRUS")]
-#             string = string[string.index("tagRUS") + 6:]
-#             result += before + translit(between, 'ru')
-#         else:
-#             result += string
-#             break
-#
-#     return result
-
 
 class UploadItemsView(UserPassesTestMixin, LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
@@ -95,7 +39,7 @@ class UploadItemsView(UserPassesTestMixin, LoginRequiredMixin, View):
                 changed = row['Обновлено']
                 if changed == "нет":
                     continue
-                company = row['Брэнд']
+                company = translit(row['Брэнд'], "ru", reversed=True)
                 category = row['Категория']
                 subcategory = row['Подкатегория']
                 name = row['Наименование']
@@ -103,10 +47,18 @@ class UploadItemsView(UserPassesTestMixin, LoginRequiredMixin, View):
                 price = row['Цена']
                 comment = row['Расшифровка подкатегории']
                 item = Item.objects.get_or_create(article=article)[0]
+                try:
+                    weight = row['Вес']
+                    if weight != "-":
+                        item.weight = float(str(weight).replace(",", "."))
+                except KeyError:
+                    pass
+                measure_unit = row['Единица измерения']
+                item.measure_unit = measure_unit
                 item.company = company
                 item.category = category
                 item.subcategory = subcategory
-                item.price = price
+                item.price = float(str(price).replace(",", "."))
                 item.name = name
                 path = row['Путь']
                 if type(path) == str:
@@ -131,10 +83,15 @@ class UploadItemsView(UserPassesTestMixin, LoginRequiredMixin, View):
 class CompanyListView(View):
     def get(self, *args, **kwargs):
         categories = Category.objects.filter(company=kwargs['company'])
-
+        try:
+            user = self.request.user
+            is_staff = user.is_staff
+        except:
+            is_staff = False
         context = {
             'categories': categories,
-            'company': kwargs['company']
+            'company': kwargs['company'],
+            'is_staff': is_staff
         }
         return render(self.request, "items/company.html", context)
 
@@ -153,13 +110,26 @@ class CategoryListView(View):
                 messages.warning(self.request, "Неправильный артикул")
                 return redirect("/")
             category = items[0].category
-        form = SearchForm()
+            subcategory = items[0].subcategory
+        paginator = Paginator(items, 5)
+        try:
+            page_number = self.request.GET.get('page')
+        except KeyError:
+            page_number = 1
+        page_obj = paginator.get_page(page_number)
+
+        s_form = SearchForm()
+        h_form = HowMuchCounterForm()
         context = {
             'items': items,
             'category': category,
+            'subcategory': subcategory,
             'categories': Category.objects.filter(company=company),
             'company': company,
-            'form': form
+            's_form': s_form,
+            'h_form': h_form,
+            'page_obj': page_obj,
+            'count': page_obj.object_list.count()
         }
         return render(self.request, "items/categories.html", context)
 
@@ -174,13 +144,15 @@ class SearchView(View):
                                             | Q(company=text)
                                             | Q(category=text)
                                             | Q(subcategory=text)
-                                            | reduce(lambda x, y: x & y, [Q(name_lowercase__icontains=" " + word.replace(",", "").lower()+" ") for word in text.split(" ")]))
+                                            | reduce(lambda x, y: x & y, [Q(name_lowercase__icontains=" " + word.replace(",", "").lower()+" ") for word in text.split(" ")])
+                                            | reduce(lambda x, y: x & y, [Q(name_lowercase__icontains=" " + word.replace(",", "").lower()+",") for word in text.split(" ")]))
             else:
                 items = Item.objects.filter(Q(article=text)
                                             | Q(company=text)
                                             | Q(category=text)
                                             | Q(subcategory=text)
-                                            | Q(name_lowercase__icontains=" " + text.lower() + " "))
+                                            | Q(name_lowercase__icontains=" " + text.lower() + " ")
+                                            | Q(name_lowercase__icontains=" " + text.lower() + ","))
         except:
             messages.warning(self.request, "По запросу ничего не найдено")
             return redirect("/")
@@ -240,12 +212,13 @@ class ItemView(View):
         else:
             qs = None
 
-        form = SearchForm()
+        s_form = SearchForm()
+        h_form = HowMuchCounterForm()
         context = {
             'item': item,
             'company': company,
-            'form': form,
-
+            's_form': s_form,
+            'h_form': h_form
         }
         if is_in_name:
             context.update({'related_items': qs})
@@ -277,7 +250,8 @@ def remove_item_from_cart(request, slug):
         order.items.remove(order_item)
         order_item.delete()
         messages.success(request, "Товар был удален из корзины")
-
+        if order.items.count() == 0:
+            return redirect("/")
         if redirect_to is not None:
             return redirect(redirect_to)
         return redirect(f"/items/{item.company}/category/?category={item.category}&subcategory={item.subcategory}")
@@ -309,7 +283,6 @@ def remove_single_item_from_cart(request, slug):
 
     if order.items.filter(item__slug=slug).exists():
         if order_item.quantity == 1:
-
             order.items.remove(order_item)
             order_item.delete()
             messages.success(request, "Товар был удален из корзины")
@@ -317,6 +290,8 @@ def remove_single_item_from_cart(request, slug):
             order_item.quantity -= 1
             order_item.save()
             messages.success(request, "Количество товара в корзине было обновлено")
+        if order.items.count() == 0:
+            return redirect("/")
         if redirect_to is not None:
             return redirect(redirect_to)
         return redirect(f"/items/{item.company}/category/?category={item.category}&subcategory={item.subcategory}")
@@ -328,41 +303,57 @@ def remove_single_item_from_cart(request, slug):
 
 
 def add_item_to_cart(request, slug):
-    item = Item.objects.filter(slug=slug)[0]
-    try:
-        client = request.user.client
-    except:
-        device = request.COOKIES['device']
-        client, created = Client.objects.get_or_create(device=device)
+    if request.method == "POST":
+        item = Item.objects.filter(slug=slug)[0]
+        form = HowMuchCounterForm(request.POST)
+        if form.is_valid():
+            by_how_much = form.cleaned_data['counter']
 
-    order, created = Order.objects.get_or_create(client=client, complete=False)
-    order_item, created = OrderItem.objects.get_or_create(
-        item=item,
-        ordered=False
-    )
+            if by_how_much == 0:
+                messages.info(request, "Сколько добавить?")
+                return redirect(
+                    f"/items/{item.company}/category/?category={item.category}&subcategory={item.subcategory}")
+            print(by_how_much)
 
-    try:
-        redirect_to = request.GET['redirect_to']
-    except:
-        redirect_to = None
+        else:
+            messages.warning(request, "Неправильное количество товара")
+            return redirect(f'{request.GET["redirect"]}')
+        try:
+            client = request.user.client
+        except:
+            device = request.COOKIES['device']
+            client, created = Client.objects.get_or_create(device=device)
+
+        order, created = Order.objects.get_or_create(client=client, complete=False)
+        order_item, created = OrderItem.objects.get_or_create(
+            item=item,
+            ordered=False
+        )
+
+        try:
+            redirect_to = request.GET['redirect_to']
+        except:
+            redirect_to = None
 
 
-    if order.items.filter(item__slug=slug).exists():
-        order_item.quantity += 1
-        order_item.save()
-        messages.success(request, "Количество товара в корзине было обновлено")
+        if order.items.filter(item__slug=slug).exists():
+            order_item.quantity += by_how_much
+            order_item.save()
+            messages.success(request, "Количество товара в корзине было обновлено")
 
-        if redirect_to is not None:
-            return redirect(redirect_to)
-        return redirect(f"/items/{item.company}/category/?category={item.category}&subcategory={item.subcategory}")
-    else:
-        order.items.add(order_item)
-        messages.success(request, "Товар был добавлен в корзину")
-        # TODO
-        # return redirect("comm", slug=slug)
-        if redirect_to is not None:
-            return redirect(redirect_to)
-        return redirect(f"/items/{item.company}/category/?category={item.category}&subcategory={item.subcategory}")
+            if redirect_to is not None:
+                return redirect(redirect_to)
+            return redirect(f"/items/{item.company}/category/?category={item.category}&subcategory={item.subcategory}")
+        else:
+            order.items.add(order_item)
+            order_item.quantity += by_how_much - 1
+            order_item.save()
+            messages.success(request, "Товар был добавлен в корзину")
+            # TODO
+            # return redirect("comm", slug=slug)
+            if redirect_to is not None:
+                return redirect(redirect_to)
+            return redirect(f"/items/{item.company}/category/?category={item.category}&subcategory={item.subcategory}")
 
 
 def discard_cart(request):
@@ -376,5 +367,63 @@ def discard_cart(request):
         order_item.delete()
         order.items.remove(order_item)
         order.save()
-    messages.success(request, "Your cart was discarded")
+    messages.success(request, "Корзина была очищена")
     return redirect("/")
+
+
+class Download(View, UserPassesTestMixin, LoginRequiredMixin):
+
+    def get(self, *args, **kwargs):
+
+        company = self.request.GET['company']
+        if 'subcategory' in self.request.GET.keys():
+            subcategory = self.request.GET['subcategory']
+            category = self.request.GET['category']
+            items = Item.objects.filter(company=company, category=category, subcategory=subcategory)
+        else:
+            if 'category' in self.request.GET.keys():
+                category = self.request.GET['category']
+                items = Item.objects.filter(company=company, category=category)
+            else:
+                items = Item.objects.filter(company=company)
+
+
+
+        df = pd.DataFrame()
+        for item in items:
+            item_series = pd.Series({"Брэнд": item.company,
+                                    "Категория": item.category,
+                                    "Подкатегория": item.subcategory,
+                                    "Расшифровка подкатегории": "",
+                                    "Наименование": item.name,
+                                    "Цена": item.price,
+                                    "Единица измерения": item.measure_unit,
+                                    "Вес": item.weight,
+                                    "Артикул": item.article,
+                                    "Конечное название": item.company + " " + item.category + " " + item.name + " арт. " + item.article,
+                                    "Обновлено": "нет",
+                                    "Путь": item.image})
+            df = df.append(item_series, ignore_index=True)
+        df2 = pd.DataFrame.from_dict(({"Брэнд": [0],
+                                       "Категория": [0],
+                                       "Подкатегория": [0],
+                                       "Расшифровка подкатегории": [0],
+                                       'Наименование': [0],
+                                       "Цена": [0],
+                                       "Единица измерения": [0],
+                                       "Вес": [0],
+                                       "Конечное название": [0],
+                                       "Обновлено": [0],
+                                       "Путь": [0]}))
+        df = df2.append(df, ignore_index=True)
+        df = df.iloc[1:]
+        path = os.path.join(DIR, "static", "items", "file.xlsx")
+
+        df.to_excel(path, index=False)
+        with open(path, "rb") as fh:
+            response = HttpResponse(fh.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            response['Content-Disposition'] = f'inline;filename={company}.xlsx'
+            return response
+
+    def test_func(self):
+        return self.request.user.is_staff

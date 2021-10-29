@@ -2,23 +2,37 @@
 {% load static %}
 
 {% block content %}
-    <h1>Партнеры</h1>
+    <div class="d-flex justify-content-center">
+        <h1>Партнеры</h1>
+    </div>
     <hr>
-    <div class="d-flex justify-content-start mt-4" style="height: 400px;">
+    <div class="d-flex justify-content-center mt-4">
         <div class="d-flex flex-column align-items-center">
-            <a id="danfoss" href="{% url 'company' 'Danfoss' %}" class="m-1 border-3 border border-dark text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/danfoss.png' %}); background-repeat: no-repeat; height: 45%; width: 300px;">
+            <a id="danfoss" href="{% url 'company' 'Danfoss' %}" class="m-1 border-3 border border-dark text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/danfoss.png' %}); background-repeat: no-repeat; height: 200px; width: 300px;">
             </a>
             <label for="danfoss" style="font-size: 20px;"><b>Danfoss</b></label>
         </div>
         <div class="d-flex flex-column align-items-center">
-            <a id="uponor" href="{% url 'company' 'Uponor' %}" class="m-1 border-3 border border-dark text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/uponor.png' %}); background-repeat: no-repeat; height: 45%; width: 300px;">
+            <a id="uponor" href="{% url 'company' 'Uponor' %}" class="m-1 border-3 border border-dark text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/uponor.png' %}); background-repeat: no-repeat; height: 200px; width: 300px;">
             </a>
             <label for="uponor" style="font-size: 20px;"><b>Uponor</b></label>
         </div>
         <div class="d-flex flex-column align-items-center">
-            <a id="tecofi" href="{% url 'company' 'Tecofi' %}" class="m-1 border-3 border border-dark text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/tecofi.png' %}); background-repeat: no-repeat; height: 45%; width: 300px;">
+            <a id="tecofi" href="{% url 'company' 'Tecofi' %}" class="m-1 border-3 border border-dark text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/tecofi.png' %}); background-repeat: no-repeat; height: 200px; width: 300px;">
             </a>
             <label for="tecofi" style="font-size: 20px;"><b>Tecofi</b></label>
+        </div>
+    </div>
+    <hr>
+    <div class="d-flex justify-content-center">
+        <h1>Другие товары</h1>
+    </div>
+    <hr>
+    <div class="d-flex justify-content-center mt-4" style="height: 400px;">
+        <div class="d-flex flex-column align-items-center">
+            <a id="danfoss" href="{% url 'company' 'Metizy' %}" class="m-1 border-3 border border-dark text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/Metizy.jpg' %}); background-repeat: no-repeat; height: 200px; width: 300px;">
+            </a>
+            <label for="danfoss" style="font-size: 20px;"><b>Метизы</b></label>
         </div>
     </div>
 {% endblock %}

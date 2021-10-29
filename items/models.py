@@ -22,7 +22,11 @@ class Item(models.Model):
     slug = models.SlugField(blank=True)
     article = models.CharField(max_length=30, blank=True)
     description = models.TextField(blank=True)
+
     image = models.ImageField(default='static/landing/images/mainpage/default.jpg')
+
+    weight = models.FloatField(blank=True, null=True)
+    measure_unit = models.CharField(max_length=50, default="шт.")
 
     def __str__(self):
         return f"{self.name}, {self.category}, {self.subcategory}"
@@ -45,9 +49,10 @@ class Item(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(translit(self.name, 'ru', reversed=True))
-        if self.name[0] != " " and self.name[:-1] != " ":
-            self.name = " " + self.name + " "
-        self.name_lowercase = self.name.lower()
+        if self.name:
+            if self.name[0] != " " and self.name[:-1] != " ":
+                self.name = " " + self.name + " "
+            self.name_lowercase = self.name.lower()
         super(Item, self).save(*args, **kwargs)
 
 class Category(models.Model):
