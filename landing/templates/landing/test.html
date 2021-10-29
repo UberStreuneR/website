@@ -1,5 +1,6 @@
 {% extends 'landing/base.html' %}
 {% block content %}
+    <h1>{{ DIR }}</h1>
     <form action="{% url 'test' %}?test=this&bla=blabla" method="POST">
     {% csrf_token %}
         <input type="text" id="counter" value="0" name="counter">

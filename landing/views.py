@@ -133,12 +133,14 @@ class CheckoutView(View):
             return redirect('/checkout/')
 
 
-
+from pathlib import Path
 class TestView(View):
     def get(self, *args, **kwargs):
         form = HowMuchCounterForm()
+        DIR = Path(__file__).resolve().parent
         context = {
-            'form': form
+            'form': form,
+            'DIR': DIR
         }
         return render(self.request, "landing/test.html", context)
     def post(self, *args, **kwargs):

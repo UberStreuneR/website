@@ -25,6 +25,7 @@
             <hr>
             <h3 id="price">{{ item.get_cool_price }}</h3>
             <label for="price" style="color: grey;">цена за штуку</label>
+            {% if item.weight %}<h3>Вес: {{ item.weight }} кг</h3>{% endif %}
             <div class="d-flex align-items-center mt-3">
                 <form action="{% url 'add-to-cart' item.slug %}" method="POST">
                     {% csrf_token %}
@@ -35,8 +36,10 @@
                 </form>
 
             </div>
+            {% if company.name != "Metizy" %}
             <h4 class="mt-5">Производитель: {{ company.name }}</h4>
             <img src="{{ company.image.url }}" alt="{{ company.name }}" style="max-width: 200px;">
+            {% endif %}
         </div>
     </div>
     {% if related_items %}

@@ -10,6 +10,7 @@ from django.contrib import messages
 from .forms import ExcelItemsForm, SearchForm, HowMuchCounterForm
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 import pandas as pd
+from django.http import HttpResponse
 from django.templatetags.static import static
 import os
 from pathlib import Path
@@ -82,10 +83,15 @@ class UploadItemsView(UserPassesTestMixin, LoginRequiredMixin, View):
 class CompanyListView(View):
     def get(self, *args, **kwargs):
         categories = Category.objects.filter(company=kwargs['company'])
-
+        try:
+            user = self.request.user
+            is_staff = user.is_staff
+        except:
+            is_staff = False
         context = {
             'categories': categories,
-            'company': kwargs['company']
+            'company': kwargs['company'],
+            'is_staff': is_staff
         }
         return render(self.request, "items/company.html", context)
 
@@ -363,3 +369,61 @@ def discard_cart(request):
         order.save()
     messages.success(request, "Корзина была очищена")
     return redirect("/")
+
+
+class Download(View, UserPassesTestMixin, LoginRequiredMixin):
+
+    def get(self, *args, **kwargs):
+
+        company = self.request.GET['company']
+        if 'subcategory' in self.request.GET.keys():
+            subcategory = self.request.GET['subcategory']
+            category = self.request.GET['category']
+            items = Item.objects.filter(company=company, category=category, subcategory=subcategory)
+        else:
+            if 'category' in self.request.GET.keys():
+                category = self.request.GET['category']
+                items = Item.objects.filter(company=company, category=category)
+            else:
+                items = Item.objects.filter(company=company)
+
+
+
+        df = pd.DataFrame()
+        for item in items:
+            item_series = pd.Series({"Брэнд": item.company,
+                                    "Категория": item.category,
+                                    "Подкатегория": item.subcategory,
+                                    "Расшифровка подкатегории": "",
+                                    "Наименование": item.name,
+                                    "Цена": item.price,
+                                    "Единица измерения": item.measure_unit,
+                                    "Вес": item.weight,
+                                    "Артикул": item.article,
+                                    "Конечное название": item.company + " " + item.category + " " + item.name + " арт. " + item.article,
+                                    "Обновлено": "нет",
+                                    "Путь": item.image})
+            df = df.append(item_series, ignore_index=True)
+        df2 = pd.DataFrame.from_dict(({"Брэнд": [0],
+                                       "Категория": [0],
+                                       "Подкатегория": [0],
+                                       "Расшифровка подкатегории": [0],
+                                       'Наименование': [0],
+                                       "Цена": [0],
+                                       "Единица измерения": [0],
+                                       "Вес": [0],
+                                       "Конечное название": [0],
+                                       "Обновлено": [0],
+                                       "Путь": [0]}))
+        df = df2.append(df, ignore_index=True)
+        df = df.iloc[1:]
+        path = os.path.join(DIR, "static", "items", "file.xlsx")
+
+        df.to_excel(path, index=False)
+        with open(path, "rb") as fh:
+            response = HttpResponse(fh.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            response['Content-Disposition'] = f'inline;filename={company}.xlsx'
+            return response
+
+    def test_func(self):
+        return self.request.user.is_staff
