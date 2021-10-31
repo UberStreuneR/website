@@ -72,6 +72,11 @@
         </div>
         {% endfor %}
     {% endif %}
+{% block side_cart %}
+    {% if title != 'cart' %}
+        {% include 'landing/side-cart.html' %}
+    {% endif %}
+{% endblock %}
 <main>
     {% block content %}
     {% endblock %}

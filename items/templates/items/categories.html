@@ -50,22 +50,20 @@
                                         </p>
                                         <h5 class="price">{{ item.get_cool_price }}</h5>
                                             {% comment %}<a tabindex="0" href="{% url 'add-to-cart' item.slug %}" class="btn btn-success" role="button" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Добавление товара" data-bs-content="Чтобы посмотреть все добавленные товары, кликните на иконку корзины вверху">Добавить</a>{% endcomment %}
-                                        <form action="{% url 'add-to-cart' item.slug %}" method="POST">
+                                        <form action="" method="POST" id="post-form-{{ item.article }}">
                                             {% csrf_token %}
                                             <div class="d-flex align-items-center">
                                                 <a style="margin-right: 5px;" id="decrement_{{ item.article }}"><i class="fas fa-minus text-black"></i></a>
                                                 {% comment %}{{ h_form }}{% endcomment %}
-                                                <input type="text" value="0" id="counter_{{ item.article }}" name="counter" class="text-center" style="width: 40px;">
+                                                <input type="text" value="1" id="counter_{{ item.article }}" name="counter" class="text-center" style="width: 40px;">
                                                 <a style="margin-left: 5px; margin-right: 10px;" id="increment_{{ item.article }}"><i class="fas fa-plus text-black"></i></a>
+                                                <div id="slug_{{ item.article }}" style="display: none;">{{ item.slug }}</div>
                                                 <button type="submit" class="btn btn-success">Добавить</button>
                                             </div>
-
                                         </form>
-
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 {% endfor %}
@@ -100,6 +98,92 @@
     var countersList = allCountersList.map((counter) => {
         var id = counter.getAttribute("id");
         id = id.slice(8);
+        var slug = $("#slug_" + id).text();
+        $('#post-form-' + id).on('submit', function(event) {
+            event.preventDefault();
+            add_to_cart();
+        });
+        function add_to_cart(){
+            $.ajax({
+                url: '/ajax-add-to-cart/' + slug + '/',
+                type: 'POST',
+                data: { counter : $("#counter_" + id).val()},
+
+                success : function(json) {
+                    $("#counter_" + id).val('1');
+                    $("#cart-count").text(json['count']).removeClass("bg-dark").addClass("bg-danger");
+                    $('<tr>' +
+                        '<th scope="row">' + json["count"] + '</th>' +
+                        '<td><a href="' + json['link'] + '">' + json['name'] +  '</a></td>' +
+                        '<td>(обновите страницу, чтобы увидеть товар корректно)</td>' +
+                        '<td>(этот функционал пока в производстве)</td>' +
+                    '</tr>').appendTo("table tbody");
+                    console.log(json);
+                    console.log(json['count']);
+                    console.log("Success");
+
+                },
+                error : function(xhr, errmsg, err){
+                    console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+        }
+        $(function() {
+            // This function gets cookie with a given name
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            var csrftoken = getCookie('csrftoken');
+
+            /*
+            The functions below will create a header with csrftoken
+            */
+
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+            function sameOrigin(url) {
+                // test that a given url is a same-origin URL
+                // url could be relative or scheme relative or absolute
+                var host = document.location.host; // host + port
+                var protocol = document.location.protocol;
+                var sr_origin = '//' + host;
+                var origin = protocol + sr_origin;
+                // Allow absolute or scheme relative URLs to same origin
+                return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                    (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                    // or any other URL that isn't scheme relative or absolute i.e relative.
+                    !(/^(\/\/|http:|https:).*/.test(url));
+            }
+
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                        // Send the token to same-origin, relative URLs only.
+                        // Send the token only if the method warrants CSRF protection
+                        // Using the CSRFToken value acquired earlier
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+
+        });
+
+
+
         var decrementButton = document.querySelector("a[id=decrement_" + id + "]");
         var incrementButton = document.querySelector("a[id=increment_" + id + "]");
         decrementButton.addEventListener("click", function() {

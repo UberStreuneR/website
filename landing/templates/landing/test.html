@@ -1,9 +1,4 @@
 {% extends 'landing/base.html' %}
 {% block content %}
-    <h1>{{ DIR }}</h1>
-    <form action="{% url 'test' %}?test=this&bla=blabla" method="POST">
-    {% csrf_token %}
-        <input type="text" id="counter" value="0" name="counter">
-        <button type="submit">Submit</button>
-    </form>
+    <div style="width: 200px; height: 100px; border: 2px solid black; box-shadow: 0 -10px 20px;">asdfasdfasd</div>
 {% endblock %}

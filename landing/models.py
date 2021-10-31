@@ -27,9 +27,15 @@ class OrderItem(models.Model):
         return f"{self.quantity} of {self.item.name}"
 
     def get_total_item_price(self):
+        if self.item.price < 0:
+            return 0
         return self.quantity * self.item.price
 
     def get_cool_price(self):
+        if self.item.price == -1:
+            return "Цена не установлена"
+        if self.item.price == -2:
+            return "Цена по запросу"
         price = str(self.get_total_item_price())
         values = price.split(".")
         values[1] = values[1][:2]
@@ -53,13 +59,15 @@ class Order(models.Model):
             total += order_item.get_total_item_price()
         return total
 
-
     def get_cool_price(self):
         price = str(self.get_total())
-        values = price.split(".")
-        values[1] = values[1][:2]
-        int_price = values[0]
-        for i in range(3, len(int_price) + 1, 4):
-            int_price = int_price[:-i] + " " + int_price[-i:]
-        return int_price + "," + values[1]
+        if not "." in price:
+            return price
+        else:
+            values = price.split(".")
+            values[1] = values[1][:2]
+            int_price = values[0]
+            for i in range(3, len(int_price) + 1, 4):
+                int_price = int_price[:-i] + " " + int_price[-i:]
+            return int_price + "," + values[1]
 
