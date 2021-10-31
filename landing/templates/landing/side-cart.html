@@ -1,0 +1,186 @@
+{% load cart_template_tags %}
+<div class="position-fixed d-flex align-items-start border-box-sizing" style="top: 64px; right:0; z-index:10;">
+        <div id="buttons">
+            <a id="side-cart" class="text-decoration-none text-white bg-dark" style="display: block; padding: 20px;">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-2x fa-shopping-cart nav-icon"></i>
+                    <span class="badge rounded-pill {% if request|cart_item_count > 0 %}bg-danger{% else %}bg-dark{% endif %}" id="side-cart-count"> {{ request|cart_item_count }} </span>
+                </div>
+            </a>
+        </div>
+        <div class="inactive bg-white" id="cart-content">
+
+            <a class="btn btn-lg btn-success mx-3" href="/cart/">Корзина ({{ request|cart_item_count }})</a>
+                <div style="height: 300px; overflow-y: scroll;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th scope="col">Наименование</th>
+                                <th scope="col">Цена</th>
+                                <th style="width: 120px;" scope="col">Количество </th>
+                                <th scope="col">Сумма</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order_item in request|cart_items %}
+                                <tr>
+                                    <th scope="row">{{ forloop.counter }}</th>
+                                    <td><a href="{{ order_item.item.get_absolute_url }}">{{ order_item.item.name }}</a></td>
+                                    <td>{{ order_item.item.get_cool_price }}</td>
+                                    <td>
+                                        <div>
+                                            <a style="margin-right: 5px;" id="side_decrement_{{ order_item.item.article }}"><i class="fas fa-minus text-black"></i></a>
+                                            {% comment %}{{ h_form }}{% endcomment %}
+                                            <input value="{{ order_item.quantity }}" id="side_counter_{{ order_item.item.article }}" name="side-cart-counter" class="text-center side" style="width: 40px;" disabled>
+                                            <a style="margin-left: 5px; margin-right: 10px;" id="side_increment_{{ order_item.item.article }}"><i class="fas fa-plus text-black"></i></a>
+                                            <div id="slug_{{ order_item.item.article }}" style="display: none;">{{ order_item.item.slug }}</div>
+                                        </div>
+
+                                    </td>
+                                    <td><span id="order_item_sum_{{ order_item.item.article }}">{{ order_item.get_cool_price }}</span></td>
+                                </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+
+                </div>
+            <hr>
+                <div class="d-flex justify-content-end mt-2"><h2 id="order-price">Итого: {{ request|cart_sum }} руб.</h2></div>
+        </div>
+</div>
+<style>
+    #buttons {
+        box-shadow: 0 -2px 10px;
+    }
+    #cart-content {
+        width: 600px;
+        overflow-x: hidden;
+        padding: 10px;
+        box-shadow: 0 -2px 10px;
+        transition: width 300ms;
+    }
+    #cart-content.inactive {
+        width: 0;
+        padding: 0;
+        overflow-y: hidden;
+    }
+</style>
+<script>
+    $("#side-cart").on('click', function() {
+        var cart_content = $("#cart-content");
+        console.log("Working!!!");
+        cart_content.toggleClass("inactive");
+    })
+</script>
+<script>
+    var allCountersList = [].slice.call(document.querySelectorAll('input[name=side-cart-counter]'));
+    var countersList = allCountersList.map((counter) => {
+        var id = counter.getAttribute("id");
+        id = id.slice(13);
+        console.log(id);
+        var slug = $("#slug_" + id).text();
+        $('#side_increment_' + id).on('click', function(event) {
+            event.preventDefault();
+            console.log("increment");
+            add_to_cart();
+        });
+        $('#side_decrement_' + id).on('click', function(event) {
+            event.preventDefault();
+            console.log("decrement");
+            remove_single_from_cart();
+        });
+        function add_to_cart(){
+            $.ajax({
+                url: '/ajax-add-single-to-cart/' + slug + '/',
+                type: 'POST',
+                success : function(json) {
+                    $("#side_counter_" + id).val(json['quantity']);
+                    $("#side-cart-count").text(json['count']).removeClass("bg-dark").addClass("bg-danger");
+                    $("#order_item_sum_" + id).text(json['price']);
+                    $("#order-price").text("Итого: " + json['order-price'] + ' руб.');
+                    console.log(json);
+                    console.log("Success");
+
+                },
+                error : function(xhr, errmsg, err){
+                    console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+        }
+
+        function remove_single_from_cart(){
+            $.ajax({
+                url: '/ajax-remove-single-from-cart/' + slug + '/',
+                type: 'POST',
+                success : function(json) {
+                    $("#side_counter_" + id).val(json['quantity']);
+                    $("#order_item_sum_" + id).text(json['price']);
+                    $("#order-price").text("Итого: " + json['order-price'] + ' руб.');
+                    console.log("Success");
+
+                },
+                error : function(xhr, errmsg, err){
+                    console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+        }
+
+
+        $(function() {
+            // This function gets cookie with a given name
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            var csrftoken = getCookie('csrftoken');
+
+            /*
+            The functions below will create a header with csrftoken
+            */
+
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+            function sameOrigin(url) {
+                // test that a given url is a same-origin URL
+                // url could be relative or scheme relative or absolute
+                var host = document.location.host; // host + port
+                var protocol = document.location.protocol;
+                var sr_origin = '//' + host;
+                var origin = protocol + sr_origin;
+                // Allow absolute or scheme relative URLs to same origin
+                return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                    (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                    // or any other URL that isn't scheme relative or absolute i.e relative.
+                    !(/^(\/\/|http:|https:).*/.test(url));
+            }
+
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                        // Send the token to same-origin, relative URLs only.
+                        // Send the token only if the method warrants CSRF protection
+                        // Using the CSRFToken value acquired earlier
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+
+        });
+
+    });
+</script>

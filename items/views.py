@@ -1,6 +1,6 @@
 from functools import reduce
 from django.core.paginator import Paginator
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.views.generic import View
 from django.db.models import Q
 from .models import Item, Category, Subcategory
@@ -10,14 +10,17 @@ from django.contrib import messages
 from .forms import ExcelItemsForm, SearchForm, HowMuchCounterForm
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 import pandas as pd
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.templatetags.static import static
+
 import os
 from pathlib import Path
 from transliterate import translit
 DIR = Path(__file__).resolve().parent
 
+
 class UploadItemsView(UserPassesTestMixin, LoginRequiredMixin, View):
+
     def get(self, *args, **kwargs):
         form = ExcelItemsForm()
         context = {
@@ -37,7 +40,7 @@ class UploadItemsView(UserPassesTestMixin, LoginRequiredMixin, View):
                 print(i, " out of ", df.index)
                 row = df.iloc[i]
                 changed = row['Обновлено']
-                if changed == "нет":
+                if changed == "нет" or changed == "":
                     continue
                 company = translit(row['Брэнд'], "ru", reversed=True)
                 category = row['Категория']
@@ -111,7 +114,7 @@ class CategoryListView(View):
                 return redirect("/")
             category = items[0].category
             subcategory = items[0].subcategory
-        paginator = Paginator(items, 5)
+        paginator = Paginator(items, 6)
         try:
             page_number = self.request.GET.get('page')
         except KeyError:
@@ -251,7 +254,7 @@ def remove_item_from_cart(request, slug):
         order_item.delete()
         messages.success(request, "Товар был удален из корзины")
         if order.items.count() == 0:
-            return redirect("/")
+            return redirect(reverse('cart'))
         if redirect_to is not None:
             return redirect(redirect_to)
         return redirect(f"/items/{item.company}/category/?category={item.category}&subcategory={item.subcategory}")
@@ -303,6 +306,8 @@ def remove_single_item_from_cart(request, slug):
 
 
 def add_item_to_cart(request, slug):
+    if request.method == "GET":
+        return redirect('/cart/')
     if request.method == "POST":
         item = Item.objects.filter(slug=slug)[0]
         form = HowMuchCounterForm(request.POST)
@@ -427,3 +432,96 @@ class Download(View, UserPassesTestMixin, LoginRequiredMixin):
 
     def test_func(self):
         return self.request.user.is_staff
+
+
+def ajax_add_to_cart(request, slug):
+    item = Item.objects.filter(slug=slug)[0]
+    try:
+        client = request.user.client
+    except:
+        device = request.COOKIES['device']
+        client, created = Client.objects.get_or_create(device=device)
+
+    order, created = Order.objects.get_or_create(client=client, complete=False)
+    order_item, created = OrderItem.objects.get_or_create(
+        item=item,
+        ordered=False
+    )
+    if request.method == "POST":
+        form = HowMuchCounterForm(request.POST)
+        if form.is_valid():
+            by_how_much = form.cleaned_data['counter']
+            if by_how_much == 0:
+                messages.info(request, "Сколько добавить?")
+                return JsonResponse({'added': False, 'count': order.items.count()})
+            if order.items.filter(item__slug=slug).exists():
+                order_item.quantity += by_how_much
+                order_item.save()
+            else:
+                order.items.add(order_item)
+                order_item.quantity += by_how_much - 1
+                order_item.save()
+            return JsonResponse({'added': True, 'count': order.items.count(), 'quantity': order_item.quantity})
+
+
+def ajax_add_single_to_cart(request, slug):
+    item = Item.objects.filter(slug=slug)[0]
+    try:
+        client = request.user.client
+    except:
+        device = request.COOKIES['device']
+        client, created = Client.objects.get_or_create(device=device)
+
+    order, created = Order.objects.get_or_create(client=client, complete=False)
+    order_item, created = OrderItem.objects.get_or_create(
+        item=item,
+        ordered=False
+    )
+    if request.method == "POST":
+        if order.items.filter(item__slug=slug).exists():
+            order_item.quantity += 1
+            order_item.save()
+        else:
+            order.items.add(order_item)
+            order_item.save()
+        return JsonResponse({'added': True,
+                             'count': order.items.count(),
+                             'quantity': order_item.quantity,
+                             'price': order_item.get_cool_price(),
+                             'order-price': order.get_cool_price(),
+                             'link': item.get_absolute_url(),
+                             'name': item.name})
+
+
+
+def ajax_remove_single_from_cart(request, slug):
+    item = Item.objects.filter(slug=slug)[0]
+    try:
+        client = request.user.client
+    except:
+        device = request.COOKIES['device']
+        client, created = Client.objects.get_or_create(device=device)
+
+    order, created = Order.objects.get_or_create(client=client, complete=False)
+    order_item, created = OrderItem.objects.get_or_create(
+        item=item,
+        ordered=False
+    )
+    if request.method == "POST":
+        if order_item.quantity == 1:
+            order.items.remove(order_item)
+            order_item.delete()
+            price = 0
+            redirect = '/cart/'
+            quantity = 0
+        else:
+            order_item.quantity -= 1
+            order_item.save()
+            price = order_item.get_cool_price()
+            redirect = 'None'
+            quantity = order_item.quantity
+        if order.items.count() == 0:
+            redirect = '/'
+            quantity = 0
+        return JsonResponse({'removed': True, 'quantity': quantity, 'price': price, 'order-price': order.get_cool_price()})
+

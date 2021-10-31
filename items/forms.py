@@ -19,7 +19,7 @@ class SearchForm(forms.Form):
 class HowMuchCounterForm(forms.Form):
     counter = forms.IntegerField(label="",
                                  widget=forms.TextInput(attrs={'type': 'text',
-                                                               'value': 0,
+                                                               'value': 1,
                                                                'id': 'counter',
                                                                'style': 'width: 40px;',
                                                                'class': 'text-center'}))

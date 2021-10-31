@@ -136,20 +136,12 @@ class CheckoutView(View):
 from pathlib import Path
 class TestView(View):
     def get(self, *args, **kwargs):
+        item = Item.objects.filter()[0]
         form = HowMuchCounterForm()
-        DIR = Path(__file__).resolve().parent
         context = {
-            'form': form,
-            'DIR': DIR
+            'item': item,
+            'form': form
         }
         return render(self.request, "landing/test.html", context)
-    def post(self, *args, **kwargs):
-        form = HowMuchCounterForm(self.request.POST)
-        if form.is_valid():
-            print(form.cleaned_data)
-        else:
-            print("None")
-        print(self.request.POST)
-        print(self.request.GET)
-        return redirect("/test")
+
 
