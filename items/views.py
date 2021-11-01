@@ -44,6 +44,7 @@ class UploadItemsView(UserPassesTestMixin, LoginRequiredMixin, View):
                     continue
                 company = translit(row['Брэнд'], "ru", reversed=True).replace(" ", "_")
                 partner = Partner.objects.get_or_create(name=company)[0]
+                partner.save()
                 category = row['Категория']
                 subcategory = row['Подкатегория']
                 name = row['Наименование']

@@ -6,7 +6,7 @@ from django.utils import timezone
 
 
 class Partner(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=250)
     image = models.ImageField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
 
