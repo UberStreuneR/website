@@ -43,6 +43,7 @@ class UploadItemsView(UserPassesTestMixin, LoginRequiredMixin, View):
                 if changed == "нет" or changed == "":
                     continue
                 company = translit(row['Брэнд'], "ru", reversed=True).replace(" ", "_")
+                partner = Partner.objects.get_or_create(company)
                 category = row['Категория']
                 subcategory = row['Подкатегория']
                 name = row['Наименование']
