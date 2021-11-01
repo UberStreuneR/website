@@ -12,7 +12,7 @@
 
             <a class="btn btn-lg btn-success mx-3" href="/cart/">Корзина ({{ request|cart_item_count }})</a>
                 <div style="height: 300px; overflow-y: scroll;">
-                {% if request|cart_item != 0 %}
+                {% if request|cart_items != 0 %}
                     <table class="table">
                         <thead>
                             <tr>
