@@ -42,7 +42,7 @@ class UploadItemsView(UserPassesTestMixin, LoginRequiredMixin, View):
                 changed = row['Обновлено']
                 if changed == "нет" or changed == "":
                     continue
-                company = translit(row['Брэнд'], "ru", reversed=True)
+                company = translit(row['Брэнд'], "ru", reversed=True).replace(" ", "_")
                 category = row['Категория']
                 subcategory = row['Подкатегория']
                 name = row['Наименование']
