@@ -3,13 +3,28 @@
     {% if company == "Metizy" %}
         <h1>Метизы{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h1>
     {% else %}
-        <h1>Продукция компании {{ company }} от официального дилера{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h1>
+        {% if company == 'Teploizoljatsija i zvukoizoljatsija' %}
+            <h1>Теплоизоляция и звукоизоляция{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h1>
+        {% else %}
+            {% if company == 'Detali truboprovodov' %}
+                <h1>Детали трубопроводов{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h1>
+                {% else %}
+            <h1>Продукция компании {{ company }} от официального дилера{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h1>
 
+            {% endif %}
+        {% endif %}
     {% endif %}
     <hr>
 
     {% for category in categories %}
-        <h2>{{ category.name }}{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}&category={{ category.name }}"> (Скачать товары)</a>{% endif %}</h2>
+
+        {% if company != 'Teploizoljatsija i zvukoizoljatsija' %}
+            {% if company != 'Metizy' %}
+                {% if company != 'Detali truboprovodov' %}
+                    <h2>{{ category.name }}{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}&category={{ category.name }}"> (Скачать товары)</a>{% endif %}</h2>
+                {% endif %}
+            {% endif %}
+        {% endif %}
         <div class="row row-cols-4 g-2 mb-5">
             {% for subcategory in category.subcategories.all %}
                 <div>
