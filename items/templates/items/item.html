@@ -24,7 +24,7 @@
             <span style="color: grey; font-size: 20px;">Артикул: {{ item.article }}</span>
             <h3 id="price">{{ item.get_cool_price }}</h3>
             <label for="price" style="color: grey;">цена за штуку</label>
-            {% if item.weight %}<h3>Вес: {{ item.weight }} кг</h3>{% endif %}
+            {% if item.weight > 0 %}<h3>Вес: {{ item.weight }} кг</h3>{% endif %}
             <div class="d-flex align-items-center mt-3">
                 <form action="{% url 'add-to-cart' item.slug %}" method="POST">
                     {% csrf_token %}
