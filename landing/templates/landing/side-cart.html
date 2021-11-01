@@ -12,6 +12,7 @@
 
             <a class="btn btn-lg btn-success mx-3" href="/cart/">Корзина ({{ request|cart_item_count }})</a>
                 <div style="height: 300px; overflow-y: scroll;">
+                {% if request|cart_item != 0 %}
                     <table class="table">
                         <thead>
                             <tr>
@@ -23,6 +24,7 @@
                             </tr>
                         </thead>
                         <tbody>
+
                             {% for order_item in request|cart_items %}
                                 <tr>
                                     <th scope="row">{{ forloop.counter }}</th>
@@ -41,10 +43,9 @@
                                     <td><span id="order_item_sum_{{ order_item.item.article }}">{{ order_item.get_cool_price }}</span></td>
                                 </tr>
                             {% endfor %}
-
                         </tbody>
                     </table>
-
+                {% endif %}
                 </div>
             <hr>
                 <div class="d-flex justify-content-end mt-2"><h2 id="order-price">Итого: {{ request|cart_sum }} руб.</h2></div>
