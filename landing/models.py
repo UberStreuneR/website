@@ -43,7 +43,7 @@ class OrderItem(models.Model):
         int_price = values[0]
         for i in range(3, len(int_price) + 1, 4):
             int_price = int_price[:-i] + " " + int_price[-i:]
-        return int_price + "," + values[1]
+        return int_price
 
 
 class Order(models.Model):
@@ -72,7 +72,7 @@ class Order(models.Model):
             int_price = values[0]
             for i in range(3, len(int_price) + 1, 4):
                 int_price = int_price[:-i] + " " + int_price[-i:]
-            return int_price + "," + values[1]
+            return int_price
 
 class File(models.Model):
     order = models.ForeignKey(Order, related_name='files', on_delete=models.CASCADE)

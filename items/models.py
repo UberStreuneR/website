@@ -9,8 +9,6 @@ STATUS_CHOICES = (
     ('N', 'Not available')
 )
 
-
-
 class Item(models.Model):
     name = models.CharField(max_length=256, blank=True)
     name_lowercase = models.CharField(max_length=256, blank=True)
@@ -45,7 +43,7 @@ class Item(models.Model):
         int_price = values[0]
         for i in range(3, len(int_price) + 1, 4):
             int_price = int_price[:-i] + " " + int_price[-i:]
-        return int_price + "," + values[1] + " руб."
+        return int_price + " руб."
 
     def save(self, *args, **kwargs):
         if self.company:

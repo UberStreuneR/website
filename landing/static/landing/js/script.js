@@ -4,6 +4,12 @@ function get_order_items(){
         type: 'GET',
         success : function(json) {
             console.log(json);
+            if (json['empty'] == 'True'){
+                console.log("Empty");
+            }
+            else {
+                console.log("Not empty");
+            }
             if ($("#table-body").length){
                 $("#table-body")[0].innerHTML = "";
             }
@@ -23,7 +29,8 @@ function get_order_items(){
                         "<div id=\"slug_" + item['article'] + "\" style=\"display: none;\">" + item['slug'] + "</div>" +
 
                     "</div></td>" +
-                        "<td><span id=\"order_item_sum_" + item['article'] + "\">" + order_item['cool_price'] + "</span></td></tr>"
+                        "<td align='right'><span id=\"order_item_sum_" + item['article'] + "\">" + order_item['cool_price'] + "</span></td>" +
+                        "<td><a id=\"side_cart_remove_" + item['article'] + "\"><i class=\"fas fa-times text-danger\"></i></a></td></tr>"
                 ;
             }
             $("#order-price").text("Итого: " + json['order']['cool_price'] + " руб.");

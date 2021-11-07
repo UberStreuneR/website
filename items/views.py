@@ -479,6 +479,25 @@ def ajax_add_to_cart(request, slug):
             return JsonResponse({'added': True, 'count': order.items.count(), 'quantity': order_item.quantity})
 
 
+def ajax_remove_from_cart(request):
+    article = request.POST['article']
+    item = Item.objects.filter(article=article)[0]
+    try:
+        client = request.user.client
+    except:
+        device = request.COOKIES['device']
+        client, created = Client.objects.get_or_create(device=device)
+
+    order, created = Order.objects.get_or_create(client=client, complete=False)
+    order_item, created = OrderItem.objects.get_or_create(
+        item=item,
+        ordered=False
+    )
+    order_item.delete()
+    return JsonResponse({'success': True, 'cool_price': order.get_cool_price()})
+
+
+
 def ajax_add_single_to_cart(request, slug):
     item = Item.objects.filter(slug=slug)[0]
     try:
@@ -566,9 +585,12 @@ def ajax_get_order_items(request):
     order, created = Order.objects.get_or_create(client=client, complete=False)
     if request.method == "GET":
         order_serializer = OrderSerializer(order)
-        item_serializer = ItemSerializer(order.items.first().item)
-        order_item_serializer = OrderItemSerializer(order.items.first())
-        return JsonResponse({'order': order_serializer.data})
+        response = {'order': order_serializer.data}
+        if order.items.count() == 0:
+            response.update({'empty': True})
+        else:
+            response.update({'empty': False})
+        return JsonResponse(response)
     return JsonResponse({})
 
 class UploadFileToOrderView(View):

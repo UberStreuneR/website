@@ -12,9 +12,9 @@ function initialize(){
         var side_counter = $("#side_counter_" + id);
         var side_decrement = $("#side_decrement_" + id);
         var side_increment = $("#side_increment_" + id);
-
+        var side_remove_item = $("#side_cart_remove_" + id);
         side_decrement.on("click", function(){
-            if (side_decrement.val() > 1){
+            if (side_counter.val() > 1){
                 var value = parseInt(side_counter.val());
                 console.log(value);
                 side_counter.val(value - 1);
@@ -33,6 +33,24 @@ function initialize(){
             console.log($("#side_counter_" + id).val());
             $("#side-cart-save").css("visibility", "visible");
             console.log(counter.getAttribute("value"));
+        });
+        side_remove_item.on("click", function(event){
+            event.preventDefault();
+            console.log("Delete!!!!!!!");
+            $.ajax({
+            url: '/ajax-remove-from-cart/',
+            type: 'POST',
+            data: {'article': id},
+            success : function(json) {
+                console.log(json);
+                console.log("Success");
+                $("#order-price").text("Итого: " + json['cool_price'] + " руб.");
+                get_order_items();
+            },
+            error : function(xhr, errmsg, err){
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
         });
     });
     var save_button = $("#side-cart-save");
@@ -58,11 +76,13 @@ function initialize(){
                 console.log("Success");
                 save_button.css("visibility", "hidden");
                 $("#order-price").text("Итого: " + json['cool_price'] + " руб.");
+                get_order_items();
             },
             error : function(xhr, errmsg, err){
                 console.log(xhr.status + ": " + xhr.responseText);
             }
         });
+
         $(function() {
             // This function gets cookie with a given name
             function getCookie(name) {

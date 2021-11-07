@@ -8,6 +8,7 @@ urlpatterns = [
     path('items/<company>/<article>/', views.ItemView.as_view(), name='item'),
     path('add-to-cart/<slug>/', views.add_item_to_cart, name='add-to-cart'),
     path('ajax-add-to-cart/<slug>/', views.ajax_add_to_cart, name='ajax-add-to-cart'),
+    path('ajax-remove-from-cart/', views.ajax_remove_from_cart, name='ajax-remove-from-cart'),
     path('ajax-add-single-to-cart/<slug>/', views.ajax_add_single_to_cart, name='ajax-add-single-to-cart'),
     path('remove-from-cart/<slug>/', views.remove_item_from_cart, name='remove-from-cart'),
     path('ajax-remove-single-from-cart/<slug>/', views.ajax_remove_single_from_cart, name='ajax-remove-single-from-cart'),
