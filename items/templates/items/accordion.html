@@ -11,7 +11,7 @@
                     <div class="accordion-body">
                         {% for subcategory in category.subcategories.all %}
                         <div class="list-group-item">
-                            <a class="text-decoration-none text-dark" href="{% url 'categories' company %}?category={{ category.name }}&subcategory={{ subcategory.name }}&page=1/" id="{{ subcategory.name }}">{{ subcategory.name }}</a>
+                            <a class="text-decoration-none text-dark" href="{% url 'categories' company %}?category={{ category.name }}&subcategory={{ subcategory.name }}&tile_view={{ tile_view }}" id="{{ subcategory.name }}">{{ subcategory.name }}</a>
                             {% if subcategory.comment != 'nan' %}
                             <label for="{{ subcategory.name }}" style="font-size: 12px; color: grey">{{ subcategory.comment }}</label>
                             {% endif %}

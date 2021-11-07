@@ -12,7 +12,7 @@ class Partner(models.Model):
 
     def save(self, *args, **kwargs):
         name = self.name.lower()
-        self.image = f'static/landing/images/mainpage/{name}.png'
+        self.image = f'static/landing/images/mainpage/{name}.jpg'
         super(Partner, self).save(*args, **kwargs)
 
     def __str__(self):

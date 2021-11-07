@@ -35,7 +35,7 @@
                 </form>
 
             </div>
-            {% if company.name != "Metizy" %}
+            {% if welcome %}
             <h4 class="mt-5">Производитель: {{ company.name }}</h4>
             <img src="{{ company.image.url }}" alt="{{ company.name }}" style="max-width: 200px;">
             {% endif %}

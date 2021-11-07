@@ -52,7 +52,7 @@ class UploadItemsView(UserPassesTestMixin, LoginRequiredMixin, View):
                 article = row['Артикул']
                 price = row['Цена']
                 comment = row['Расшифровка подкатегории']
-                item = Item.objects.get_or_create(article=article)[0]
+                item, created = Item.objects.get_or_create(article=article)
                 try:
                     weight = row['Вес']
                     if weight != "-":
@@ -117,12 +117,17 @@ class CategoryListView(View):
                 return redirect("/")
             category = items[0].category
             subcategory = items[0].subcategory
-        paginator = Paginator(items, 6)
-        try:
-            page_number = self.request.GET.get('page')
-        except KeyError:
-            page_number = 1
-        page_obj = paginator.get_page(page_number)
+
+        try :
+            tile_view = self.request.GET['tile_view']
+            paginator = Paginator(items, 6)
+            try:
+                page_number = self.request.GET.get('page')
+            except KeyError:
+                page_number = 1
+            page_obj = paginator.get_page(page_number)
+        except:
+            tile_view = False
 
         s_form = SearchForm()
         h_form = HowMuchCounterForm()
@@ -134,9 +139,11 @@ class CategoryListView(View):
             'company': company,
             's_form': s_form,
             'h_form': h_form,
-            'page_obj': page_obj,
-            'count': page_obj.object_list.count()
+            'tile_view': tile_view
         }
+        if tile_view:
+            context.update({'page_obj': page_obj,
+                            'count': page_obj.object_list.count()})
         return render(self.request, "items/categories.html", context)
 
 
@@ -174,7 +181,11 @@ class ItemView(View):
     def get(self, *args, **kwargs):
         item = get_object_or_404(Item, article=kwargs['article'])
         company = get_object_or_404(Partner, name=kwargs['company'])
-
+        unwelcome_companies = ['Detali_truboprovodov', 'Metizy', 'Teploizoljatsija_i_zvukoizoljatsija']
+        if company.name in unwelcome_companies:
+            welcome = False
+        else:
+            welcome = True
         dn_du = ['dn', 'Dn', 'dN', 'DN',
                  'du', 'Du', 'dU', 'DU',
                  'дн', 'Дн', "дН", "ДН",
@@ -224,7 +235,8 @@ class ItemView(View):
             'item': item,
             'company': company,
             's_form': s_form,
-            'h_form': h_form
+            'h_form': h_form,
+            'welcome': welcome
         }
         if is_in_name:
             context.update({'related_items': qs})
@@ -605,4 +617,4 @@ def update_order_from_side_cart(request):
             )
             order_item.quantity = int(value)
             order_item.save()
-        return JsonResponse({'success': True})
+        return JsonResponse({'success': True, 'cool_price': order.get_cool_price()})

@@ -143,7 +143,7 @@ class TestView(View):
         send_mail(
             "Subject",
             "Message",
-            "mopnerzad@yandex.ru",
+            "office@nvsnab.com",
             ["mopnerzad@yandex.ru"]
         )
 

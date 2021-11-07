@@ -4,7 +4,9 @@ function get_order_items(){
         type: 'GET',
         success : function(json) {
             console.log(json);
-            $("#table-body")[0].innerHTML = "";
+            if ($("#table-body").length){
+                $("#table-body")[0].innerHTML = "";
+            }
             for (let i = 0; i < json['order']['items'].length; i++){
                 var order_item = json['order']['items'][i];
                 var item = order_item['item'];
@@ -24,6 +26,7 @@ function get_order_items(){
                         "<td><span id=\"order_item_sum_" + item['article'] + "\">" + order_item['cool_price'] + "</span></td></tr>"
                 ;
             }
+            $("#order-price").text("Итого: " + json['order']['cool_price'] + " руб.");
             initialize();
         },
         error : function(xhr, errmsg, err){

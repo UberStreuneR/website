@@ -13,7 +13,7 @@
 
 
                 <div style="height: 300px; overflow-y: scroll;">
-                {% if request|cart_items != 0 %}
+                {% comment %}{% if request|cart_items != 0 %}{% endcomment %}
                     <table class="table">
                         <thead>
                             <tr>
@@ -25,7 +25,7 @@
                             </tr>
                         </thead>
                         <tbody id="table-body">
-
+                        {% if request|cart_items != 0 %}
                             {% for order_item in request|cart_items %}
                                 <tr>
                                     <th scope="row">{{ forloop.counter }}</th>
@@ -44,9 +44,10 @@
                                     <td><span id="order_item_sum_{{ order_item.item.article }}">{{ order_item.get_cool_price }}</span></td>
                                 </tr>
                             {% endfor %}
+                        {% endif %}
                         </tbody>
                     </table>
-                {% endif %}
+                {% comment %}{% endif %}{% endcomment %}
                 </div>
             <hr>
                 <div class="d-flex align-items-center mt-2">

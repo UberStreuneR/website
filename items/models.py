@@ -48,7 +48,8 @@ class Item(models.Model):
         return int_price + "," + values[1] + " руб."
 
     def save(self, *args, **kwargs):
-        self.url = self.get_absolute_url()
+        if self.company:
+            self.url = self.get_absolute_url()
         self.slug = slugify(translit(self.name, 'ru', reversed=True))
         if self.name:
             if self.name[0] != " " and self.name[:-1] != " ":

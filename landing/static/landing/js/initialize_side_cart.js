@@ -1,6 +1,7 @@
 function initialize(){
     console.log("Init!!!");
     var allCountersList = [].slice.call(document.querySelectorAll('input[name=side-cart-counter]'));
+    console.log(allCountersList.length);
     for (let i = 0; i < allCountersList.length; i++){
         console.log(allCountersList[i].getAttribute("value"));
         console.log(allCountersList[i].getAttribute("id"));
@@ -16,7 +17,7 @@ function initialize(){
             if (side_decrement.val() > 1){
                 var value = parseInt(side_counter.val());
                 console.log(value);
-                side_counter.val(value + 1);
+                side_counter.val(value - 1);
                 $("#side-cart-save").css("visibility", "visible");
             }
         });
@@ -56,6 +57,7 @@ function initialize(){
                 console.log(json);
                 console.log("Success");
                 save_button.css("visibility", "hidden");
+                $("#order-price").text("Итого: " + json['cool_price'] + " руб.");
             },
             error : function(xhr, errmsg, err){
                 console.log(xhr.status + ": " + xhr.responseText);
