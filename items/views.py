@@ -494,7 +494,13 @@ def ajax_remove_from_cart(request):
         ordered=False
     )
     order_item.delete()
-    return JsonResponse({'success': True, 'cool_price': order.get_cool_price()})
+    response = {'success': True, 'cool_price': order.get_cool_price()}
+
+    if order.items.count() == 0:
+        response.update({'empty': True})
+    else:
+        response.update({'empty': False})
+    return JsonResponse(response)
 
 
 

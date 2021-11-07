@@ -2,6 +2,12 @@ function initialize(){
     console.log("Init!!!");
     var allCountersList = [].slice.call(document.querySelectorAll('input[name=side-cart-counter]'));
     console.log(allCountersList.length);
+    if (allCountersList.length === 0){
+        $("#side-cart-count").text("0").removeClass("bg-danger").addClass("bg-dark");
+    }
+    else {
+        console.log("NOT ZERO");
+    }
     for (let i = 0; i < allCountersList.length; i++){
         console.log(allCountersList[i].getAttribute("value"));
         console.log(allCountersList[i].getAttribute("id"));
@@ -45,6 +51,10 @@ function initialize(){
                 console.log(json);
                 console.log("Success");
                 $("#order-price").text("Итого: " + json['cool_price'] + " руб.");
+                /*if (json['empty'] === 'True'){
+                    console.log("EMPTY");
+                    $("#side-cart-count").text(0).removeClass("bg-danger").addClass("bg-dark");
+                }*/
                 get_order_items();
             },
             error : function(xhr, errmsg, err){

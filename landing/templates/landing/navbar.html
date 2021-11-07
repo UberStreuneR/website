@@ -34,10 +34,10 @@
 
       {% comment %}<span class="fas fa-shopping-cart fa-lg nav-icon"></span>{% endcomment %}
       </ul>
-      <a class="mt-lg-0 text-decoration-none text-white" href="{% url 'cart' %}" style="padding-left: 10px;">
+      {% comment %}<a class="mt-lg-0 text-decoration-none text-white" href="{% url 'cart' %}" style="padding-left: 10px;">
         <span class="fas fa-shopping-cart {% if title == 'cart' %}fa-lg active{% endif %} nav-icon"></span>
         <span class="badge rounded-pill {% if request|cart_item_count > 0 %}bg-danger{% else %}bg-dark{% endif %}" id="cart-count"> {{ request|cart_item_count }} </span>
-      </a>
+      </a>{% endcomment %}
       <!-- Left links -->
     </div>
     <!-- Collapsible wrapper -->
