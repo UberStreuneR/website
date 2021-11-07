@@ -22,7 +22,7 @@ class Item(models.Model):
     slug = models.SlugField(blank=True)
     article = models.CharField(max_length=30, blank=True)
     description = models.TextField(blank=True)
-
+    # url = models.URLField(blank=True, null=True)
     image = models.ImageField(default='static/landing/images/mainpage/default.jpg')
 
     weight = models.FloatField(blank=True, null=True)
@@ -48,6 +48,7 @@ class Item(models.Model):
         return int_price + "," + values[1] + " руб."
 
     def save(self, *args, **kwargs):
+        self.url = self.get_absolute_url()
         self.slug = slugify(translit(self.name, 'ru', reversed=True))
         if self.name:
             if self.name[0] != " " and self.name[:-1] != " ":
@@ -69,9 +70,6 @@ class Category(models.Model):
         verbose_name_plural = 'Categories'
 
 
-
-
-
 class Subcategory(models.Model):
     name = models.CharField(max_length=256, blank=True, null=True)
     category = models.ForeignKey(Category, related_name='subcategories', on_delete=models.CASCADE, blank=True, null=True)
@@ -82,3 +80,4 @@ class Subcategory(models.Model):
 
     class Meta:
         verbose_name_plural = 'subcategories'
+

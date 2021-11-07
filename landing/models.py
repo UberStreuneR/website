@@ -51,6 +51,8 @@ class Order(models.Model):
     date = models.DateTimeField(default=timezone.now)
     items = models.ManyToManyField(OrderItem, blank=True)
     price = models.IntegerField(default=0)
+    details = models.TextField(blank=True, null=True)
+
     complete = models.BooleanField(default=False)
     fulfilled = models.BooleanField(default=False)
 
@@ -72,3 +74,7 @@ class Order(models.Model):
                 int_price = int_price[:-i] + " " + int_price[-i:]
             return int_price + "," + values[1]
 
+class File(models.Model):
+    order = models.ForeignKey(Order, related_name='files', on_delete=models.CASCADE)
+    name = models.CharField(blank=True, null=True, max_length=200)
+    file = models.FileField(blank=True, null=True, upload_to='static/cart_files/')

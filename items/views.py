@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.views.generic import View
 from django.db.models import Q
 from .models import Item, Category, Subcategory
-from landing.models import Order, OrderItem, Partner
+from landing.models import Order, OrderItem, Partner, File
 from clients.models import Client
 from django.contrib import messages
 from .forms import ExcelItemsForm, SearchForm, HowMuchCounterForm
@@ -12,7 +12,8 @@ from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 import pandas as pd
 from django.http import HttpResponse, JsonResponse
 from django.templatetags.static import static
-
+from landing.forms import OrderDetailsForm, OrderFilesForm
+from landing.serializers import OrderSerializer, ItemSerializer, OrderItemSerializer
 import os
 from pathlib import Path
 from transliterate import translit
@@ -527,3 +528,81 @@ def ajax_remove_single_from_cart(request, slug):
             quantity = 0
         return JsonResponse({'removed': True, 'quantity': quantity, 'price': price, 'order-price': order.get_cool_price()})
 
+def ajax_save_order_details(request):
+    try:
+        client = request.user.client
+    except:
+        device = request.COOKIES['device']
+        client, created = Client.objects.get_or_create(device=device)
+
+    order, created = Order.objects.get_or_create(client=client, complete=False)
+    if request.method == "POST":
+        d_form = OrderDetailsForm(request.POST)
+        if d_form.is_valid():
+            order.details = d_form.cleaned_data['details']
+            order.save()
+            return JsonResponse({'saved': True, 'data': d_form.cleaned_data['details']})
+        return JsonResponse({'saved': False, 'data': d_form.cleaned_data['details']})
+
+def ajax_get_order_items(request):
+    try:
+        client = request.user.client
+    except:
+        device = request.COOKIES['device']
+        client, created = Client.objects.get_or_create(device=device)
+
+    order, created = Order.objects.get_or_create(client=client, complete=False)
+    if request.method == "GET":
+        order_serializer = OrderSerializer(order)
+        item_serializer = ItemSerializer(order.items.first().item)
+        order_item_serializer = OrderItemSerializer(order.items.first())
+        return JsonResponse({'order': order_serializer.data})
+    return JsonResponse({})
+
+class UploadFileToOrderView(View):
+    def post(self, *args, **kwargs):
+        try:
+            client = self.request.user.client
+        except:
+            device = self.request.COOKIES['device']
+            client, created = Client.objects.get_or_create(device=device)
+        order, created = Order.objects.get_or_create(client=client, complete=False)
+        f_form = OrderFilesForm(self.request.POST, self.request.FILES)
+        if f_form.is_valid():
+            File.objects.create(file=f_form.cleaned_data['file'], order=order, name=self.request.FILES['file'].name)
+            messages.success(self.request, "Файл загружен")
+            return redirect("/cart/")
+        messages.error(self.request, "Ошибка загрузки")
+        return redirect("/cart/")
+
+
+def delete_file_from_order(request):
+    try:
+        client = request.user.client
+    except:
+        device = request.COOKIES['device']
+        client, created = Client.objects.get_or_create(device=device)
+    order, created = Order.objects.get_or_create(client=client, complete=False)
+    name = request.GET['name']
+    file = order.files.filter(Q(name__icontains=name))[0]
+    file.delete()
+    messages.success(request, "Файл удален")
+    return redirect('/cart/')
+
+def update_order_from_side_cart(request):
+    try:
+        client = request.user.client
+    except:
+        device = request.COOKIES['device']
+        client, created = Client.objects.get_or_create(device=device)
+    order, created = Order.objects.get_or_create(client=client, complete=False)
+    if request.method == "POST":
+        for key, value in request.POST.items():
+            item = Item.objects.filter(article=key)[0]
+            order_item, created = OrderItem.objects.get_or_create(
+                item=item,
+                ordered=False
+            )
+            order_item.quantity = int(value)
+            order_item.save()
+        return JsonResponse({'success': True})

@@ -10,7 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.templatetags.static import static
 from items.forms import SearchForm, HowMuchCounterForm
-from .forms import CheckoutForm
+from .forms import CheckoutForm, OrderDetailsForm, OrderFilesForm
 # Create your views here.
 
 
@@ -71,9 +71,13 @@ class CartView(View):
         if order.items.count() == 0:
             messages.error(self.request, "Добавь сначала что-нибудь в корзину")
             return redirect('/')
+        d_form = OrderDetailsForm()
+        f_form = OrderFilesForm()
         context = {
             "title": "cart",
-            'order': order
+            'order': order,
+            'd_form': d_form,
+            'f_form': f_form
         }
         return render(self.request, "landing/cart.html", context=context)
 
@@ -133,15 +137,16 @@ class CheckoutView(View):
             return redirect('/checkout/')
 
 
-from pathlib import Path
+from django.core.mail import send_mail
 class TestView(View):
     def get(self, *args, **kwargs):
-        item = Item.objects.filter()[0]
-        form = HowMuchCounterForm()
-        context = {
-            'item': item,
-            'form': form
-        }
-        return render(self.request, "landing/test.html", context)
+        send_mail(
+            "Subject",
+            "Message",
+            "mopnerzad@yandex.ru",
+            ["mopnerzad@yandex.ru"]
+        )
+
+        return render(self.request, "landing/test.html")
 
 

@@ -1,17 +1,18 @@
 {% extends 'landing/base.html' %}
+{% load cart_template_tags %}
 {% block content %}
-<div class="d-flex justify-content-center">
+<div class="d-flex flex-column align-items-center">
     <table class="table w-75 table-hover">
         <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Категория</th>
-            <th scope="col">Подкатегория</th>
-            <th scope="col">Название</th>
-            <th scope="col">Количество</th>
-            <th scope="col">Цена (руб.)</th>
-            <th scope="col"></th>
-        </tr>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Категория</th>
+                <th scope="col">Подкатегория</th>
+                <th scope="col">Название</th>
+                <th scope="col">Количество</th>
+                <th scope="col">Цена (руб.)</th>
+                <th scope="col"></th>
+            </tr>
         </thead>
         <tbody>
             {% for order_item in order.items.all %}
@@ -27,6 +28,7 @@
                         <div id="slug_{{ order_item.item.article }}" style="display: none;">{{ order_item.item.slug }}</div>
                     </td>
                     <td id="order_item_sum_{{ order_item.item.article }}" colspan="2">{{ order_item.get_cool_price }}</td>
+                    <td><a href="{% url 'remove-from-cart' order_item.item.slug %}?redirect_to=cart"><i class="fas fa-2x fa-times text-danger"></i></a></td>
                 </tr>
 
             {% endfor %}
@@ -34,22 +36,63 @@
                 <td colspan="4"><b><h3>Сумма заказа</h3></b></td>
                 <td colspan="2"><b><h3 id="order_price">{{ order.get_cool_price }} руб.</h3></b></td>
             </tr>
-            <tr>
-
-                <td colspan="6">
-                    <div class="d-flex justify-content-around">
-                        <a href="{% url 'discard' %}" class="btn btn-danger">Очистить корзину</a>
-                        <a href="{% url 'home' %}" class="btn btn-secondary">Продолжить покупки</a>
-                        <a href="{% url 'checkout' %}" class="btn btn-success">Подтвердить</a>
-                    </div>
-                </td>
-            </tr>
-
         </tbody>
     </table>
+        <form action="{% url 'cart' %}" method="POST" id="details-form">
+            <div class="d-flex align-items-center justify-content-between" style="width: 900px;">
+
+                {% csrf_token %}
+                {{ d_form }}
+                <div class="d-flex flex-column align-items-center">
+                    <button class="btn btn-outline-primary" type="submit" id="save-details-button">Сохранить детали</button>
+                    <label for="save-details-button" class="d-none" style="color: green;" id="save-details-success">Сохранено</label>
+                    <label for="save-details-button" class="d-none" style="color: darkred;" id="save-details-error">Ошибка</label>
+                </div>
+            </div>
+
+        </form>
+    <form enctype="multipart/form-data" action="{% url 'upload-file-to-order' %}" method="POST">
+        {% csrf_token %}
+        {{ f_form }}
+        <button class="btn btn-outline-primary" type="submit">Загрузить</button>
+    </form>
+    {% for file in order.files.all %}
+        <div class="d-flex">
+            <span>{{ file.name }}</span>
+            <a href="{% url 'delete-file-from-order' %}?name={{ file.name|no_extension }}"><i class="fas fa-times text-danger mx-2"></i></a>
+        </div>
+
+    {% endfor %}
+
+    <div class="d-flex justify-content-around mt-3" style="width: 600px;">
+        <a href="{% url 'discard' %}" class="btn btn-danger">Очистить корзину</a>
+        <a href="{% url 'home' %}" class="btn btn-secondary">Продолжить покупки</a>
+        <a href="{% url 'checkout' %}" class="btn btn-success">Подтвердить заказ</a>
+    </div>
+
+
 
 </div>
 <script>
+    $('#details-form').on('submit', function(event) {
+            event.preventDefault();
+            save_details();
+    });
+    function save_details(){
+            $.ajax({
+                url: '/ajax-save-order-details/',
+                type: 'POST',
+                data: { details : $("#details").val()},
+
+                success : function(json) {
+                    $("#save-details-success").removeClass("d-none");
+                },
+                error : function(xhr, errmsg, err){
+                    $("#save-details-error").removeClass("d-none");
+                    console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+        }
     var allCountersList = [].slice.call(document.querySelectorAll('span[name=counter]'));
     var countersList = allCountersList.map((counter) => {
         console.log(counter);

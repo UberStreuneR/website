@@ -92,8 +92,10 @@
         </div>
     </div>
 </div>
-
+<script src="{% static 'landing/js/script.js' %}"></script>
+<script src="{% static 'landing/js/initialize_side_cart.js' %}"></script>
 <script>
+
     var allCountersList = [].slice.call(document.querySelectorAll('input[name=counter]'));
     var countersList = allCountersList.map((counter) => {
         var id = counter.getAttribute("id");
@@ -112,14 +114,7 @@
                 success : function(json) {
                     $("#counter_" + id).val('1');
                     $("#cart-count").text(json['count']).removeClass("bg-dark").addClass("bg-danger");
-                    $('<tr>' +
-                        '<th scope="row">' + json["count"] + '</th>' +
-                        '<td><a href="' + json['link'] + '">' + json['name'] +  '</a></td>' +
-                        '<td>(обновите страницу, чтобы увидеть товар корректно)</td>' +
-                        '<td>(этот функционал пока в производстве)</td>' +
-                    '</tr>').appendTo("table tbody");
-                    console.log(json);
-                    console.log(json['count']);
+                    get_order_items();
                     console.log("Success");
 
                 },
@@ -187,7 +182,7 @@
         var decrementButton = document.querySelector("a[id=decrement_" + id + "]");
         var incrementButton = document.querySelector("a[id=increment_" + id + "]");
         decrementButton.addEventListener("click", function() {
-            if (counter.value > 0){
+            if (counter.value > 1){
                 counter.value = parseInt(counter.value) - 1;
             }
         });

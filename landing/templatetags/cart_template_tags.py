@@ -53,3 +53,8 @@ def cart_sum(request):
         return 0
 
     return qs[0].items.all()
+
+
+@register.filter
+def no_extension(name):
+    return name[:name.find(".")]
