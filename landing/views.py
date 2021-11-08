@@ -144,7 +144,17 @@ class TestView(View):
         #     "office@nvsnab.com",
         #     ["mopnerzad@yandex.ru"]
         # )
-
-        return render(self.request, "landing/test.html")
+        print()
+        print()
+        print()
+        print(self.request.GET)
+        print(self.request.POST)
+        print()
+        print()
+        print()
+        context = {
+            's_form': SearchForm()
+        }
+        return render(self.request, "landing/test.html", context)
 
 

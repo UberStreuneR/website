@@ -157,21 +157,30 @@ class CategoryListView(View):
 
 class SearchView(View):
     def get(self, *args, **kwargs):
+        print()
+        print()
+        print()
+        print()
         print(self.request.GET)
+        print()
+        print()
+        print()
+        print()
         try:
             text = self.request.GET['text']
             if " " in text:
                 items = Item.objects.filter(Q(article=text)
-                                            | Q(company_icontains=text)
-                                            | Q(category_icontains=text)
-                                            | Q(subcategory_icontains=text)
+                                            | Q(company__icontains=text)
+                                            | Q(category__icontains=text)
+                                            | Q(subcategory__icontains=text)
                                             | reduce(lambda x, y: x & y, [Q(name_lowercase__icontains=" " + word.replace(",", "").lower()+" ") for word in text.split(" ")])
                                             | reduce(lambda x, y: x & y, [Q(name_lowercase__icontains=" " + word.replace(",", "").lower()+",") for word in text.split(" ")]))
             else:
                 items = Item.objects.filter(Q(article=text)
-                                            | Q(company_icontains=text)
-                                            | Q(category_icontains=text)
-                                            | Q(subcategory_icontains=text)
+                                            | Q(company__icontains=text)
+                                            | Q(category__icontains=text)
+                                            | Q(subcategory__icontains=text)
+                                            | Q(name__icontains=text)
                                             | Q(name_lowercase__icontains=" " + text.lower() + " ")
                                             | Q(name_lowercase__icontains=" " + text.lower() + ","))
         except:
@@ -644,15 +653,6 @@ def update_order_from_side_cart(request):
         client, created = Client.objects.get_or_create(device=device)
     order, created = Order.objects.get_or_create(client=client, complete=False)
     if request.method == "POST":
-        print()
-        print()
-        print()
-        print()
-        print(request.POST)
-        print()
-        print()
-        print()
-        print()
         response = {}
         append_to_response = {'items': []}
         for key, value in request.POST.items():

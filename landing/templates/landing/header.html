@@ -8,8 +8,8 @@
                 <form action="{% url 'search' %}" method="GET">
                 <div class="input-group input-group-sm mx-3" style="width: 400px;">
                     {% comment %}<span class="input-group-text" id="inputGroup-sizing-sm">Поиск</span>{% endcomment %}
-                    {% comment %}{{ s_form.text }}{% endcomment %}
-                    <input type="text" class="form-control" id="article" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Поиск товара по каталогу">
+{#                    {{ s_form.text }}#}
+                    <input type="text" name="text" class="form-control" id="article" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Поиск товара по каталогу">
                     {% comment %}<label for="article">Артикул</label>{% endcomment %}
                     <button class="btn btn-outline-secondary" type="submit">Поиск</button>
                 </div>
