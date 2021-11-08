@@ -26,13 +26,10 @@ body {
     }
 }
 
-.items-sidebar {
+/*.items-sidebar {
     width: 25%;
     margin-right: 30px;
-}
-.items {
-    width: 100%;
-}
+}*/
 .nav-icon {
     opacity: 0.5;
     transition: opacity 150ms linear;
