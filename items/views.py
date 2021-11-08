@@ -132,6 +132,8 @@ class CategoryListView(View):
 
         s_form = SearchForm()
         h_form = HowMuchCounterForm()
+
+
         context = {
             'items': items,
             'category': category,
@@ -142,6 +144,11 @@ class CategoryListView(View):
             'h_form': h_form,
             'tile_view': tile_view
         }
+        companies = ['Danfoss', 'Uponor', 'Tecofi']
+        if company in companies:
+            context.update({"add_company": True})
+        else:
+            context.update({"add_company": False})
         if tile_view:
             context.update({'page_obj': page_obj,
                             'count': page_obj.object_list.count()})
