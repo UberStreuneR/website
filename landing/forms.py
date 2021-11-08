@@ -19,6 +19,7 @@ class OrderDetailsForm(forms.ModelForm):
 
 class OrderFilesForm(forms.Form):
     file = forms.FileField(widget=forms.FileInput(attrs={
-        'style': 'margin-top: 20px;'
+        'style': 'margin-top: 20px;',
+        'multiple': 'multiple'
     }), label='')
 

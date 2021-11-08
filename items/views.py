@@ -66,6 +66,7 @@ class UploadItemsView(UserPassesTestMixin, LoginRequiredMixin, View):
                 item.subcategory = subcategory
                 item.price = float(str(price).replace(",", "."))
                 item.name = name
+                print(name)
                 path = row['Путь']
                 if type(path) == str:
                     item.image = path
@@ -609,10 +610,9 @@ class UploadFileToOrderView(View):
         order, created = Order.objects.get_or_create(client=client, complete=False)
         f_form = OrderFilesForm(self.request.POST, self.request.FILES)
         if f_form.is_valid():
-            File.objects.create(file=f_form.cleaned_data['file'], order=order, name=self.request.FILES['file'].name)
-            messages.success(self.request, "Файл загружен")
-            return redirect("/cart/")
-        messages.error(self.request, "Ошибка загрузки")
+            for file in self.request.FILES.getlist('file'):
+                print(file, file.name)
+                File.objects.create(file=file, order=order, name=file.name)
         return redirect("/cart/")
 
 

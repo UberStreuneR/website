@@ -3,15 +3,15 @@
 {% block content %}
     <div class="w-75 m-auto">
         {% if company == "Metizy" %}
-        <h2>Метизы{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h2>
+        <h3>Метизы{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h3>
     {% else %}
         {% if company == 'Teploizoljatsija_i_zvukoizoljatsija' %}
-            <h2>Теплоизоляция и звукоизоляция{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h2>
+            <h3>Теплоизоляция и звукоизоляция{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h3>
         {% else %}
             {% if company == 'Detali_truboprovodov' %}
-                <h2>Детали трубопроводов{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h2>
+                <h3>Детали трубопроводов{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h3>
                 {% else %}
-            <h2>Продукция компании {{ company }} от официального дилера{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h2>
+            <h3>Продукция компании {{ company }} от официального дилера{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h3>
 
             {% endif %}
         {% endif %}
@@ -23,7 +23,7 @@
         {% if company != 'Teploizoljatsija_i_zvukoizoljatsija' %}
             {% if company != 'Metizy' %}
                 {% if company != 'Detali_truboprovodov' %}
-                    <h4>{{ category.name }}{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}&category={{ category.name }}"> (Скачать товары)</a>{% endif %}</h4>
+                    <h5>{{ category.name }}{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}&category={{ category.name }}"> (Скачать товары)</a>{% endif %}</h5>
                 {% endif %}
             {% endif %}
         {% endif %}
