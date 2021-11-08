@@ -1,4 +1,5 @@
 {% extends 'landing/base.html' %}
+{% load static %}
 {% load cart_template_tags %}
 {% block content %}
 <div class="d-flex flex-column align-items-center">
@@ -21,24 +22,27 @@
                     <td>{{ order_item.item.category}}</td>
                     <td>{{ order_item.item.subcategory }}</td>
                     <td>{{ order_item.item.name }}</td>
-                    <td>
+                    <td style="width: 140px;">
                         <a style="margin-right: 5px;" id="decrement_{{ order_item.item.article }}"><i class="fas fa-minus text-black"></i></a>
-                        <span id="counter_{{ order_item.item.article }}" name="counter">{{ order_item.quantity }}</span>
+                        <input type="text" id="cart_counter_{{ order_item.item.article }}" name="cart-counter" value="{{ order_item.quantity }}" style="width: 50px; text-align: center;">
                         <a style="margin-left: 5px; margin-right: 10px;" id="increment_{{ order_item.item.article }}"><i class="fas fa-plus text-black"></i></a>
                         <div id="slug_{{ order_item.item.article }}" style="display: none;">{{ order_item.item.slug }}</div>
                     </td>
-                    <td id="order_item_sum_{{ order_item.item.article }}" colspan="2">{{ order_item.get_cool_price }}</td>
+                    <td style="width: 150px;" id="order_item_sum_{{ order_item.item.article }}" colspan="2">{{ order_item.get_cool_price }}</td>
                     <td><a href="{% url 'remove-from-cart' order_item.item.slug %}?redirect_to=cart"><i class="fas fa-2x fa-times text-danger"></i></a></td>
                 </tr>
 
             {% endfor %}
             <tr>
-                <td colspan="4"><b><h3>Сумма заказа</h3></b></td>
+                <td colspan="3"><b><h3>Сумма заказа</h3></b></td>
                 <td colspan="2"><b><h3 id="order_price">{{ order.get_cool_price }} руб.</h3></b></td>
+                <td>
+                    <a id="cart-save" class="btn btn-sm text-white" style="background-color: #c44620; visibility: hidden;">Сохранить</a>
+                </td>
             </tr>
         </tbody>
     </table>
-        <form action="{% url 'cart' %}" method="POST" id="details-form">
+    <form action="{% url 'cart' %}" method="POST" id="details-form">
             <div class="d-flex align-items-center justify-content-between" style="width: 900px;">
 
                 {% csrf_token %}
@@ -61,163 +65,38 @@
             <span>{{ file.name }}</span>
             <a href="{% url 'delete-file-from-order' %}?name={{ file.name|no_extension }}"><i class="fas fa-times text-danger mx-2"></i></a>
         </div>
-
     {% endfor %}
 
     <div class="d-flex justify-content-around mt-3" style="width: 600px;">
         <a href="{% url 'discard' %}" class="btn btn-danger">Очистить корзину</a>
-        <a href="{% url 'home' %}" class="btn btn-secondary">Продолжить покупки</a>
         <a href="{% url 'checkout' %}" class="btn btn-success">Подтвердить заказ</a>
     </div>
 
 
 
 </div>
+<script src="{% static 'landing/js/initialize_cart.js' %}"></script>
+<script>initialize_cart();</script>
 <script>
     $('#details-form').on('submit', function(event) {
             event.preventDefault();
             save_details();
     });
     function save_details(){
-            $.ajax({
-                url: '/ajax-save-order-details/',
-                type: 'POST',
-                data: { details : $("#details").val()},
+        $.ajax({
+            url: '/ajax-save-order-details/',
+            type: 'POST',
+            data: { details : $("#details").val()},
 
-                success : function(json) {
-                    $("#save-details-success").removeClass("d-none");
-                },
-                error : function(xhr, errmsg, err){
-                    $("#save-details-error").removeClass("d-none");
-                    console.log(xhr.status + ": " + xhr.responseText);
-                }
-            });
-        }
-    var allCountersList = [].slice.call(document.querySelectorAll('span[name=counter]'));
-    var countersList = allCountersList.map((counter) => {
-        console.log(counter);
-        var id = counter.getAttribute("id");
-        id = id.slice(8);
-        var slug = $("#slug_" + id).text();
-        console.log(id);
-        console.log(slug);
-        $('#increment_' + id).on('click', function(event) {
-            event.preventDefault();
-            console.log("increment");
-            add_single_to_cart();
-        });
-        $('#decrement_' + id).on('click', function(event) {
-            event.preventDefault();
-            console.log("decrement");
-            remove_single_from_cart();
-        });
-        function add_single_to_cart(){
-            $.ajax({
-                url: '/ajax-add-single-to-cart/' + slug + '/',
-                type: 'POST',
-                data: { counter : $("#counter_" + id).text()},
-
-                success : function(json) {
-                    $("#counter_" + id).text(json['quantity']);
-                    $("#order_item_sum_" + id).text(json['price']);
-                    $("#order_price").text(json['order-price'] + " руб.");
-                    console.log("Success");
-
-                },
-                error : function(xhr, errmsg, err){
-                    console.log(xhr.status + ": " + xhr.responseText);
-                }
-            });
-        }
-        function remove_single_from_cart(){
-            $.ajax({
-                url: '/ajax-remove-single-from-cart/' + slug + '/',
-                type: 'POST',
-                success : function(json) {
-                    if (json['quantity'] !== 'None'){
-                        $("#counter_" + id).text(json['quantity']);
-                        $("#order_item_sum_" + id).text(json['price']);
-                        $("#order_price").text(json['order-price'] + " руб.");
-                    }
-                    else {
-                        var loc = json['redirect'];
-                        window.location = '{% url "cart" %}';
-                    }
-                    console.log("Success");
-
-                },
-                error : function(xhr, errmsg, err){
-                    console.log(xhr.status + ": " + xhr.responseText);
-                }
-            });
-        }
-
-        $(function() {
-            // This function gets cookie with a given name
-            function getCookie(name) {
-                var cookieValue = null;
-                if (document.cookie && document.cookie != '') {
-                    var cookies = document.cookie.split(';');
-                    for (var i = 0; i < cookies.length; i++) {
-                        var cookie = jQuery.trim(cookies[i]);
-                        // Does this cookie string begin with the name we want?
-                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
-                    }
-                }
-                return cookieValue;
-            }
-            var csrftoken = getCookie('csrftoken');
-
-            /*
-            The functions below will create a header with csrftoken
-            */
-
-            function csrfSafeMethod(method) {
-                // these HTTP methods do not require CSRF protection
-                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-            }
-            function sameOrigin(url) {
-                // test that a given url is a same-origin URL
-                // url could be relative or scheme relative or absolute
-                var host = document.location.host; // host + port
-                var protocol = document.location.protocol;
-                var sr_origin = '//' + host;
-                var origin = protocol + sr_origin;
-                // Allow absolute or scheme relative URLs to same origin
-                return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
-                    (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
-                    // or any other URL that isn't scheme relative or absolute i.e relative.
-                    !(/^(\/\/|http:|https:).*/.test(url));
-            }
-
-            $.ajaxSetup({
-                beforeSend: function(xhr, settings) {
-                    if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
-                        // Send the token to same-origin, relative URLs only.
-                        // Send the token only if the method warrants CSRF protection
-                        // Using the CSRFToken value acquired earlier
-                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                    }
-                }
-            });
-
-        });
-
-
-
-        var decrementButton = document.querySelector("a[id=decrement_" + id + "]");
-        var incrementButton = document.querySelector("a[id=increment_" + id + "]");
-        decrementButton.addEventListener("click", function() {
-            if (counter.value > 0){
-                counter.value = parseInt(counter.value) - 1;
+            success : function(json) {
+                $("#save-details-success").removeClass("d-none");
+            },
+            error : function(xhr, errmsg, err){
+                $("#save-details-error").removeClass("d-none");
+                console.log(xhr.status + ": " + xhr.responseText);
             }
         });
-        incrementButton.addEventListener("click", function() {
-            counter.value = parseInt(counter.value) + 1;
-        })
-    });
+    }
+
 </script>
 {% endblock %}

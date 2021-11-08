@@ -644,6 +644,17 @@ def update_order_from_side_cart(request):
         client, created = Client.objects.get_or_create(device=device)
     order, created = Order.objects.get_or_create(client=client, complete=False)
     if request.method == "POST":
+        print()
+        print()
+        print()
+        print()
+        print(request.POST)
+        print()
+        print()
+        print()
+        print()
+        response = {}
+        append_to_response = {'items': []}
         for key, value in request.POST.items():
             item = Item.objects.filter(article=key)[0]
             order_item, created = OrderItem.objects.get_or_create(
@@ -652,7 +663,10 @@ def update_order_from_side_cart(request):
             )
             order_item.quantity = int(value)
             order_item.save()
-        return JsonResponse({'success': True, 'cool_price': order.get_cool_price()})
+            append_to_response['items'].append({str(item.article): order_item.get_cool_price()})
+        response.update({'success': True, 'cool_price': order.get_cool_price()})
+        response.update(append_to_response)
+        return JsonResponse(response)
 
 def ajax_get_all_partners(request):
     companies = ['Uponor', 'Danfoss', 'Tecofi']
