@@ -2,31 +2,31 @@
 
 <div class="container">
     <div class="d-flex justify-content-center align-items-center my-3" id="upper-header">
-        <a href="/"><img src="{% static 'landing/images/mainpage/nvsnab-logo.png' %}" alt="" style="height: 100px; width: 200px;"></a>
+        <a href="/"><img src="{% static 'landing/images/mainpage/nvsnab-logo.png' %}" alt="" style="width: 230px;"></a>
         <form action="{% url 'search' %}" method="GET">
             <div class="input-group input-group-sm mx-3" style="width: 400px;">
-                <span class="input-group-text" id="inputGroup-sizing-sm">Поиск</span>
+                {% comment %}<span class="input-group-text" id="inputGroup-sizing-sm">Поиск</span>{% endcomment %}
                 {% comment %}{{ s_form.text }}{% endcomment %}
-                <input type="text" class="form-control" id="article" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                <input type="text" class="form-control" id="article" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Поиск товара по каталогу">
                 {% comment %}<label for="article">Артикул</label>{% endcomment %}
                 <button class="btn btn-outline-secondary ms-3" type="submit">Поиск</button>
             </div>
         </form>
-        <div class="d-flex flex-column align-items-start">
-            <h2>+7-499-550-8858</h2>
+        <div class="d-flex flex-column align-items-end">
+            <h4>+7-499-550-8858</h4>
             <span style="font-size: 15px; color: darkgray">ПН-ПТ: 9:00 - 18:00</span>
         </div>
     </div>
     <div class="d-flex w-75 justify-content-start" id="lower-header">
         <div class="dropdown" style="width: 300px; margin-left: 200px;">
-          <button class="btn btn-light dropdown-toggle w-100 fw-bold border border-black border-1" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          <button class="btn btn-light dropdown-toggle w-100 border border-black border-1" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
             Каталог
           </button>
           <ul class="dropdown-menu w-100" id="dropdown-ul" aria-labelledby="dropdownMenuButton1">
           </ul>
         </div>
-        <a class="btn btn-light fw-bold border border-black border-1 mx-3" href="/about/">О компании</a>
-        <a class="btn btn-light fw-bold border border-black border-1" href="/contacts/">Контакты</a>
+        <a class="btn btn-light border border-black border-1 mx-3" href="/about/">О компании</a>
+        <a class="btn btn-light border border-black border-1" href="/contacts/">Контакты</a>
     </div>
 </div>
 <script>
@@ -38,11 +38,12 @@
             for (let i = 0; i < json['partners'].length; i++){
                 var key = Object.keys(json['partners'][i])[0];
                 var value = Object.values(json['partners'][i])[0];
-                $("#dropdown-ul")[0].innerHTML += "<li><a class=\"dropdown-item\" href=\"" + value + "\">" + key + "</a></li>";
+                $("#dropdown-ul")[0].innerHTML += "<li><a class=\"dropdown-item text-decoration-none\" href=\"" + value + "\">" + key + "</a></li>";
             }
         },
         error : function(xhr, errmsg, err){
             console.log(xhr.status + ": " + xhr.responseText);
         }
     });
+
 </script>

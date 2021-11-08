@@ -3,15 +3,15 @@
 {% block content %}
     <div class="w-75 m-auto">
         {% if company == "Metizy" %}
-        <h1>Метизы{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h1>
+        <h2>Метизы{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h2>
     {% else %}
         {% if company == 'Teploizoljatsija_i_zvukoizoljatsija' %}
-            <h1>Теплоизоляция и звукоизоляция{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h1>
+            <h2>Теплоизоляция и звукоизоляция{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h2>
         {% else %}
             {% if company == 'Detali_truboprovodov' %}
-                <h1>Детали трубопроводов{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h1>
+                <h2>Детали трубопроводов{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h2>
                 {% else %}
-            <h1>Продукция компании {{ company }} от официального дилера{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h1>
+            <h2>Продукция компании {{ company }} от официального дилера{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h2>
 
             {% endif %}
         {% endif %}
@@ -23,14 +23,14 @@
         {% if company != 'Teploizoljatsija_i_zvukoizoljatsija' %}
             {% if company != 'Metizy' %}
                 {% if company != 'Detali_truboprovodov' %}
-                    <h2>{{ category.name }}{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}&category={{ category.name }}"> (Скачать товары)</a>{% endif %}</h2>
+                    <h4>{{ category.name }}{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}&category={{ category.name }}"> (Скачать товары)</a>{% endif %}</h4>
                 {% endif %}
             {% endif %}
         {% endif %}
         <div class="row row-cols-4 g-2 mb-5">
             {% for subcategory in category.subcategories.all %}
                 <div>
-                    <a class="d-block" style="font-size: 20px;" href="{% url 'categories' company %}?category={{ category.name }}&subcategory={{ subcategory.name }}&page=1/" id="{{ forloop.counter }}">{{ subcategory.name }}</a>
+                    <a class="d-block" style="font-size: 15px;" href="{% url 'categories' company %}?category={{ category.name }}&subcategory={{ subcategory.name }}&page=1/" id="{{ forloop.counter }}">{{ subcategory.name }}</a>
                     {% if subcategory.comment != 'nan' %}
                     <label for="{{ forloop.counter }}" style="font-size: 14px; color: grey;">{{ subcategory.comment }}</label>
                     {% endif %}

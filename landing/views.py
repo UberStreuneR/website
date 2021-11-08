@@ -68,9 +68,7 @@ class CartView(View):
         except ObjectDoesNotExist:
             messages.error(self.request, "Добавь сначала что-нибудь в корзину")
             return redirect('/')
-        if order.items.count() == 0:
-            messages.error(self.request, "Добавь сначала что-нибудь в корзину")
-            return redirect('/')
+
         d_form = OrderDetailsForm()
         f_form = OrderFilesForm()
         context = {
@@ -140,12 +138,12 @@ class CheckoutView(View):
 from django.core.mail import send_mail
 class TestView(View):
     def get(self, *args, **kwargs):
-        send_mail(
-            "Subject",
-            "Message",
-            "office@nvsnab.com",
-            ["mopnerzad@yandex.ru"]
-        )
+        # send_mail(
+        #     "Subject",
+        #     "Message",
+        #     "office@nvsnab.com",
+        #     ["mopnerzad@yandex.ru"]
+        # )
 
         return render(self.request, "landing/test.html")
 

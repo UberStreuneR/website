@@ -1,7 +1,4 @@
-html {
-    height: 100%;
 
-}
 main {
     margin: 40px;
 }
@@ -50,4 +47,17 @@ body {
 
 .alert.alert-error {
     background-color: #f8d7da;
+}
+
+#top-navbar {
+    height: 0;
+    position: sticky;
+    top: 0;
+    visibility: hidden;
+    transition: visibility 150ms linear, height 150ms linear;
+    z-index: 150;
+}
+#top-navbar.active {
+    height: 60px;
+    visibility: visible;
 }

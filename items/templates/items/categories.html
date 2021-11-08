@@ -93,7 +93,7 @@
                             </div>
 
                             <a id="listview-plus"><i class="fas fa-plus text-black mx-3"></i></a>
-                            <a href="{{ item.get_absolute_url }}">{{ item }}</a>
+                            <a class="text-decoration-none text-black" href="{{ item.get_absolute_url }}">{{ item }} арт.{{ item.article }} - {{ item.get_cool_price }}</a>
                         </div>
 
                     {% endfor %}

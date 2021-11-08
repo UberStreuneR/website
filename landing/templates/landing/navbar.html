@@ -5,7 +5,7 @@
     <span class="fas fa-bars fa-2x border-3 border border-secondary" style="color: black; background-color: white; padding: 10px;"></span>
 </button>
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top" style="height: 60px;">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="top-navbar">
   <!-- Container wrapper -->
   <div class="container d-flex justify-content-center">
 
@@ -98,3 +98,18 @@ function yrzg(){var c9="@"; c9=c9+"nvsnab.c"; c9="20office"+c9; c9=c9+"om"; c9="
 </div>
 
 </div>
+
+<script>
+    $(document).scroll(function() {
+      var y = $(this).scrollTop();
+      console.log(y);
+      if (y > 200) {
+          $('#top-navbar').addClass("active");
+          console.log("Appear");
+
+      } else {
+        $('#top-navbar').removeClass("active");
+        console.log("Disappear");
+      }
+    });
+</script>

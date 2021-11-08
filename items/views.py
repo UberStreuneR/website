@@ -154,16 +154,16 @@ class SearchView(View):
             text = self.request.GET['text']
             if " " in text:
                 items = Item.objects.filter(Q(article=text)
-                                            | Q(company=text)
-                                            | Q(category=text)
-                                            | Q(subcategory=text)
+                                            | Q(company_icontains=text)
+                                            | Q(category_icontains=text)
+                                            | Q(subcategory_icontains=text)
                                             | reduce(lambda x, y: x & y, [Q(name_lowercase__icontains=" " + word.replace(",", "").lower()+" ") for word in text.split(" ")])
                                             | reduce(lambda x, y: x & y, [Q(name_lowercase__icontains=" " + word.replace(",", "").lower()+",") for word in text.split(" ")]))
             else:
                 items = Item.objects.filter(Q(article=text)
-                                            | Q(company=text)
-                                            | Q(category=text)
-                                            | Q(subcategory=text)
+                                            | Q(company_icontains=text)
+                                            | Q(category_icontains=text)
+                                            | Q(subcategory_icontains=text)
                                             | Q(name_lowercase__icontains=" " + text.lower() + " ")
                                             | Q(name_lowercase__icontains=" " + text.lower() + ","))
         except:

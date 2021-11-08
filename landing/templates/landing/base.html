@@ -61,17 +61,17 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
-{% comment %}{% include 'landing/header.html' %}{% endcomment %}
+{% include 'landing/navbar.html' %}
 <body>
 
 {% include 'landing/header.html' %}
-    {% if messages %}
+{% comment %}    {% if messages %}
         {% for message in messages %}
         <div class="alert alert-{{ message.tags }} text-center" role="alert">
           {{ message }}
         </div>
         {% endfor %}
-    {% endif %}
+    {% endif %}{% endcomment %}
 {% block side_cart %}
     {% if title != 'cart' %}
         {% include 'landing/side-cart.html' %}
