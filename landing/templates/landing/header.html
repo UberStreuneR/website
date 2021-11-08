@@ -1,26 +1,48 @@
 {% load static %}
 
 <div class="container">
-
-    <div class="d-flex justify-content-center align-items-center">
-
-        <div class="m-2 d-flex justify-content-center align-items-start">
-
-            <div class="mx-2 mb-4">
-                <img src="{% static 'landing/nv-eng-logo.png' %}" alt="">
+    <div class="d-flex justify-content-center align-items-center my-3" id="upper-header">
+        <a href="/"><img src="{% static 'landing/images/mainpage/nvsnab-logo.png' %}" alt="" style="height: 100px; width: 200px;"></a>
+        <form action="{% url 'search' %}" method="GET">
+            <div class="input-group input-group-sm mx-3" style="width: 400px;">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Поиск</span>
+                {% comment %}{{ s_form.text }}{% endcomment %}
+                <input type="text" class="form-control" id="article" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                {% comment %}<label for="article">Артикул</label>{% endcomment %}
+                <button class="btn btn-outline-secondary ms-3" type="submit">Поиск</button>
             </div>
-
-            <div class="phones bg-dark mx-2 px-3 py-1 mb-4">
-                <div><span class="text-warning">Тел:</span> +8 (499) 000-00-00</div>
-                <div><span class="text-warning">Тел:</span> +8 (499) 000-00-00</div>
-                <div><span class="text-warning">Тел:</span> +8 (499) 000-00-00</div>
-            </div>
-            <div class="emails bg-dark mx-2 px-3 py-1 mb-4">
-                <div><span class="text-warning">Email:</span> info@nvsnab.com</div>
-                <div><span class="text-warning">Email:</span> message@nvsnab.com</div>
-                <div><span class="text-warning">Email:</span> admin@nvsnab.com</div>
-            </div>
+        </form>
+        <div class="d-flex flex-column align-items-start">
+            <h2>+7-499-550-8858</h2>
+            <span style="font-size: 15px; color: darkgray">ПН-ПТ: 9:00 - 18:00</span>
         </div>
     </div>
-
+    <div class="d-flex w-75 justify-content-start" id="lower-header">
+        <div class="dropdown" style="width: 300px; margin-left: 200px;">
+          <button class="btn btn-light dropdown-toggle w-100 fw-bold border border-black border-1" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            Каталог
+          </button>
+          <ul class="dropdown-menu w-100" id="dropdown-ul" aria-labelledby="dropdownMenuButton1">
+          </ul>
+        </div>
+        <a class="btn btn-light fw-bold border border-black border-1 mx-3" href="/about/">О компании</a>
+        <a class="btn btn-light fw-bold border border-black border-1" href="/contacts/">Контакты</a>
+    </div>
 </div>
+<script>
+    $.ajax({
+        url: '/ajax-get-all-partners/',
+        type: 'GET',
+        success : function(json) {
+
+            for (let i = 0; i < json['partners'].length; i++){
+                var key = Object.keys(json['partners'][i])[0];
+                var value = Object.values(json['partners'][i])[0];
+                $("#dropdown-ul")[0].innerHTML += "<li><a class=\"dropdown-item\" href=\"" + value + "\">" + key + "</a></li>";
+            }
+        },
+        error : function(xhr, errmsg, err){
+            console.log(xhr.status + ": " + xhr.responseText);
+        }
+    });
+</script>

@@ -21,5 +21,6 @@ urlpatterns = [
     path('upload-file-to-order/', views.UploadFileToOrderView.as_view(), name='upload-file-to-order'),
     path('delete-file-from-order/', views.delete_file_from_order, name='delete-file-from-order'),
     path('update-order-from-side-cart/', views.update_order_from_side_cart, name='update-order-from-side-cart'),
+    path('ajax-get-all-partners/', views.ajax_get_all_partners, name='ajax-get-all-partners'),
     path('', landing_views.HomeView.as_view(), name='home')
 ]

@@ -1,6 +1,8 @@
 {% extends 'landing/base.html' %}
+
 {% block content %}
-    {% if company == "Metizy" %}
+    <div class="w-75 m-auto">
+        {% if company == "Metizy" %}
         <h1>Метизы{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h1>
     {% else %}
         {% if company == 'Teploizoljatsija_i_zvukoizoljatsija' %}
@@ -39,4 +41,6 @@
         </div>
         <hr>
     {% endfor %}
+    </div>
+
 {% endblock %}

@@ -646,3 +646,16 @@ def update_order_from_side_cart(request):
             order_item.quantity = int(value)
             order_item.save()
         return JsonResponse({'success': True, 'cool_price': order.get_cool_price()})
+
+def ajax_get_all_partners(request):
+    companies = ['Uponor', 'Danfoss', 'Tecofi']
+    if request.method == "GET":
+        partners = Partner.objects.all()
+        partners_list = []
+        for partner in partners:
+            if partner.name not in companies:
+                name = translit(partner.name, 'ru').replace("_", " ")
+            else:
+                name = partner.name
+            partners_list.append({name: f'/items/{partner.name}'})
+        return JsonResponse({'partners': partners_list})

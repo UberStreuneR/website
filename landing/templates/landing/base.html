@@ -64,7 +64,7 @@
 {% comment %}{% include 'landing/header.html' %}{% endcomment %}
 <body>
 
-{% include 'landing/navbar.html' %}
+{% include 'landing/header.html' %}
     {% if messages %}
         {% for message in messages %}
         <div class="alert alert-{{ message.tags }} text-center" role="alert">
@@ -78,8 +78,11 @@
     {% endif %}
 {% endblock %}
 <main>
-    {% block content %}
-    {% endblock %}
+    <div class="container my-5">
+        {% block content %}
+        {% endblock %}
+    </div>
+
 </main>
 
 
