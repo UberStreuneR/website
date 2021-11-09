@@ -1,2 +1,41 @@
+
+
 {% extends 'landing/base.html' %}
 {% load static %}
+{% block content %}
+<div class="d-flex justify-content-end">
+    <div class="d-flex" style="">
+        <script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3Ac9e79b1b426280fca77cdcf5dffd61fcd4c414860100748a4f5691d92ce7e99e&amp;width=568&amp;height=323&amp;lang=ru_RU&amp;scroll=true"></script>
+    </div>
+    <div class="d-flex flex-column ms-3" style="">
+        <div class="d-flex align-items-start flex-column w-75">
+            <h5>Адрес</h5>
+            <span>125009, Москва, Средний Кисловский переулок, 4</span>
+        </div>
+        <div class="d-flex align-items-start flex-column my-4">
+            <h5>Время работы</h5>
+            <span>ПН-СБ: 9:00 - 18:00</span>
+        </div>
+        <div class="d-flex align-items-start flex-column">
+            <h5>Контакты</h5>
+            <span><i class="fas fa-phone me-1"></i><script language=JavaScript><!--
+function vm2y(){var s326=""; s326=s326+"+7-499-550-885"; s326=""+s326; s326=s326+"8"; s326=""+s326; return s326}; function sa(){return ""}; function u0b(){status="mailto:"+vm2y()+sa()}; function b5lm(){status=""}; function i8(){this.location="mailto:"+vm2y()+sa(); return false}; document.write("<a style='text-decoration: none; color: black;' onMouseOver='u0b()' onMouseLeave='b5lm()'>"+vm2y()+"</a>");
+//--></script>
+
+</span>
+            <span><i class="fas fa-phone me-1"></i><script language=JavaScript><!--
+function c8(){var cjevh=""; cjevh=cjevh+"+7-985-580"; cjevh=""+cjevh; cjevh=cjevh+"-5553"; cjevh=""+cjevh; return cjevh}; function z6kd(){return ""}; function vl(){status="mailto:"+c8()+z6kd()}; function xrk0(){status=""}; function r7s(){this.location="mailto:"+c8()+z6kd(); return false}; document.write("<a style='text-decoration: none; color: black;' onMouseOver='vl()' onMouseLeave='xrk0()'>"+c8()+"</a>");
+//--></script>
+</span>
+            <span><i class="fas fa-envelope me-1"></i><script language=JavaScript><!--
+function a5b8(){var ivbf="@"; ivbf=ivbf+"nv"; ivbf="fice"+ivbf; ivbf=ivbf+"snab.com"; ivbf="of"+ivbf; return ivbf}; function rs3s(){return ""}; function pgp(){status="mailto:"+a5b8()+rs3s()}; function pz(){status=""}; function b6(){this.location="mailto:"+a5b8()+rs3s(); return false}; document.write("<a style='text-decoration: none; color: black;' onMouseOver='pgp()' onMouseLeave='pz()'>"+a5b8()+"</a>");
+//--></script><noscript>office&copy;nvsnab&cedil;com</noscript>
+</span>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}
+{# https://yandex.ru/maps/?um=constructor%3Ac9e79b1b426280fca77cdcf5dffd61fcd4c414860100748a4f5691d92ce7e99e&source=constructorLink #}

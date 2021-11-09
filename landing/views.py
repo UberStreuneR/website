@@ -11,6 +11,7 @@ from django.contrib import messages
 from django.templatetags.static import static
 from items.forms import SearchForm, HowMuchCounterForm
 from .forms import CheckoutForm, OrderDetailsForm, OrderFilesForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 
 
@@ -136,14 +137,14 @@ class CheckoutView(View):
 
 
 from django.core.mail import send_mail
-class TestView(View):
+class TestView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
-        # send_mail(
-        #     "Subject",
-        #     "Message",
-        #     "office@nvsnab.com",
-        #     ["mopnerzad@yandex.ru"]
-        # )
+        send_mail(
+            "Subject",
+            "Message",
+            "order@nvsnab.com",
+            ["mopnerzad@yandex.ru"]
+        )
         print()
         print()
         print()

@@ -48,7 +48,7 @@
                 {% csrf_token %}
                 {{ d_form }}
                 <div class="d-flex flex-column align-items-center">
-                    <button class="btn btn-outline-primary" type="submit" id="save-details-button">Сохранить детали</button>
+                    <button class="btn btn-outline-primary" type="submit" id="save-details-button" style="visibility: hidden;">Сохранить детали</button>
                     <label for="save-details-button" class="d-none" style="color: green;" id="save-details-success">Сохранено</label>
                     <label for="save-details-button" class="d-none" style="color: darkred;" id="save-details-error">Ошибка</label>
                 </div>
@@ -82,6 +82,9 @@
             event.preventDefault();
             save_details();
     });
+    $("#details").on("change", function(){
+        $("#save-details-button").css("visibility", "visible");
+    });
     function save_details(){
         $.ajax({
             url: '/ajax-save-order-details/',
@@ -90,6 +93,11 @@
 
             success : function(json) {
                 $("#save-details-success").removeClass("d-none");
+
+                let timer = setTimeout(function(){
+                    $("#save-details-success").addClass("d-none");
+                    $("#save-details-button").css("visibility", "hidden");
+                }, 700);
             },
             error : function(xhr, errmsg, err){
                 $("#save-details-error").removeClass("d-none");

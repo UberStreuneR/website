@@ -83,12 +83,12 @@
         <div class="d-flex flex-column mx-3">
             {% for item in items %}
                 <div class="d-flex align-items-center my-2">
-                    <div class="d-flex align-items-center invisible">
+                    {% comment %}<div class="d-flex align-items-center">
                         <a id="listview-remove"><i class="fas fa-times text-danger mx-3"></i></a>
                         <input type="text" value="1" id="listview_counter_{{ item.article }}" name="listview_counter" class="text-center" style="width: 40px; height: 25px;">
                     </div>
 
-                    <a id="listview-plus"><i class="fas fa-plus text-black mx-3"></i></a>
+                    <a id="listview-plus"><i class="fas fa-plus text-black mx-3"></i></a>{% endcomment %}
                     <a class="text-decoration-none text-black" href="{{ item.get_absolute_url }}">{% if add_company == True %}{{ company }}{% endif %}{{ item.name }} арт.{{ item.article }} - {{ item.get_cool_price }}</a>
                 </div>
 

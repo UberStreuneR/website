@@ -30,7 +30,7 @@
                             {% for order_item in request|cart_items %}
                                 <tr>
                                     <th scope="row">{{ forloop.counter }}</th>
-                                    <td><a href="{{ order_item.item.get_absolute_url }}">{{ order_item.item.name }}</a></td>
+                                    <td><a style="text-decoration: none; color: black;" href="{{ order_item.item.get_absolute_url }}">{{ order_item.item.name }}</a></td>
                                     <td>{{ order_item.item.get_cool_price }}</td>
                                     <td>
                                         <div>
