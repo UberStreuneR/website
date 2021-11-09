@@ -53,9 +53,9 @@
                 </div>
             <hr>
                 <div class="d-flex align-items-center mt-2">
-                    <a id="side-cart-save" class="btn btn-sm text-white" style="background-color: #c44620; margin-left: 10px; visibility: hidden;">Сохранить</a>
-                    <a class="btn btn-sm btn-success mx-3" href="/cart/">Оформить</a>
-                    <h2 id="order-price">Итого: {{ request|cart_sum }} руб.</h2>
+
+                    <a class="btn btn-sm btn-success mx-3" href="/cart/" id="go-to-cart">Оформить</a>
+                    <h2 id="order-price">Итого: {{ request|cart_sum }} руб.<a id="side-cart-save" class="btn btn-sm text-white" style="background-color: #c44620; margin-left: 10px; visibility: hidden;">Пересчитать</a></h2>
                 </div>
         </div>
 </div>
@@ -85,7 +85,37 @@
 </script>
 <script src="{% static 'landing/js/script.js' %}"></script>
 <script src="{% static 'landing/js/initialize_side_cart.js' %}"></script>
+{% comment %}<script>
+$(window).on("hashchange", function(e){
+    var origEvent = e.originalEvent;
+    console.log('Going to: ' + origEvent.newURL + ' from: ' + origEvent.oldURL);
+    var sideCountersList = [].slice.call(document.querySelectorAll('input[name=side-cart-counter]'));
+    var dict = {};
+    for (let i = 0; i < sideCountersList.length; i++){
+        var counter = sideCountersList[i];
+        var id = counter.getAttribute("id");
+        id = id.slice(13);
+        let side_counter_jquery = $("#side_counter_" + id);
+        if (counter.getAttribute("value") !== side_counter_jquery.val()){
+            dict[id] = side_counter_jquery.val();
+        }
+    }
+    $.ajax({
+        url: '/update-order-from-side-cart/',
+        type: 'POST',
+        data: dict,
+        success : function(json) {
+            console.log(json);
+            console.log("Success");
+            save_button.css("visibility", "hidden");
+            $("#order-price").text("Итого: " + json['cool_price'] + " руб.");
+            get_order_items();
+        },
+        error : function(xhr, errmsg, err){
+            console.log(xhr.status + ": " + xhr.responseText);
+        }
+    });
+})
+</script>{% endcomment %}
 <script>initialize();</script>
-<script>
 
-</script>

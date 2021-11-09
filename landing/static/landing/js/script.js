@@ -22,7 +22,7 @@ function get_order_items(){
                 var count = parseInt(i) + 1;
                 $("#table-body")[0].innerHTML += "<tr>" +
                     "<th scope='row'>" + count + "</th>" +
-                    "<td><a href='" + item['url'] +  "'>" + item.name + "</a></td>" +
+                    "<td><a style='text-decoration: none; color: black;' href='" + item['url'] +  "'>" + item.name + "</a></td>" +
                         "<td>" + item['cool_price'] + "</td>" +
                         "<td><div>" + "<a style=\"margin-right: 5px;\" id=\"side_decrement_" + item['article'] + "\"><i class=\"fas fa-minus text-black\"></i></a>" +
                         "<input value=\"" + order_item['quantity'] + "\" id=\"side_counter_" + item['article'] + "\" name=\"side-cart-counter\" class=\"text-center side\" style=\"width: 40px;\">" +

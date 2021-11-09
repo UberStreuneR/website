@@ -7,8 +7,8 @@
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Категория</th>
-                <th scope="col">Подкатегория</th>
+                {% comment %}<th scope="col">Категория</th>
+                <th scope="col">Подкатегория</th>{% endcomment %}
                 <th scope="col">Название</th>
                 <th scope="col">Количество</th>
                 <th scope="col">Цена (руб.)</th>
@@ -19,8 +19,8 @@
             {% for order_item in order.items.all %}
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ order_item.item.category}}</td>
-                    <td>{{ order_item.item.subcategory }}</td>
+                    {% comment %}<td>{{ order_item.item.category}}</td>
+                    <td>{{ order_item.item.subcategory }}</td>{% endcomment %}
                     <td>{{ order_item.item.name }}</td>
                     <td style="width: 140px;">
                         <a style="margin-right: 5px;" id="decrement_{{ order_item.item.article }}"><i class="fas fa-minus text-black"></i></a>
