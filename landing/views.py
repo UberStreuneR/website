@@ -12,6 +12,13 @@ from django.templatetags.static import static
 from items.forms import SearchForm, HowMuchCounterForm
 from .forms import CheckoutForm, OrderDetailsForm, OrderFilesForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.mail import EmailMessage
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent.parent
+import os
+import pandas as pd
+
+
 # Create your views here.
 
 
@@ -128,7 +135,59 @@ class CheckoutView(View):
             client.save()
             order.complete = True
             order.save()
-            messages.success(self.request, "Ваш заказ принят. Ожидайте звонка от специалиста")
+
+            body = f"Имя: {client.name}" + "\n" + f"Телефон: {client.phone}" + "\n" + f"Почта: {client.email}" + "\n" + f"Детали заказа: {order.details}"
+            email = EmailMessage(
+                'Order',
+                body,
+                'order@nvsnab.com',
+                ['order@nvsnab.com']
+            )
+            files = order.files.all()
+            for file in files:
+                with open(os.path.join(BASE_DIR, file.file.path), "rb") as f:
+                    email.attach_file(f.name)
+            df = pd.DataFrame()
+            for order_item in order.items.all():
+                item_series = pd.Series({"Брэнд": order_item.item.company,
+                                         "Категория": order_item.item.category,
+                                         "Подкатегория": order_item.item.category,
+                                         "Наименование": order_item.item.name,
+                                         "Цена товара": order_item.item.get_cool_price(),
+                                         "Количество товара": order_item.quantity,
+                                         "Cумма": order_item.get_cool_price(),
+                                         "Артикул": order_item.item.article})
+                df = df.append(item_series, ignore_index=True)
+
+            final_series = pd.Series({"Брэнд": "",
+                                      "Категория": "",
+                                      "Подкатегория": "",
+                                      "Наименование": "",
+                                      "Цена товара": "",
+                                      "Количество товара": "Сумма",
+                                      "Cумма": order.get_cool_price(),
+                                      "Артикул": ""})
+            df = df.append(final_series, ignore_index=True)
+            date = order.date.strftime("%d-%m-%Y_%H-%M-%S")
+            writer = pd.ExcelWriter(f"Order-{date}.xlsx", engine='xlsxwriter')
+            df.to_excel(writer, sheet_name="Товары", index=False)
+            worksheet = writer.sheets['Товары']
+            for i, col in enumerate(df.columns):
+                # find length of column i
+                column_len = df[col].astype(str).str.len().max()
+                # Setting the length if the column header is larger
+                # than the max column value length
+                column_len = max(column_len, len(col))
+                # set the column length
+                worksheet.set_column(i, i, column_len)
+            writer.save()
+            writer.close()
+            with open(f"Order-{date}.xlsx", 'rb') as exc:
+                email.attach_file(exc.name)
+            email.send()
+            os.remove(f"Order-{date}.xlsx")
+
+
             return redirect('/')
 
         else:
@@ -136,23 +195,10 @@ class CheckoutView(View):
             return redirect('/checkout/')
 
 
-from django.core.mail import send_mail
+
 class TestView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
-        send_mail(
-            "Subject",
-            "Message",
-            "order@nvsnab.com",
-            ["mopnerzad@yandex.ru"]
-        )
-        print()
-        print()
-        print()
-        print(self.request.GET)
-        print(self.request.POST)
-        print()
-        print()
-        print()
+
         context = {
             's_form': SearchForm()
         }
