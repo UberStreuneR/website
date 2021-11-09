@@ -15,7 +15,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import EmailMessage
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
-import os
+import os, shutil
 import pandas as pd
 
 
@@ -186,7 +186,19 @@ class CheckoutView(View):
                 email.attach_file(exc.name)
             email.send()
             os.remove(f"Order-{date}.xlsx")
+            for file in files:
+                file.delete()
 
+            folder = os.path.join(BASE_DIR, "static", "cart_files")
+            for filename in os.listdir(folder):
+                file_path = os.path.join(folder, filename)
+                try:
+                    if os.path.isfile(file_path) or os.path.islink(file_path):
+                        os.unlink(file_path)
+                    elif os.path.isdir(file_path):
+                        shutil.rmtree(file_path)
+                except Exception as e:
+                    print('Failed to delete %s. Reason: %s' % (file_path, e))
 
             return redirect('/')
 
