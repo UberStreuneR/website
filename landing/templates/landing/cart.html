@@ -21,7 +21,7 @@
                     <th scope="row">{{ forloop.counter }}</th>
                     {% comment %}<td>{{ order_item.item.category}}</td>
                     <td>{{ order_item.item.subcategory }}</td>{% endcomment %}
-                    <td>{{ order_item.item.name }}</td>
+                    <td style="width: 400px;">{{ order_item.item.name }}</td>
                     <td style="width: 140px;">
                         <a style="margin-right: 5px;" id="decrement_{{ order_item.item.article }}"><i class="fas fa-minus text-black"></i></a>
                         <input type="text" id="cart_counter_{{ order_item.item.article }}" name="cart-counter" value="{{ order_item.quantity }}" style="width: 50px; text-align: center;">
