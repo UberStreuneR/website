@@ -57,9 +57,9 @@
                 <div class="pagination mt-5 d-flex align-items-center">
                     {% if page_obj.has_previous %}
                         {% if page_obj|more_than_one_from_start %}
-                            <a style="text-decoration: none; color: black;" href="{% url 'categories' company%}?category={{ category }}&subcategory={{ subcategory }}&page=1"><i class="fas fa-2x fa-backward"></i></a>
+                            <a style="text-decoration: none; color: black;" href="{% url 'categories' company%}?category={{ category }}&subcategory={{ subcategory }}&page=1&tile_view={{ tile_view }}"><i class="fas fa-2x fa-backward"></i></a>
                         {% endif %}
-                        <a style="text-decoration: none; color: black;" href="{% url 'categories' company%}?category={{ category }}&subcategory={{ subcategory }}&page={{ page_obj.previous_page_number }}"><i class="fas fa-3x fa-caret-left mx-3"></i></a>
+                        <a style="text-decoration: none; color: black;" href="{% url 'categories' company%}?category={{ category }}&subcategory={{ subcategory }}&page={{ page_obj.previous_page_number }}&tile_view={{ tile_view }}"><i class="fas fa-3x fa-caret-left mx-3"></i></a>
                     {% endif %}
 
                     <span style="font-size: 20px;" class="current">
@@ -67,9 +67,9 @@
                     </span>
 
                     {% if page_obj.has_next %}
-                        <a style="text-decoration: none; color: black;" href="{% url 'categories' company%}?category={{ category }}&subcategory={{ subcategory }}&page={{ page_obj.next_page_number }}"><i class="fas fa-3x fa-caret-right mx-3"></i></a>
+                        <a style="text-decoration: none; color: black;" href="{% url 'categories' company%}?category={{ category }}&subcategory={{ subcategory }}&page={{ page_obj.next_page_number }}&tile_view={{ tile_view }}"><i class="fas fa-3x fa-caret-right mx-3"></i></a>
                         {% if page_obj|more_than_one_left %}
-                            <a style="text-decoration: none; color: black;" href="{% url 'categories' company%}?category={{ category }}&subcategory={{ subcategory }}&page={{ page_obj.paginator.num_pages }}"><i class="fas fa-2x fa-forward"></i></a>
+                            <a style="text-decoration: none; color: black;" href="{% url 'categories' company%}?category={{ category }}&subcategory={{ subcategory }}&page={{ page_obj.paginator.num_pages }}&tile_view={{ tile_view }}"><i class="fas fa-2x fa-forward"></i></a>
                         {% endif %}
                     {% endif %}
                 </div>
