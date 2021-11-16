@@ -683,6 +683,8 @@ def ajax_get_all_partners(request):
         return JsonResponse({'partners': partners_list})
 
 def ajax_update_order_from_listview(request):
+    if request.method == "GET":
+        return JsonResponse({"success": "GET request for some reason"})
     try:
         client = request.user.client
     except:
