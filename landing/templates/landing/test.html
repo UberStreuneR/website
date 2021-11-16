@@ -14,9 +14,9 @@
 
         console.log(tbody.children("tr").length);
     </script>
-   {% comment %} <script>
+    <script>
     $.ajax({
-        url: '/ajax-update-order-from-listview/',
+        url: '/update_order_from_listview/',
         type: 'POST',
         success : function(json) {
             console.log(json);
@@ -78,7 +78,7 @@
         });
 
     });
-    </script>{% endcomment %}
+    </script>
     {% comment %}<script>
     function getCookie(name) {
         let cookieValue = null;
