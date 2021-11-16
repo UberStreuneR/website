@@ -193,6 +193,7 @@
         });
     {% else %}
         var globalTimer = null;
+        var getOrderItemsTimer = null;
         var allListViewCountersList = [].slice.call(document.querySelectorAll('input[name=listview_counter]'));
         var listViewCountersList = allListViewCountersList.map((counter) => {
             var id = counter.getAttribute("id");
@@ -271,7 +272,7 @@
             var nav = navigator.sendBeacon("/ajax-update-order-from-listview/", data);
             if (nav === true){
                 console.log("success nav");
-                setTimeout(get_order_items, 500);
+                getOrderItemsTimer = setTimeout(get_order_items, 3000);
             }
             else{
                 console.log("error nav");
