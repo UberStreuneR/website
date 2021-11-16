@@ -1,9 +1,42 @@
 {% extends 'landing/base.html' %}
+{% load static %}
 {% block content %}
-    <div class="d-flex">
-        <div class="d-flex">
-            asdf
-        </div>
-        <h1>asdf</h1>
-    </div>
+    <button id="add-to-cookie">Add</button>
+    <div id="test-div"><h1>asf</h1><h2>sdfg</h2></div>
+    <script>
+        var tbody = $("#table-body");
+        var div = $("#test-div");
+        var button = $("#add-to-cookie");
+        button.on("click", function(){
+            div.html("<h3>Shit</h3>");
+        });
+        button.click();
+
+        console.log(tbody.children("tr").length);
+    </script>
+    {% comment %}<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    document.cookie = 'cart={"12312": "1", "234525": "2", "9876": "12"}';
+    let cart = getCookie("cart");
+    console.log(cart);
+    $("#add-to-cookie").on("click", function(){
+        cart = cart.slice(0, -1) + ', "12345":"30"' + cart.slice(-1);
+        console.log(cart);
+    })
+    </script>{% endcomment %}
+
 {% endblock %}

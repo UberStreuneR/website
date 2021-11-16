@@ -15,6 +15,7 @@ from django.templatetags.static import static
 from landing.forms import OrderDetailsForm, OrderFilesForm
 from landing.serializers import OrderSerializer, ItemSerializer, OrderItemSerializer
 import os
+import json
 from pathlib import Path
 from transliterate import translit
 DIR = Path(__file__).resolve().parent
@@ -680,3 +681,43 @@ def ajax_get_all_partners(request):
                 name = partner.name
             partners_list.append({name: f'/items/{partner.name}'})
         return JsonResponse({'partners': partners_list})
+
+def ajax_update_order_from_listview(request):
+    try:
+        client = request.user.client
+    except:
+        device = request.COOKIES['device']
+        client, created = Client.objects.get_or_create(device=device)
+    order, created = Order.objects.get_or_create(client=client, complete=False)
+    if request.method == "POST":
+        counters_dict = json.loads(request.POST['changed_counters'])
+        print(counters_dict)
+
+        for key, value in counters_dict.items():
+            item = Item.objects.filter(article=key)[0]
+            order_item, created = OrderItem.objects.get_or_create(
+                item=item,
+                ordered=False
+            )
+            order_item.quantity = int(value)
+            order_item.save()
+            if order.items.filter(item__slug=item.slug).exists():
+                pass
+            else:
+                order.items.add(order_item)
+                order_item.save()
+        return JsonResponse({'success': True})
+
+def test_ajax(request):
+    print()
+    print()
+    print()
+    print()
+    print()
+    print("Test ajax success")
+    print(request.POST)
+    print(request.GET)
+    print()
+    print()
+    print()
+    return JsonResponse({'success': True})
