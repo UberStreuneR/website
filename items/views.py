@@ -682,7 +682,7 @@ def ajax_get_all_partners(request):
             partners_list.append({name: f'/items/{partner.name}'})
         return JsonResponse({'partners': partners_list})
 
-def ajax_update_order_from_listview(request):
+def update_order_from_listview(request):
     if request.method == "GET":
         return JsonResponse({"success": "GET request for some reason"})
     try:
