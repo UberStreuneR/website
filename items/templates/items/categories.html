@@ -270,7 +270,7 @@
             data.append("csrfmiddlewaretoken", token);
             data.append("changed_counters", JSON.stringify(list_counters_changed));
             {#var nav = navigator.sendBeacon("/ajax-update-order-from-listview/", data);#}
-            var nav = navigator.sendBeacon({% url 'ajax-update-order-from-listview' %}, data);
+            var nav = navigator.sendBeacon({% url 'update-order-from-listview' %}, data);
             if (nav === true){
                 console.log("success nav");
                 getOrderItemsTimer = setTimeout(get_order_items, 1500);

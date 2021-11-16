@@ -22,7 +22,7 @@ urlpatterns = [
     path('delete-file-from-order/', views.delete_file_from_order, name='delete-file-from-order'),
     path('update-order-from-side-cart/', views.update_order_from_side_cart, name='update-order-from-side-cart'),
     path('ajax-get-all-partners/', views.ajax_get_all_partners, name='ajax-get-all-partners'),
-    path('ajax-update-order-from-listview/', views.ajax_update_order_from_listview, name='ajax-update-order-from-listview'),
+    path('update-order-from-listview/', views.ajax_update_order_from_listview, name='update-order-from-listview'),
     path('test-ajax/', views.test_ajax, name='test-ajax'),
     path('', landing_views.HomeView.as_view(), name='home')
 ]
