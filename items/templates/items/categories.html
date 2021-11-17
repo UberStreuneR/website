@@ -86,6 +86,7 @@
                         <a id="listview-remove-{{ item.article }}"><i class="fas fa-times text-danger ms-3"></i></a>
                         <a id="listview-minus-{{ item.article }}"><i class="fas fa-minus text-black mx-3"></i></a>
                         <input type="text" value="1" id="listview-counter-{{ item.article }}" name="listview_counter" class="text-center" style="width: 40px; height: 25px;">
+                        <div class="d-none" id="listview-price-{{ item.article }}">{{ item.price }}</div>
                     </div>
                     <a id="listview-plus-{{ item.article }}"><i class="fas fa-plus text-black mx-3"></i></a>
                     <a class="text-decoration-none text-black" href="{{ item.get_absolute_url }}">{% if add_company == True %}{{ company }}{% endif %}{{ item.name }} арт.{{ item.article }} - {{ item.get_cool_price }}</a>
@@ -309,7 +310,7 @@
                 console.log("error nav");
             }
         }
-        {% comment %}function client_side_read_counters(){ TODO:
+        function client_side_read_counters(){ TODO:
             console.log("Read counters");
             var allCounters = [].slice.call(document.querySelectorAll('.activated'));
             console.log(allCounters.length);
@@ -317,8 +318,9 @@
             allCounters.map(counter => {
                 var id = counter.getAttribute("id");
                 id = id.slice(17);
-                var jcounter = $("#listview-counter-" + id);
-                list_counters_changed[id] = jcounter.val();
+                var j_counter = $("#listview-counter-" + id);
+                list_counters_changed[id] = j_counter.val();
+
             });
             console.log(list_counters_changed);
             var data = new FormData();
@@ -334,7 +336,7 @@
             else{
                 console.log("error nav");
             }
-        }{% endcomment %}
+        }
     {% endif %}
 </script>
 <script>

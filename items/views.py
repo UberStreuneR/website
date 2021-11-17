@@ -156,6 +156,19 @@ class CategoryListView(View):
         return render(self.request, "items/categories.html", context)
 
 
+class DeleteCompanyView(View):
+    def get(self, *args, **kwargs):
+        company = kwargs['company']
+        items = Item.objects.filter(company=company)
+        for item in items:
+            item.delete()
+        try:
+            company = Partner.objects.get(name=company)
+            company.delete()
+        except:
+            pass
+        return redirect("/")
+
 class SearchView(View):
     def get(self, *args, **kwargs):
         print()
@@ -670,7 +683,7 @@ def update_order_from_side_cart(request):
         return JsonResponse(response)
 
 def ajax_get_all_partners(request):
-    companies = ['Uponor', 'Danfoss', 'Tecofi', 'Belimo', 'Rehau']
+    companies = ['Uponor', 'Danfoss', 'Tecofi', 'Belimo', 'Rehau', 'SML']
     if request.method == "GET":
         partners = Partner.objects.all()
         partners_list = []

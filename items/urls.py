@@ -3,6 +3,7 @@ from . import views
 from landing import views as landing_views
 urlpatterns = [
     path('items/<company>/', views.CompanyListView.as_view(), name="company"),
+    path('delete/<company>/', views.DeleteCompanyView.as_view(), name="delete-company"),
     path('items/<company>/category/', views.CategoryListView.as_view(), name="categories"),
     path('search/', views.SearchView.as_view(), name='search'),
     path('items/<company>/<article>/', views.ItemView.as_view(), name='item'),

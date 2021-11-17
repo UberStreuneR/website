@@ -3,15 +3,15 @@
 {% block content %}
     <div class="w-75 m-auto">
         {% if company == "Metizy" %}
-        <h3>Метизы{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h3>
+        <h3><a style="font-size: 10px;" href="{% url 'delete-company' company %}">(Удалить товары) </a>Метизы{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h3>
     {% else %}
         {% if company == 'Teploizoljatsija_i_zvukoizoljatsija' %}
-            <h3>Теплоизоляция и звукоизоляция{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h3>
+            <h3><a style="font-size: 10px;" href="{% url 'delete-company' company %}">(Удалить товары) </a>Теплоизоляция и звукоизоляция{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h3>
         {% else %}
             {% if company == 'Detali_truboprovodov' %}
-                <h3>Детали трубопроводов{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h3>
+                <h3><a style="font-size: 10px;" href="{% url 'delete-company' company %}">(Удалить товары) </a>Детали трубопроводов{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h3>
                 {% else %}
-            <h3>Продукция компании {{ company }} от официального дилера{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h3>
+            <h3><a style="font-size: 10px;" href="{% url 'delete-company' company %}">(Удалить товары) </a>Продукция компании {{ company }} от официального дилера{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h3>
 
             {% endif %}
         {% endif %}
@@ -19,11 +19,12 @@
     <hr>
 
     {% for category in categories %}
-
-        {% if company != 'Teploizoljatsija_i_zvukoizoljatsija' %}
-            {% if company != 'Metizy' %}
-                {% if company != 'Detali_truboprovodov' %}
-                    <h5>{{ category.name }}{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}&category={{ category.name }}"> (Скачать товары)</a>{% endif %}</h5>
+        {% if company != 'SML' %}
+            {% if company != 'Teploizoljatsija_i_zvukoizoljatsija' %}
+                {% if company != 'Metizy' %}
+                    {% if company != 'Detali_truboprovodov' %}
+                        <h5>{{ category.name }}{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}&category={{ category.name }}"> (Скачать товары)</a>{% endif %}</h5>
+                    {% endif %}
                 {% endif %}
             {% endif %}
         {% endif %}
