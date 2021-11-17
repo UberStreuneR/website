@@ -51,10 +51,13 @@ function initialize(){
                     console.log(json);
                     console.log("Success");
                     $("#order-price").text("Итого: " + json['cool_price'] + " руб.");
+                    $("#listview-counter-" + id).val(1);
+                    $("#listview-item-div-" + id).css("visibility", "hidden");
                     /*if (json['empty'] === 'True'){
                         console.log("EMPTY");
                         $("#side-cart-count").text(0).removeClass("bg-danger").addClass("bg-dark");
                     }*/
+
                     get_order_items();
                 },
                 error : function(xhr, errmsg, err){

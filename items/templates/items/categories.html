@@ -87,6 +87,9 @@
                         <a id="listview-minus-{{ item.article }}"><i class="fas fa-minus text-black mx-3"></i></a>
                         <input type="text" value="1" id="listview-counter-{{ item.article }}" name="listview_counter" class="text-center" style="width: 40px; height: 25px;">
                         <div class="d-none" id="listview-price-{{ item.article }}">{{ item.price }}</div>
+                        <div class="d-none" id="listview-url-{{ item.article }}">{{ item.get_absolute_url }}</div>
+                        <div class="d-none" id="listview-slug-{{ item.article }}">{{ item.slug }}</div>
+                        <div class="d-none" id="listview-name-{{ item.article }}">{{ item.name }}</div>
                     </div>
                     <a id="listview-plus-{{ item.article }}"><i class="fas fa-plus text-black mx-3"></i></a>
                     <a class="text-decoration-none text-black" href="{{ item.get_absolute_url }}">{% if add_company == True %}{{ company }}{% endif %}{{ item.name }} арт.{{ item.article }} - {{ item.get_cool_price }}</a>
@@ -97,6 +100,11 @@
 
 {% endif %}
 <script>
+    //TODO:
+    // minus deletes from side-cart even before it loaded to backend
+    // change position in side-cart before it was sent to backend
+    // correct recalculation of order price
+    // update order item price and quantity on click before backend
     {% if tile_view == 'True' %}
         console.log("Tile view!!!");
         var allCountersList = [].slice.call(document.querySelectorAll('input[name=counter]'));
@@ -224,9 +232,44 @@
                 if (hidden_div.css("visibility") === 'visible'){
                     var val = parseInt(j_counter.val());
                     j_counter.val(val + 1);
+                    var order_item_cool_price;
+
                 }
                 else{
+                    var side_cart_count = $("#side-cart-count");
+                    if (side_cart_count.text() === '0'){
+                        side_cart_count.removeClass("bg-dark").addClass("bg-danger");
+                    }
+                    side_cart_count.text(parseInt(side_cart_count.text()) + 1);
                     hidden_div.css("visibility", "visible");
+                    var tbody = $("#table-body")[0];
+                    var count = tbody.childElementCount;
+                    var url = $("#listview-url-" + id).text();
+                    var item_price = parseInt($("#listview-price-" + id).text());
+                    var article = id;
+                    var slug = $("#listview-slug-" + id).text();
+                    var name = $("#listview-name-" + id).text();
+                    count = count + 1;
+                    tbody.innerHTML += "<tr>" +
+                    "<th scope='row'>" + count + "</th>" +
+                    "<td><a style='text-decoration: none; color: black;' href='" + url +  "'>" + name + "</a></td>" +
+                        "<td>" + item_price + "</td>" +
+                        "<td><div>" + "<a style=\"margin-right: 5px;\" id=\"side_decrement_" + article + "\"><i class=\"fas fa-minus text-black\"></i></a>" +
+                        "<input value=\"" + 1 + "\" id=\"side_counter_" + article + "\" name=\"side-cart-counter\" class=\"text-center side\" style=\"width: 40px;\">" +
+                        "<a style=\"margin-left: 5px; margin-right: 10px;\" id=\"side_increment_" + article + "\"><i class=\"fas fa-plus text-black\"></i></a>" +
+                        "<div id=\"slug_" + article + "\" style=\"display: none;\">" + slug + "</div>" +
+
+                    "</div></td>" +
+                        "<td align='right'><span id=\"order_item_sum_" + article + "\">" + item_price + "</span></td>" +
+                        "<td><a id=\"side_cart_remove_" + article + "\"><i class=\"fas fa-times text-danger\"></i></a></td></tr>"
+                    ;
+                    var order_price = $("#order-price");
+                    var order_price_int = parseInt($("#hidden-side-cart-sum").text().replace(/\s+/g, ""));
+                    console.log("Order hidden price", order_price_int);
+                    console.log("Item price", parseInt(item_price));
+                    var order_final_price = order_price_int + parseInt(item_price);
+                    $("#hidden-side-cart-sum").text(order_final_price);
+                    order_price.text("Итого: " + order_final_price + " руб.");
                 }
 
                 j_counter.addClass("activated");
@@ -310,10 +353,9 @@
                 console.log("error nav");
             }
         }
-        function client_side_read_counters(){ TODO:
-            console.log("Read counters");
+        function client_side_read_counters(){
+            console.log("Client side read counters");
             var allCounters = [].slice.call(document.querySelectorAll('.activated'));
-            console.log(allCounters.length);
             var list_counters_changed = {};
             allCounters.map(counter => {
                 var id = counter.getAttribute("id");

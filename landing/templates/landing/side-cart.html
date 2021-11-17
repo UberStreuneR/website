@@ -56,6 +56,7 @@
 
                     <a class="btn btn-sm btn-success mx-3" href="/cart/" id="go-to-cart">Оформить</a>
                     <h2 id="order-price">Итого: {{ request|cart_sum }} руб.<a id="side-cart-save" class="btn btn-sm text-white" style="background-color: #c44620; margin-left: 10px; visibility: hidden;">Пересчитать</a></h2>
+                    <div class="d-none" id="hidden-side-cart-sum">{{ request|cart_sum }}</div>
                 </div>
         </div>
 </div>
@@ -119,6 +120,7 @@ $(window).on("hashchange", function(e){
 </script>{% endcomment %}
 <script>initialize();</script>
 <script>
+    //TODO: absolute numbers don't work if screen is smaller
     function printMousePos(event) {
         // 830 60
         var cart_content = $("#cart-content");
