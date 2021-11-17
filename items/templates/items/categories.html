@@ -280,7 +280,7 @@
                 }
                 globalTimer = setTimeout(function(){
                     read_counters();
-                }, 5000);
+                }, 3000);
             });
             minus.on("click", function(){
                 if (parseInt(j_counter.val()) > 1){
@@ -299,7 +299,7 @@
                 }
                 globalTimer = setTimeout(function(){
                     read_counters();
-                }, 5000);
+                }, 3000);
                 {% comment %}$.ajax({
                     url: '/ajax-remove-from-cart/',
                     type: 'POST',
@@ -321,7 +321,7 @@
                 }
                 globalTimer = setTimeout(function(){
                     read_counters();
-                }, 5000);
+                }, 3000);
             })
         });
         $(window).on('unload', function(e){
@@ -373,7 +373,7 @@
             {#var nav = navigator.sendBeacon({% url 'update-order-from-listview' %}, data);#}
             if (nav === true){
                 console.log("success nav");
-                getOrderItemsTimer = setTimeout(get_order_items, 1500);
+                getOrderItemsTimer = setTimeout(get_order_items, 3000);
             }
             else{
                 console.log("error nav");
