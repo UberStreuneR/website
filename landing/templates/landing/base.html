@@ -89,6 +89,37 @@
 {% include 'landing/footer.html' %}
 
 {% comment %}<script type="text/javascript" src="{% static 'landing/js/mdb.min.js' %}"></script>{% endcomment %}
+<script>
+    //TODO: absolute numbers don't work if screen is smaller
+    function printMousePos(event) {
+        // 830 60
+        var cart_content = $("#cart-content");
+        if (event.clientX < 830){
 
+            if (!cart_content.hasClass("inactive")){
+                cart_content.addClass("inactive")
+            }
+        }
+        if (event.clientY < 60 || event.clientY > 465){
+            if (!cart_content.hasClass("inactive")){
+                cart_content.addClass("inactive")
+            }
+        }
+    }
+
+    $(document).on("click", e => {
+        console.log(e.target);
+        var cart_content = document.getElementById("cart-content");
+        var j_cart_content = $("#cart-content");
+        {#alert(cart_content.contains(e.target));#}
+        if (!cart_content.contains(e.target)){
+            {#alert(j_cart_content.width());#}
+            if (j_cart_content.width() > 200){
+                j_cart_content.addClass("inactive")
+            }
+        }
+
+    });
+</script>
 </body>
 </html>

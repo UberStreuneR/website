@@ -119,24 +119,5 @@ $(window).on("hashchange", function(e){
 })
 </script>{% endcomment %}
 <script>initialize();</script>
-<script>
-    //TODO: absolute numbers don't work if screen is smaller
-    function printMousePos(event) {
-        // 830 60
-        var cart_content = $("#cart-content");
-        if (event.clientX < 830){
 
-            if (!cart_content.hasClass("inactive")){
-                cart_content.addClass("inactive")
-            }
-        }
-        if (event.clientY < 60 || event.clientY > 465){
-            if (!cart_content.hasClass("inactive")){
-                cart_content.addClass("inactive")
-            }
-        }
-    }
-
-    document.addEventListener("click", printMousePos);
-</script>
 
