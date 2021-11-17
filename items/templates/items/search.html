@@ -34,11 +34,11 @@
                                             {{ item.description}}
                                         </p>
                                         <h5 class="price">{{ item.get_cool_price }}</h5>
-                                        {% if forloop.counter == 1 %}
+                                        {% comment %}{% if forloop.counter == 1 %}
                                             <a tabindex="0" href="{% url 'add-to-cart' item.slug %}" class="btn btn-primary" role="button" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Добавление товара" data-bs-content="Чтобы посмотреть все добавленные товары, кликните на иконку корзины вверху">Добавить</a>
                                         {% else %}
                                             <a href="{% url 'add-to-cart' item.slug %}" class="btn btn-primary">Добавить</a>
-                                        {% endif %}
+                                        {% endif %}{% endcomment %}
                                     </div>
                                 </div>
                             </div>
