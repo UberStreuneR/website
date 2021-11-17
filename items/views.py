@@ -670,7 +670,7 @@ def update_order_from_side_cart(request):
         return JsonResponse(response)
 
 def ajax_get_all_partners(request):
-    companies = ['Uponor', 'Danfoss', 'Tecofi', 'Belimo']
+    companies = ['Uponor', 'Danfoss', 'Tecofi', 'Belimo', 'Rehau']
     if request.method == "GET":
         partners = Partner.objects.all()
         partners_list = []

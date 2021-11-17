@@ -83,7 +83,8 @@
             {% for item in items %}
                 <div class="d-flex align-items-center my-2">
                     <div class="d-flex align-items-center" id="listview-item-div-{{ item.article }}" style="visibility: hidden;">
-                        <a id="listview-remove-{{ item.article }}"><i class="fas fa-times text-danger mx-3"></i></a>
+                        <a id="listview-remove-{{ item.article }}"><i class="fas fa-times text-danger ms-3"></i></a>
+                        <a id="listview-minus-{{ item.article }}"><i class="fas fa-minus text-black mx-3"></i></a>
                         <input type="text" value="1" id="listview-counter-{{ item.article }}" name="listview_counter" class="text-center" style="width: 40px; height: 25px;">
                     </div>
                     <a id="listview-plus-{{ item.article }}"><i class="fas fa-plus text-black mx-3"></i></a>
@@ -195,17 +196,40 @@
         var globalTimer = null;
         var getOrderItemsTimer = null;
         var allListViewCountersList = [].slice.call(document.querySelectorAll('input[name=listview_counter]'));
+        var allListViewSideCartCountersList = [].slice.call(document.querySelectorAll('input[name=side-cart-counter]'));
+        var sideCartIds = [];
+        var sideCartAmounts = [];
+        allListViewSideCartCountersList.map((counter) => {
+            var id = counter.getAttribute("id");
+            id = id.slice(13);
+            sideCartIds.push(id);
+            sideCartAmounts.push(counter.getAttribute("value"))
+        });
+        console.log("Side cart ids: ", sideCartIds);
         var listViewCountersList = allListViewCountersList.map((counter) => {
             var id = counter.getAttribute("id");
             id = id.slice(17);
             var plus = $("#listview-plus-" + id);
+            var minus = $("#listview-minus-" + id);
             var cross = $("#listview-remove-" + id);
             var j_counter = $("#listview-counter-" + id);
             var hidden_div = $("#listview-item-div-" + id);
+            if (sideCartIds.indexOf(id) >= 0){
+                hidden_div.css("visibility", "visible");
+                j_counter.val(sideCartAmounts[sideCartIds.indexOf(id)]);
+            }
             var side_cart_tbody = $("#table-body")[0];
             plus.on("click", function(){
-                hidden_div.css("visibility", "visible");
+                if (hidden_div.css("visibility") === 'visible'){
+                    var val = parseInt(j_counter.val());
+                    j_counter.val(val + 1);
+                }
+                else{
+                    hidden_div.css("visibility", "visible");
+                }
+
                 j_counter.addClass("activated");
+
                 if (globalTimer !== null){
                     clearTimeout(globalTimer);
                     console.log("Not null");
@@ -213,6 +237,12 @@
                 globalTimer = setTimeout(function(){
                     read_counters();
                 }, 5000);
+            });
+            minus.on("click", function(){
+                if (parseInt(j_counter.val()) > 1){
+                    var val = parseInt(j_counter.val());
+                    j_counter.val(val - 1);
+                }
             });
             cross.on("click", function(){
                 hidden_div.css("visibility", "hidden");
@@ -279,6 +309,32 @@
                 console.log("error nav");
             }
         }
+        {% comment %}function client_side_read_counters(){ TODO:
+            console.log("Read counters");
+            var allCounters = [].slice.call(document.querySelectorAll('.activated'));
+            console.log(allCounters.length);
+            var list_counters_changed = {};
+            allCounters.map(counter => {
+                var id = counter.getAttribute("id");
+                id = id.slice(17);
+                var jcounter = $("#listview-counter-" + id);
+                list_counters_changed[id] = jcounter.val();
+            });
+            console.log(list_counters_changed);
+            var data = new FormData();
+            var token = getCookie("csrftoken");
+            data.append("csrfmiddlewaretoken", token);
+            data.append("changed_counters", JSON.stringify(list_counters_changed));
+            var nav = navigator.sendBeacon("/update_order_from_listview/", data);
+            {#var nav = navigator.sendBeacon({% url 'update-order-from-listview' %}, data);#}
+            if (nav === true){
+                console.log("success nav");
+                getOrderItemsTimer = setTimeout(get_order_items, 1500);
+            }
+            else{
+                console.log("error nav");
+            }
+        }{% endcomment %}
     {% endif %}
 </script>
 <script>

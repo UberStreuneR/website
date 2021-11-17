@@ -29,7 +29,7 @@
         {% endif %}
         <div class="row row-cols-4 g-2 mb-5">
             {% for subcategory in category.subcategories.all %}
-                <div>
+                <div> {# TODO: if category.name != subcategory.name -> show subcategory.name #}
                     <a class="d-block text-decoration-none fw-bold" style="font-size: 15px; color: {% if subcategory.comment != 'nan' %}#0066BB{% else %}black{% endif %};" href="{% url 'categories' company %}?category={{ category.name }}&subcategory={{ subcategory.name }}&page=1/" id="{{ forloop.counter }}">{{ subcategory.name }}</a>
                     {% if subcategory.comment != 'nan' %}
 
