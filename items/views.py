@@ -156,7 +156,7 @@ class CategoryListView(View):
         return render(self.request, "items/categories.html", context)
 
 
-class DeleteCompanyView(View):
+class DeleteCompanyView(UserPassesTestMixin, LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         company = kwargs['company']
         items = Item.objects.filter(company=company)
@@ -168,6 +168,8 @@ class DeleteCompanyView(View):
         except:
             pass
         return redirect("/")
+    def test_func(self):
+        return self.request.user.is_staff
 
 class SearchView(View):
     def get(self, *args, **kwargs):

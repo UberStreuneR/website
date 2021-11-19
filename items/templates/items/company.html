@@ -3,15 +3,15 @@
 {% block content %}
     <div class="w-75 m-auto">
         {% if company == "Metizy" %}
-        <h3><a style="font-size: 10px;" href="{% url 'delete-company' company %}">(Удалить товары) </a>Метизы{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h3>
+        <h3>{% if is_staff %}<a style="font-size: 10px;" href="{% url 'delete-company' company %}">(Удалить товары) </a>{% endif %}Метизы{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h3>
     {% else %}
         {% if company == 'Teploizoljatsija_i_zvukoizoljatsija' %}
-            <h3><a style="font-size: 10px;" href="{% url 'delete-company' company %}">(Удалить товары) </a>Теплоизоляция и звукоизоляция{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h3>
+            <h3>{% if is_staff %}<a style="font-size: 10px;" href="{% url 'delete-company' company %}">(Удалить товары) </a>{% endif %}Теплоизоляция и звукоизоляция{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h3>
         {% else %}
             {% if company == 'Detali_truboprovodov' %}
-                <h3><a style="font-size: 10px;" href="{% url 'delete-company' company %}">(Удалить товары) </a>Детали трубопроводов{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h3>
+                <h3>{% if is_staff %}<a style="font-size: 10px;" href="{% url 'delete-company' company %}">(Удалить товары) </a>{% endif %}Детали трубопроводов{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h3>
                 {% else %}
-            <h3><a style="font-size: 10px;" href="{% url 'delete-company' company %}">(Удалить товары) </a>Продукция компании {{ company }} от официального дилера{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h3>
+            <h3>{% if is_staff %}<a style="font-size: 10px;" href="{% url 'delete-company' company %}">(Удалить товары) </a>{% endif %}Продукция компании {{ company }} от официального дилера{% if is_staff %}.<a style="font-size: 10px;" href="{% url 'download' %}?company={{ company }}"> (Скачать товары)</a>{% endif %}</h3>
 
             {% endif %}
         {% endif %}

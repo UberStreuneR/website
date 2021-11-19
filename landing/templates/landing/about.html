@@ -1,8 +1,8 @@
 {% extends 'landing/base.html' %}
 {% load static %}
 {% block content %}
-<div class="d-flex justify-content-center" style="height: 300px;">
-    <div class="d-flex flex-column align-items-center justify-content-between">
+<div class="d-flex justify-content-center" style="height: 500px;">
+    <div class="d-flex flex-column align-items-center">
         <div class="d-flex flex-column">
             <span style="width: 300px;"><b>ООО "НВ ГРУПП"</b></span>
             <span style="width: 300px;">ИНН: 7722467460</span>
@@ -16,8 +16,11 @@
             <span style="width: 300px;"><b>Главный бухгалтер:</b></span>
             <span style="width: 300px;">Трофимов Алексей Николаевич</span>
         </div>
+        <div class="d-flex flex-column" style="height: 500px; width: 300px; margin-top: 15px;">
+            {% include 'landing/zanger.htm' %}
+        </div>
     </div>
-    <div class="d-flex flex-column align-items-center justify-content-between">
+    <div class="d-flex flex-column align-items-center">
         <div class="d-flex flex-column">
             <span style="width: 300px;"><b>Юридический адрес:</b></span>
             <span style="width: 300px;">111250, г.Москва, Вн.Тер.Г. Муниципальный округ Лефортово,
@@ -30,6 +33,7 @@
             <span style="width: 300px;">К/с: 30101810200000000593</span>
             <span style="width: 300px;">в ГУ БАНКА РОССИИ ПО ЦФО</span>
         </div>
+
     </div>
 </div>
 
