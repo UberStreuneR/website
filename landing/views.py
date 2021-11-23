@@ -10,14 +10,15 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.templatetags.static import static
 from items.forms import SearchForm, HowMuchCounterForm
-from .forms import CheckoutForm, OrderDetailsForm, OrderFilesForm
+from .forms import CheckoutForm, OrderDetailsForm, OrderFilesForm, PaymentDetailsForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import EmailMessage
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 import os, shutil
 import pandas as pd
-
+import requests
+import json
 
 # Create your views here.
 
@@ -184,7 +185,7 @@ class CheckoutView(View):
             writer.close()
             with open(f"Order-{date}.xlsx", 'rb') as exc:
                 email.attach_file(exc.name)
-            email.send()
+            # email.send()
             os.remove(f"Order-{date}.xlsx")
             for file in files:
                 file.delete()
@@ -200,20 +201,101 @@ class CheckoutView(View):
                 except Exception as e:
                     print('Failed to delete %s. Reason: %s' % (file_path, e))
 
-            return redirect('/')
+            return redirect('/payment/')
 
         else:
             messages.error(self.request, "Введите корректные данные")
             return redirect('/checkout/')
 
 
+class PaymentView(View):
+    def get(self, *args, **kwargs):
+        try:
+            client = self.request.user.client
+        except:
+            device = self.request.COOKIES['device']
+            client, created = Client.objects.get_or_create(device=device)
+        try:
+            order = Order.objects.get(client=client, complete=True, paid=False)
+        except ObjectDoesNotExist:
+            messages.error(self.request, "Добавь сначала что-нибудь в корзину")
+            return redirect('/')
+        context = {
+            'order': order,
+            'price': order.get_cool_price(),
+            'items': order.items.all()
+        }
+
+        return render(self.request, "landing/payment.html", context)
+
+    def post(self, *args, **kwargs):
+        try:
+            client = self.request.user.client
+        except:
+            device = self.request.COOKIES['device']
+            client, created = Client.objects.get_or_create(device=device)
+        try:
+            order = Order.objects.get(client=client, complete=True, paid=False)
+        except ObjectDoesNotExist:
+            messages.error(self.request, "Добавь сначала что-нибудь в корзину")
+            return redirect('/')
+
+
+class PaymentInfoView(View):
+    def post(self, *args, **kwargs):
+        try:
+            client = self.request.user.client
+        except:
+            device = self.request.COOKIES['device']
+            client, created = Client.objects.get_or_create(device=device)
+        try:
+            order = Order.objects.get(client=client, complete=True, paid=False)
+            form = PaymentDetailsForm(self.request.POST)
+            if form.is_valid():
+                dict = {
+                    'orderNumber': form.cleaned_data['order_id'],
+                    'userName': 'nvsnab-api',
+                    'password': 'nvsnab*?1',
+                    'amount': form.cleaned_data['order_price'],
+                    'returnUrl': 'http://localhost:8000/'}
+
+                r = requests.post("https://web.rbsuat.com/ab/rest/getOrderStatusExtended.do", data=dict)
+                if json.loads(r.text)['errorMessage'] == 'Успешно':
+                    order.paid = True
+                    order.save()
+                else:
+                    return redirect('/payment/')
+            return redirect("/")
+
+        except ObjectDoesNotExist:
+            messages.error(self.request, "Добавь сначала что-нибудь в корзину")
+            return redirect('/')
 
 class TestView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
+        dict = {
+                'orderNumber': "47",
+                'userName': 'nvsnab-api',
+                'password': 'nvsnab*?1',
+                'amount': 1000,
+                'returnUrl': 'http://localhost:8000/'}
 
+        # r = requests.get("https://web.rbsuat.com/ab/rest/getOrderStatusExtended.do", data=dict)
+        r = requests.post("https://web.rbsuat.com/ab/rest/getOrderStatusExtended.do", data=dict)
+        print()
+        print()
+        print()
+        print(r.content)
+        print(r)
+        print(r.text)
+        print(json.loads(r.text)['errorMessage'])
+        print()
+        print()
         context = {
             's_form': SearchForm()
         }
         return render(self.request, "landing/test.html", context)
 
-
+    def post(self, *args, **kwargs):
+        print(self.request.POST)
+        return redirect("/test/")

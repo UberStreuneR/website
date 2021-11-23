@@ -23,3 +23,6 @@ class OrderFilesForm(forms.Form):
         'multiple': 'multiple'
     }), label='')
 
+class PaymentDetailsForm(forms.Form):
+    order_id = forms.IntegerField()
+    order_price = forms.FloatField()

@@ -1,0 +1,132 @@
+{% extends 'landing/base.html' %}
+{% block content %}
+    <div class="d-flex justify-content-center">
+        <div class="col-md-5 mb-4">
+            <h1 class="text-center">Оплата</h1>
+            {% comment %}{{ form|crispy }}{% endcomment %}
+            <div class="d-flex flex-column px-4 pt-4" style="box-shadow: 0 0 2px 0;">
+                <div class="d-flex">
+                    <h4>
+                        <label for="price">Цена: </label>
+                        <a style="color: black; text-decoration: none;" class="price" id="price">{{ price }}</a>
+                    </h4>
+
+                </div>
+                <h4>Номер вашего заказа: <span class="number">{{ order.id }}</span></h4>
+
+                <ul class="items">
+                    {% for item in items %}
+                        <li>{{ item.quantity }} x {{ item.item.name }} -- {{ item.get_cool_price }} руб.</li>
+                    {% endfor %}
+                </ul>
+            {% comment %}<form id="confirm-payment"
+                method="post"
+                action="{% url 'payment' %}"
+            >
+                {% csrf_token %}
+            </form>{% endcomment %}
+            <div
+                id="alfa-payment-button"
+                data-token="osl65n7epa6eafnoop1a77maic"
+                data-language="ru"
+                data-stages="1"
+                data-amount-format="rubli"
+                data-order-number-selector=".number"
+                data-amount-selector=".price"
+                data-description-selector=".items"
+                class="text-center"
+            ></div>
+            </div>
+        </div>
+        <script>
+            console.log("Shit worked here");
+        </script>
+    <script
+        id="alfa-payment-script"
+        type="text/javascript"
+        src="https://testpay.alfabank.ru/assets/alfa-payment.js">
+    </script>
+    <script>
+        console.log("before interval");
+        var interval = setInterval(try_ajax, 1000);
+        console.log("after interval");
+
+        function try_ajax(){
+            console.log("Called");
+            console.log($("#alfa-payment__message").text().length);
+            if ($("#alfa-payment__message").text().length === 22){
+                var dict = {
+                    'order_id': {{ order.id }},
+                    'order_price': parseInt({{ price }})
+                };
+                $.ajax({
+                    url: '/payment-info/',
+                    type: 'POST',
+                    data: dict,
+                    success : function(json) {
+                        console.log(json);
+                        window.location.replace('{% url 'home' %}');
+                    },
+                    error : function(xhr, errmsg, err){
+                        console.log(xhr.status + ": " + xhr.responseText);
+                    }
+                });
+                clearInterval(interval);
+            }
+        }
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        var csrftoken = getCookie('csrftoken');
+
+        /*
+        The functions below will create a header with csrftoken
+        */
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        function sameOrigin(url) {
+            // test that a given url is a same-origin URL
+            // url could be relative or scheme relative or absolute
+            var host = document.location.host; // host + port
+            var protocol = document.location.protocol;
+            var sr_origin = '//' + host;
+            var origin = protocol + sr_origin;
+            // Allow absolute or scheme relative URLs to same origin
+            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                // or any other URL that isn't scheme relative or absolute i.e relative.
+                !(/^(\/\/|http:|https:).*/.test(url));
+        }
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                    // Send the token to same-origin, relative URLs only.
+                    // Send the token only if the method warrants CSRF protection
+                    // Using the CSRFToken value acquired earlier
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+
+
+    </script>
+    </div>
+
+{% endblock %}

@@ -55,6 +55,7 @@ class Order(models.Model):
 
     complete = models.BooleanField(default=False)
     fulfilled = models.BooleanField(default=False)
+    paid = models.BooleanField(default=False)
 
     def get_total(self):
         total = 0

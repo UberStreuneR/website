@@ -1,5 +1,15 @@
 {% extends 'landing/base.html' %}
 {% load static %}
 {% block content %}
+    <form id="search_form" action="{% url 'test' %}" method="POST">
+        {% csrf_token %}
+        {{ s_form }}
+    </form>
+    <script>
 
+        var int = setInterval(f, 1000);
+        function f(){
+            console.log("here");
+        }
+    </script>
 {% endblock %}

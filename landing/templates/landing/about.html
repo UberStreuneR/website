@@ -1,7 +1,7 @@
 {% extends 'landing/base.html' %}
 {% load static %}
 {% block content %}
-<div class="d-flex justify-content-center" style="height: 500px;">
+<div class="d-flex justify-content-center" style="margin-top: 10px;">
     <div class="d-flex flex-column align-items-center">
         <div class="d-flex flex-column">
             <span style="width: 300px;"><b>ООО "НВ ГРУПП"</b></span>
@@ -11,15 +11,14 @@
             <span style="width: 300px;">ОКПО: 33323592</span>
         </div>
         <div class="d-flex flex-column">
+	<br>
             <span style="width: 300px;"><b>Генеральный директор:</b></span>
             <span style="width: 300px;">Трофимов Алексей Николаевич</span>
             <span style="width: 300px;"><b>Главный бухгалтер:</b></span>
             <span style="width: 300px;">Трофимов Алексей Николаевич</span>
         </div>
-        <div class="d-flex flex-column" style="height: 500px; width: 300px; margin-top: 15px;">
-            {% include 'landing/zanger.htm' %}
-        </div>
     </div>
+
     <div class="d-flex flex-column align-items-center">
         <div class="d-flex flex-column">
             <span style="width: 300px;"><b>Юридический адрес:</b></span>
@@ -33,8 +32,13 @@
             <span style="width: 300px;">К/с: 30101810200000000593</span>
             <span style="width: 300px;">в ГУ БАНКА РОССИИ ПО ЦФО</span>
         </div>
-
     </div>
+</div>
+
+<div class="d-flex justify-content-center" style="margin-left: -200px;margin-top: 20px;">
+        <div class="d-flex flex-column" style="width: 400px;">
+            {% include 'landing/zanger.htm' %}
+        </div>
 </div>
 
 {% endblock %}

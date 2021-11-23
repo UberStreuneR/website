@@ -44,6 +44,18 @@ body {
     font-size: 17px;
 }
 
+.footer-link{
+    text-decoration: none;
+    color: white;
+    opacity: 0.75;
+    transition: opacity 150ms linear;
+}
+
+.footer-link:hover{
+    text-decoration: none;
+    color: white;
+    opacity: 1;
+}
 .alert.alert-error {
     background-color: #f8d7da;
 }
