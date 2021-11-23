@@ -185,7 +185,7 @@ class CheckoutView(View):
             writer.close()
             with open(f"Order-{date}.xlsx", 'rb') as exc:
                 email.attach_file(exc.name)
-            # email.send()
+            email.send()
             os.remove(f"Order-{date}.xlsx")
             for file in files:
                 file.delete()
@@ -242,6 +242,8 @@ class PaymentView(View):
 
 
 class PaymentInfoView(View):
+    def get(self, *args, **kwargs):
+        return render(self.request, "landing/payment-info.html")
     def post(self, *args, **kwargs):
         try:
             client = self.request.user.client
