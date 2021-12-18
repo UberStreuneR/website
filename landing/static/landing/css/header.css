@@ -59,7 +59,8 @@
     width: 75%;
     margin: 10px auto;
 }
-@media (max-width: 770px){
+/*@media (max-width: 770px){*/
+@media (max-width: 15cm){
     .grid-wrapper {
         width: 100%;
         grid-template-rows: repeat(6, 60px);
@@ -78,7 +79,5 @@
         margin: 10px 10px;
     }
     #catalog, #about, #contacts {
-        height: 50px;
-        align-items: center;
     }
 }
