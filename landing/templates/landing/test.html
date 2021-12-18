@@ -36,12 +36,15 @@
         <a id="contacts" class="btn btn-sm btn-light" href="/contacts/" style="box-shadow: 0 0 3px 0 black;">Контакты</a>
         <span id="times" style="">ПН-ПТ: 9:00 - 18:00</span>
     </div>
+    <span id="checking">None</span>
 </div>
 <script>
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
      console.log("Mobile");
+        $("#checking").text("Mobile");
     }
     else{
         console.log("PC");
+        $("#checking").text("PC");
     }
 </script>
