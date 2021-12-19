@@ -2,8 +2,8 @@ html, body {
     background-color: #5c6360;
 }
 .mobile-screen{
-    width: 360px;
-    height: 640px;
+    /*width: 360px;*/
+    /*height: 640px;*/
     /*background-color: white;*/
     border: 3px solid black;
     margin: 10px auto;
