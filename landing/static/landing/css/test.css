@@ -1,70 +1,85 @@
-body {
-    margin: 0;
+html, body {
+    background-color: #5c6360;
+}
+.mobile-screen{
+    width: 360px;
+    height: 640px;
+    /*background-color: white;*/
+    border: 3px solid black;
+    margin: 10px auto;
+    padding: 10px;
+    font-size: 15px;
 }
 
-.header {
-    background-color: #F3F3F3;
-    display: flex;
-    align-items: baseline;
-    padding: .5rem;
-    gap: 1rem;
-}
-
-.link {
-    background: none;
-    border: none;
-    text-decoration: none;
-    color: #777;
-    font-family: inherit;
-    font-size: inherit;
-    cursor: pointer;
-    padding: 0;
-}
-.dropdown.active > .link,
-.link:hover {
-    color: black;
-}
-
-.dropdown {
-    position: relative;
-}
-
-.dropdown-menu {
-    position: absolute;
-    left: 0;
-    top: calc(100% + .25rem);
-    background-color: white;
-    padding: .75rem;
-    border-radius: .25rem;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .1);
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(-10px);
-    transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
-}
-/*.dropdown-menu.active {
-    opacity: 1;
-}*/
-
-.dropdown.active > .link + .dropdown-menu {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-
-}
-
-.information-grid {
+.my-container {
     display: grid;
-    grid-template-columns: repeat(2, max-content);
-    gap: 2rem;
+    grid-template-rows: repeat(4, 1.5rem) 2rem 2rem;
+    row-gap: 3px;
+    grid-template-areas:
+        "logo logo email email"
+        "logo logo phone-1 phone-1"
+        "logo logo phone-2 phone-2"
+        "logo logo times times"
+        "search search search search"
+        "catalog catalog about contacts";
 }
 
-.dropdown-links {
-    display: flex;
-    flex-direction: column;
-    gap: .25rem;
+#logo {
+    grid-area: logo;
 }
-
-.login-form > input {
-    margin-bottom: .5rem;
+#logo-img {
+    grid-area: logo-img;
+    width: 11rem;
 }
+#catalog{
+    grid-area: catalog;
+}
+#catalog button{
+    width: 100%;
+    border: 1px solid grey;
+}
+#search {
+    grid-area: search;
+}
+#search input{
+}
+#about {
+    grid-area: about;
+    border: 1px solid grey;
+}
+#contacts {
+    grid-area: contacts;
+    border: 1px solid grey;
+}
+#phone-1 {
+    grid-area: phone-1;
+    justify-self: end;
+}
+#phone-2 {
+    grid-area: phone-2;
+    justify-self: end;
+}
+#email {
+    grid-area: email;
+    justify-self: end;
+}
+#times {
+    grid-area: times;
+    justify-self: end;
+}
+/*@media (max-width: 600px){*/
+/*    #times {*/
+/*        display: block;*/
+/*    }*/
+/*    .container {*/
+/*        grid-template-rows: repeat(4, 30px) repeat(2, 40px);*/
+/*        grid-template-columns: 3fr 1fr 1fr;*/
+/*        grid-template-areas:*/
+/*            "logo email email"*/
+/*            "logo phone-1 phone-1"*/
+/*            "logo phone-2 phone-2"*/
+/*            "logo times times"*/
+/*            "search search search"*/
+/*            "catalog about contacts";*/
+/*    }*/
+/*}*/

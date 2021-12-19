@@ -11,7 +11,7 @@
 }
 .grid-wrapper > * {
     /*border: 3px dotted red;*/
-    align-self: end;
+    /*align-self: end;*/
 
 }
 #logo {
@@ -19,6 +19,9 @@
     margin-right: 10px;
     height: 115px;
     border: 2px dotted cyan;
+}
+#logo-image {
+    width: 230px;
 }
 #search {
     grid-area: search;
@@ -40,8 +43,13 @@
     height: 30px;
     border: 2px dotted cyan;
 }
-#phones {
-    grid-area: phones;
+#phone-1 {
+    grid-area: phone-2;
+    text-align: right;
+    border: 2px dotted cyan;
+}
+#phone-2 {
+    grid-area: phone-2;
     text-align: right;
     border: 2px dotted cyan;
 }
@@ -59,44 +67,52 @@
     width: 75%;
     margin: 10px auto;
 }
-/*@media (max-width: 770px){*/
-/*@media (max-width: 15cm){*/
-/*    .grid-wrapper {*/
-/*        width: 100%;*/
-/*        grid-template-rows: repeat(6, 60px);*/
-/*        grid-template-areas:*/
-/*            "logo logo email email"*/
-/*            "logo logo phones phones"*/
-/*            "logo logo times times"*/
-/*            "search search search search"*/
-/*            "catalog catalog about contacts";*/
-/*    }*/
-/*    #logo{*/
-/*        margin-right: 0;*/
-/*    }*/
-/*    .header-div{*/
-/*        width: 100%;*/
-/*        margin: 10px 10px;*/
-/*    }*/
-/*    #catalog, #about, #contacts {*/
-/*    }*/
-/*}*/
 .grid-wrapper.mobile{
-        width: 100%;
-        grid-template-rows: repeat(6, 60px);
-        grid-template-areas:
-            "logo logo email email"
-            "logo logo phones phones"
-            "logo logo times times"
-            "search search search search"
-            "catalog catalog about contacts";
+    border: 2px dotted red;
+    width: 100%;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    grid-template-areas:
+        "logo logo logo logo logo email email email"
+        "logo logo logo logo logo phone-1 phone-1 phone-1"
+        "logo logo logo logo logo phone-2 phone-2 phone-2"
+        "logo logo logo logo logo times times times"
+        "search search search search search search search search"
+        "catalog catalog catalog catalog about about contacts contacts";
 }
 #logo.mobile {
+    margin-right: 0;
+    /*grid-column: 1 / span 5;*/
+    /*grid-row: 1 / span 4;*/
+}
+#logo-image.mobile {
     margin-right: 0;
 }
 .header-div.mobile {
     width: 100%;
     margin: 10px 10px;
 }
-#catalog, #about, #contacts {
+#email.mobile {
+
+}
+#phone-1.mobile {
+
+}
+#phone-2.mobile {
+
+}
+#times.mobile {
+
+}
+#search.mobile {
+
+}
+#catalog.mobile {
+
+}
+#about.mobile {
+
+}
+#contacts.mobile {
+
 }
