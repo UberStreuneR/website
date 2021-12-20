@@ -1,0 +1,106 @@
+/*Desktop home*/
+.home-screen {
+    margin: 30px 10px;
+    width: 70%;
+}
+.home-container {
+    display: grid;
+    grid-gap: 0.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 12rem);
+    grid-template-areas:
+        "danfoss-div uponor-div tecofi-div"
+        "rehau-div belimo-div sml-div"
+        "metizy-div detali-div teplo-div";
+}
+.home-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 70%;
+}
+.home-a {
+    height: 10rem;
+    width: 15rem;
+
+    box-shadow: 0 0 5px 0 black;
+    margin-bottom: 0.5rem;
+}
+.home-image {
+    height: 10rem;
+    width: 15rem;
+
+}
+/*Desktop home*/
+
+/*Mobile home*/
+.home-screen.mobile {
+    font-size: 1.5rem;
+    margin: 10px auto;
+    width: 100%;
+}
+.home-screen.mobile .home-container {
+    display: grid;
+    grid-gap: 1.5rem;
+    grid-template-rows: repeat(9, 16rem);
+    grid-template-columns: 1fr;
+    grid-template-areas:
+        "danfoss-div"
+        "uponor-div"
+        "tecofi-div"
+        "rehau-div"
+        "belimo-div"
+        "sml-div"
+        "metizy-div"
+        "detali-div"
+        "teplo-div";
+}
+.home-screen.mobile .home-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+.home-screen.mobile .home-a {
+    height: 15rem;
+    width: 100%;
+    box-shadow: 0 0 5px 0 black;
+    margin-bottom: 0.5rem;
+}
+.home-screen.mobile .home-image {
+    height: auto;
+    width: 100%;
+}
+/*Mobile home*/
+
+
+#danfoss-div {
+    grid-area: danfoss-div;
+}
+#uponor-div {
+    grid-area: uponor-div;
+}
+#tecofi-div {
+    grid-area: tecofi-div;
+}
+#rehau-div {
+    grid-area: rehau-div;
+}
+#belimo-div {
+    grid-area: belimo-div;
+}
+#sml-div {
+    grid-area: sml-div;
+}
+#metizy-div {
+    grid-area: metizy-div;
+}
+#detali-div {
+    grid-area: detali-div;
+
+}
+#teplo-div {
+    grid-area: teplo-div;
+}
+
+

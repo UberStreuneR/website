@@ -10,9 +10,9 @@
     <body>
         <div class="screen">
             <div class="my-container">
-                <a id="logo" href="#"><img id="logo-img" src="{% static 'landing/images/mainpage/nvsnab-logo.png' %}" alt="logo"></a>
+                <a id="logo" href="/"><img id="logo-img" src="{% static 'landing/images/mainpage/nvsnab-logo.png' %}" alt="logo"></a>
                 <div id="search">
-                    <form action="#" method="GET">
+                    <form action="{% url 'search' %}" method="GET">
                         <div class="input-group input-group-sm">
                             <input type="text" name="text" class="form-control" id="article" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Поиск товара по каталогу">
                             <button class="btn btn-outline-dark" type="submit">Поиск</button>
@@ -31,8 +31,8 @@
                     <ul class="dropdown-menu" id="dropdown-ul" aria-labelledby="dropdownMenuButton1">
                     </ul>
                 </div>
-                <a id="about" class="btn btn-sm btn-light" href="#">О нас</a>
-                <a id="contacts" class="btn btn-sm btn-light" href="#">Контакты</a>
+                <a id="about" class="btn btn-sm btn-light" href="/about/">О нас</a>
+                <a id="contacts" class="btn btn-sm btn-light" href="/contacts/">Контакты</a>
             </div>
         </div>
 

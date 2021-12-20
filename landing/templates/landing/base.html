@@ -76,7 +76,10 @@
         {% include 'landing/side-cart.html' %}
     {% endif %}
 {% endblock %}
+{% block home %}
+{% endblock %}
 <main>
+
     <div class="container mb-2">
         {% block content %}
         {% endblock %}
@@ -85,7 +88,7 @@
 </main>
 
 
-{#{% include 'landing/footer.html' %}#}
+{% include 'landing/footer.html' %}
 
 {% comment %}<script type="text/javascript" src="{% static 'landing/js/mdb.min.js' %}"></script>{% endcomment %}
 <script>

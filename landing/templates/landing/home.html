@@ -1,59 +1,54 @@
 {% extends 'landing/base.html' %}
 {% load static %}
-
-{% block content %}
-
-{#    <div class="d-flex justify-content-center mt-4">#}
-{#        <div class="d-flex flex-column align-items-center">#}
-{#            <a id="danfoss" href="{% url 'company' 'Danfoss' %}" class="m-1 text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/danfoss.jpg' %}); background-repeat: no-repeat; height: 200px; width: 300px; box-shadow: 0 0 5px 0 black;">#}
-{#            </a>#}
-{#            <label for="danfoss" style="font-size: 20px;"><b>Danfoss</b></label>#}
-{#        </div>#}
-{#        <div class="d-flex flex-column align-items-center">#}
-{#            <a id="uponor" href="{% url 'company' 'Uponor' %}" class="m-1 text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/uponor.jpg' %}); background-repeat: no-repeat; height: 200px; width: 300px; box-shadow: 0 0 5px 0 black;">#}
-{#            </a>#}
-{#            <label for="uponor" style="font-size: 20px;"><b>Uponor</b></label>#}
-{#        </div>#}
-{#        <div class="d-flex flex-column align-items-center">#}
-{#            <a id="tecofi" href="{% url 'company' 'Tecofi' %}" class="m-1 text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/tecofi.jpg' %}); background-repeat: no-repeat; height: 200px; width: 300px; box-shadow: 0 0 5px 0 black;">#}
-{#            </a>#}
-{#            <label for="tecofi" style="font-size: 20px;"><b>Tecofi</b></label>#}
-{#        </div>#}
-{#    </div>#}
-{#    <div class="d-flex justify-content-center mt-4">#}
-{#        <div class="d-flex flex-column align-items-center">#}
-{#            <a id="rehau" href="{% url 'company' 'Rehau' %}" class="m-1 text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/rehau.png' %}); background-repeat: no-repeat; height: 200px; width: 300px; box-shadow: 0 0 5px 0 black;">#}
-{#            </a>#}
-{#            <label for="rehau" style="font-size: 20px;"><b>Rehau</b></label>#}
-{#        </div>#}
-{#        <div class="d-flex flex-column align-items-center">#}
-{#            <a id="belimo" href="{% url 'company' 'Belimo' %}" class="m-1 text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/belimo.png' %}); background-repeat: no-repeat; height: 200px; width: 300px; box-shadow: 0 0 5px 0 black;">#}
-{#            </a>#}
-{#            <label for="belimo" style="font-size: 20px;"><b>Belimo</b></label>#}
-{#        </div>#}
-{#        <div class="d-flex flex-column align-items-center">#}
-{#            <a id="sml" href="{% url 'company' 'SML' %}" class="m-1 text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/sml.jpg' %}); background-repeat: no-repeat; height: 200px; width: 300px; box-shadow: 0 0 5px 0 black;">#}
-{#            </a>#}
-{#            <label for="sml" style="font-size: 20px;"><b>SML</b></label>#}
-{#        </div>#}
-{##}
-{##}
-{#    </div>#}
-{#    <div class="d-flex justify-content-center mt-4" style="height: 250px;">#}
-{#        <div class="d-flex flex-column align-items-center">#}
-{#            <a id="metizy" href="{% url 'company' 'Metizy' %}" class="m-1 text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/metizy.jpg' %}); background-repeat: no-repeat; height: 200px; width: 300px; box-shadow: 0 0 5px 0 black;">#}
-{#            </a>#}
-{#            <label for="metizy" style="font-size: 20px;"><b>Крепежная техника</b></label>#}
-{#        </div>#}
-{#        <div class="d-flex flex-column align-items-center">#}
-{#            <a id="detali" href="{% url 'company' 'Detali_truboprovodov' %}" class="m-1 text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/detali_truboprovodov.jpg' %}); background-repeat: no-repeat; height: 200px; width: 300px; box-shadow: 0 0 5px 0 black;">#}
-{#            </a>#}
-{#            <label for="detali" style="font-size: 20px;"><b>Детали трубопроводов ВГП</b></label>#}
-{#        </div>#}
-{#        <div class="d-flex flex-column align-items-center">#}
-{#            <a id="teplo" href="{% url 'company' 'Teploizoljatsija_i_zvukoizoljatsija' %}" class="m-1 text-decoration-none" style="background-image: url({% static 'landing/images/mainpage/teploiz.jpg' %}); background-repeat: no-repeat; height: 200px; width: 300px; box-shadow: 0 0 5px 0 black;">#}
-{#            </a>#}
-{#            <label for="teplo" style="font-size: 20px;"><b>Изоляция</b></label>#}
-{#        </div>#}
-{#    </div>#}
+{% block home %}
+    <link rel="stylesheet" href="{% static 'landing/css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/css/home.css' %}">
+<div class="home-screen">
+    <div class="home-container">
+        <div class="home-div" id="danfoss-div">
+            <a class="home-a" href="{% url 'company' 'Danfoss' %}"><img class="home-image" src="{% static 'landing/images/mainpage/danfoss.jpg' %}" alt="" id="danfoss"></a>
+            <span><b>Danfoss</b></span>
+        </div>
+        <div class="home-div" id="uponor-div">
+            <a class="home-a" href="{% url 'company' 'Uponor' %}"><img class="home-image" src="{% static 'landing/images/mainpage/uponor.jpg' %}" alt="" id="uponor"></a>
+            <span><b>Uponor</b></span>
+        </div>
+        <div class="home-div" id="tecofi-div">
+            <a class="home-a" href="{% url 'company' 'Tecofi' %}"><img class="home-image" src="{% static 'landing/images/mainpage/tecofi.jpg' %}" alt="" id="tecofi"></a>
+            <span><b>Tecofi</b></span>
+        </div>
+        <div class="home-div" id="rehau-div">
+            <a class="home-a" href="{% url 'company' 'Rehau' %}"><img class="home-image" src="{% static 'landing/images/mainpage/rehau.jpg' %}" alt="" id="rehau"></a>
+            <span><b>Rehau</b></span>
+        </div>
+        <div class="home-div" id="belimo-div">
+            <a class="home-a" href="{% url 'company' 'Belimo' %}"><img class="home-image" src="{% static 'landing/images/mainpage/belimo.jpg' %}" alt="" id="belimo"></a>
+            <span><b>Belimo</b></span>
+        </div>
+        <div class="home-div" id="sml-div">
+            <a class="home-a" href="{% url 'company' 'SML' %}"><img class="home-image" src="{% static 'landing/images/mainpage/sml.jpg' %}" alt="" id="sml"></a>
+            <span><b>SML</b></span>
+        </div>
+        <div class="home-div" id="metizy-div">
+            <a class="home-a" href="{% url 'company' 'Metizy' %}"><img class="home-image" src="{% static 'landing/images/mainpage/metizy.jpg' %}" alt="" id="metizy"></a>
+            <span><b>Крепёжная техника</b></span>
+        </div>
+        <div class="home-div" id="detali-div">
+            <a class="home-a" href="{% url 'company' 'Detali_truboprovodov' %}"><img class="home-image" src="{% static 'landing/images/mainpage/detali_truboprovodov.jpg' %}" alt="" id="detali"></a>
+            <span><b>Детали трубопроводов ВГП</b></span>
+        </div>
+        <div class="home-div" id="teplo-div">
+            <a class="home-a" href="{% url 'company' 'Teploizoljatsija_i_zvukoizoljatsija' %}"><img class="home-image" src="{% static 'landing/images/mainpage/teploiz.jpg' %}" alt="" id="teplo"></a>
+            <span><b>Изоляция</b></span>
+        </div>
+    </div>
+</div>
+<script>
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        $(".home-screen").addClass("mobile");
+        $("html").addClass("mobile");
+    }
+</script>
 {% endblock %}
+
+
