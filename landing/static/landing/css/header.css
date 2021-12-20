@@ -1,118 +1,153 @@
-.grid-wrapper {
-    display: grid;
-    max-width: 1000px;
-    /*max-width: 800px;*/
-    grid-template-rows: repeat(3, 37px);
-    grid-template-columns: repeat(2, 2fr) repeat(2, 1.4fr);
-    grid-template-areas:
-        "logo search search phones"
-        "logo times times phones"
-        "logo catalog about contacts";
-}
-.grid-wrapper > * {
-    /*border: 3px dotted red;*/
-    /*align-self: end;*/
+/*Desktop header*/
+/*@media (min-width: 1080px){*/
+    html{
+        font-size: 1.4vw;
+    }
+    .screen{
+        margin: 10px auto;
+        width: 60%;
+    }
+    .my-container {
+        display: grid;
+        grid-template-rows: repeat(3, 1.5rem) 2rem;
+        grid-template-columns: repeat(2, 1.5fr) repeat(2, 1fr);
+        grid-template-areas:
+            "logo search search email"
+            "logo search search phone-1"
+            "logo . times phone-2"
+            "logo catalog about contacts"
+    }
+    #logo {
+        grid-area: logo;
+        justify-self: end;
+        margin-right: 10px;
+    }
+    #logo-img {
+        grid-area: logo-img;
+        width: 13rem;
+    }
+    #catalog{
+        grid-area: catalog;
+    }
+    #catalog button{
+        width: 100%;
+        height: 100%;
 
-}
-#logo {
-    grid-area: logo;
-    margin-right: 10px;
-    height: 115px;
-    border: 2px dotted cyan;
-}
-#logo-image {
-    width: 230px;
-}
-#search {
-    grid-area: search;
-    height: 30px;
-    border: 2px dotted cyan;
-}
-#catalog{
-    grid-area: catalog;
-    height: 30px;
-    border: 2px dotted cyan;
-}
-#about {
-    grid-area: about;
-    height: 30px;
-    border: 2px dotted cyan;
-}
-#contacts {
-    grid-area: contacts;
-    height: 30px;
-    border: 2px dotted cyan;
-}
-#phone-1 {
-    grid-area: phone-2;
-    text-align: right;
-    border: 2px dotted cyan;
-}
-#phone-2 {
-    grid-area: phone-2;
-    text-align: right;
-    border: 2px dotted cyan;
-}
-#email {
-    grid-area: email;
-    border: 2px dotted cyan;
-}
-#times {
-    grid-area: times;
-    justify-self: end;
-    border: 2px dotted cyan;
-    font-size: 15px;
-}
-.header-div {
-    width: 75%;
-    margin: 10px auto;
-}
-.grid-wrapper.mobile{
-    border: 2px dotted red;
-    width: 100%;
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(6, 1fr);
-    grid-template-areas:
-        "logo logo logo logo logo email email email"
-        "logo logo logo logo logo phone-1 phone-1 phone-1"
-        "logo logo logo logo logo phone-2 phone-2 phone-2"
-        "logo logo logo logo logo times times times"
-        "search search search search search search search search"
-        "catalog catalog catalog catalog about about contacts contacts";
-}
-#logo.mobile {
-    margin-right: 0;
-    /*grid-column: 1 / span 5;*/
-    /*grid-row: 1 / span 4;*/
-}
-#logo-image.mobile {
-    margin-right: 0;
-}
-.header-div.mobile {
-    width: 100%;
-    margin: 10px 10px;
-}
-#email.mobile {
+        border: 1px solid grey;
+    }
+    #search {
+        grid-area: search;
+        align-self: center;
+    }
+    #search input{
+    }
+    #about {
+        grid-area: about;
+        border: 1px solid grey;
+        height: 100%;
 
-}
-#phone-1.mobile {
+    }
+    #contacts {
+        grid-area: contacts;
+        border: 1px solid grey;
+        height: 100%;
 
-}
-#phone-2.mobile {
+    }
+    #phone-1 {
+        grid-area: phone-1;
+        justify-self: end;
+    }
+    #phone-2 {
+        grid-area: phone-2;
+        justify-self: end;
+    }
+    #email {
+        grid-area: email;
+        justify-self: end;
+        font-size: 0.8rem;
+        align-self: end;
+    }
+    #times {
+        grid-area: times;
+        justify-self: end;
+        font-size: 0.8rem;
+    }
+/*}*/
+/*Desktop header*/
 
-}
-#times.mobile {
+/*Mobile header*/
+/*@media (max-width: 1080px){*/
+    html.mobile{
+        font-size: 4.5vw;
+    }
+    .screen.mobile{
+        margin: 0 10px;
+        padding: 10px;
+        width: 100%;
+    }
+    .screen.mobile .my-container {
+        display: grid;
+        grid-template-rows: repeat(4, 1.5rem) 2rem 2rem;
+        row-gap: 3px;
+        grid-template-areas:
+            "logo logo email email"
+            "logo logo phone-1 phone-1"
+            "logo logo phone-2 phone-2"
+            "logo logo times times"
+            "search search search search"
+            "catalog catalog about contacts";
+    }
+    .screen.mobile #logo {
+        grid-area: logo;
+        align-self: end;
+    }
+    .screen.mobile #logo-img {
+        grid-area: logo-img;
+        width: 11rem;
+    }
+    .screen.mobile #catalog{
+        grid-area: catalog;
+    }
+    .screen.mobile #catalog button{
+        width: 100%;
+        border: 1px solid grey;
+        height: 2rem;
+    }
+    .screen.mobile #search {
+        grid-area: search;
+    }
+    .screen.mobile #search input{
+    }
+    .screen.mobile #about {
+        grid-area: about;
+        border: 1px solid grey;
+        height: 2rem;
+    }
+    .screen.mobile #contacts {
+        grid-area: contacts;
+        border: 1px solid grey;
+        height: 2rem;
+    }
+    .screen.mobile #phone-1 {
+        grid-area: phone-1;
+        justify-self: end;
 
-}
-#search.mobile {
+    }
+    .screen.mobile #phone-2 {
+        grid-area: phone-2;
+        justify-self: end;
 
-}
-#catalog.mobile {
-
-}
-#about.mobile {
-
-}
-#contacts.mobile {
-
-}
+    }
+    .screen.mobile #email {
+        grid-area: email;
+        justify-self: end;
+        font-size: 0.8rem;
+        align-self: end;
+    }
+    .screen.mobile #times {
+        grid-area: times;
+        justify-self: end;
+        font-size: 0.8rem;
+    }
+/*}*/
+/*Mobile header*/

@@ -1,0 +1,55 @@
+{% load static %}
+
+<div class="container">
+    <div class="d-flex justify-content-center" id="upper-header">
+        <a href="/"><img src="{% static 'landing/images/mainpage/nvsnab-logo.png' %}" alt="" style="width: 230px;"></a>
+        <div class="d-flex flex-column justify-content-end">
+            <div class="d-flex">
+                <div class="d-flex flex-column align-items-end">
+                    <form action="{% url 'search' %}" method="GET">
+                        <div class="input-group input-group-sm mx-3" style="width: 400px; box-shadow: 0 0 3px 0 black;">
+                            <input type="text" name="text" class="form-control" id="article" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Поиск товара по каталогу">
+                            <button class="btn btn-outline-dark" type="submit">Поиск</button>
+                        </div>
+                    </form>
+                    <span style="font-size: 15px; margin-top: 4px; margin-right: 15px;">ПН-ПТ: 9:00 - 18:00</span>
+                </div>
+
+                <div class="d-flex flex-column">
+                    <h5>+7-499-000-0000</h5>
+                    <h5>+7-916-000-0000</h5>
+                </div>
+            </div>
+            <div class="d-flex justify-content-start" id="lower-header" style="margin-top: 5px; margin-bottom: 15px;">
+                <div class="dropdown" style="width: 270px; margin-left: 17px; box-shadow: 0 0 3px 0 black;">
+                  <button class="btn btn-sm btn-light dropdown-toggle w-100 border border-black border-1" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    Каталог
+                  </button>
+                  <ul class="dropdown-menu w-100" id="dropdown-ul" aria-labelledby="dropdownMenuButton1">
+                  </ul>
+                </div>
+                <a class="btn btn-sm btn-light border border-black border-1" href="/about/" style="width: 153px; box-shadow: 0 0 3px 0 black;">О компании</a>
+                <a class="btn btn-sm btn-light border border-black border-1" href="/contacts/" style="width: 153px; box-shadow: 0 0 3px 0 black;">Контакты</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    $.ajax({
+        url: '/ajax-get-all-partners/',
+        type: 'GET',
+        success : function(json) {
+
+            for (let i = 0; i < json['partners'].length; i++){
+                var key = Object.keys(json['partners'][i])[0];
+                var value = Object.values(json['partners'][i])[0];
+                $("#dropdown-ul")[0].innerHTML += "<li><a class=\"dropdown-item text-decoration-none\" href=\"" + value + "\">" + key + "</a></li>";
+            }
+        },
+        error : function(xhr, errmsg, err){
+            console.log(xhr.status + ": " + xhr.responseText);
+        }
+    });
+
+</script>

@@ -1,12 +1,8 @@
-html, body {
-    background-color: #5c6360;
-    font-size: 5vw;
+html{
+    font-size: 4.5vw;
 }
-.mobile-screen{
-    /*width: 360px;*/
-    /*height: 640px;*/
-    /*background-color: white;*/
-    margin: 10px auto;
+.screen.mobile{
+    margin: 0 10px;
     padding: 10px;
 }
 .my-container {
@@ -23,6 +19,7 @@ html, body {
 }
 #logo {
     grid-area: logo;
+    align-self: end;
 }
 #logo-img {
     grid-area: logo-img;
@@ -34,6 +31,7 @@ html, body {
 #catalog button{
     width: 100%;
     border: 1px solid grey;
+    height: 2rem;
 }
 #search {
     grid-area: search;
@@ -43,40 +41,31 @@ html, body {
 #about {
     grid-area: about;
     border: 1px solid grey;
+    height: 2rem;
 }
 #contacts {
     grid-area: contacts;
     border: 1px solid grey;
+    height: 2rem;
 }
 #phone-1 {
     grid-area: phone-1;
     justify-self: end;
+
 }
 #phone-2 {
     grid-area: phone-2;
     justify-self: end;
+
 }
 #email {
     grid-area: email;
     justify-self: end;
+    font-size: 0.8rem;
+    align-self: end;
 }
 #times {
     grid-area: times;
     justify-self: end;
+    font-size: 0.8rem;
 }
-/*@media (max-width: 600px){*/
-/*    #times {*/
-/*        display: block;*/
-/*    }*/
-/*    .container {*/
-/*        grid-template-rows: repeat(4, 30px) repeat(2, 40px);*/
-/*        grid-template-columns: 3fr 1fr 1fr;*/
-/*        grid-template-areas:*/
-/*            "logo email email"*/
-/*            "logo phone-1 phone-1"*/
-/*            "logo phone-2 phone-2"*/
-/*            "logo times times"*/
-/*            "search search search"*/
-/*            "catalog about contacts";*/
-/*    }*/
-/*}*/
