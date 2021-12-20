@@ -1,13 +1,4 @@
-main {
-    margin: 0 40px 40px 40px;
 
-}
-body {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    top: 0;
-}
 #side-menu {
     background: transparent;
     color: white;
@@ -19,12 +10,14 @@ body {
     }
 
 }
-@media (min-width: 993px){
-    #side-menu {
-        display: none !important;
-    }
+/*@media (min-width: 993px){*/
+/*    #side-menu {*/
+/*        display: none !important;*/
+/*    }*/
+/*}*/
+#side-menu {
+    display: none !important;
 }
-
 /*.items-sidebar {
     width: 25%;
     margin-right: 30px;
