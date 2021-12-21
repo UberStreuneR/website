@@ -2,9 +2,10 @@
 /*@media (min-width: 1080px){*/
     html{
         font-size: 1.4vw;
+        min-height: 100%;
     }
     body{
-        min-height: 100vh;
+        height: 100%;
     }
     .screen{
         margin: 10px auto;

@@ -37,9 +37,6 @@
 }
 /*Desktop about*/
 /*Mobile about*/
-html.mobile {
-    min-height: 60rem;
-}
 html.mobile #about-div {
     width: auto;
     margin: 10px;
