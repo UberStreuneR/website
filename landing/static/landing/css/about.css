@@ -1,0 +1,55 @@
+
+#about-nv {
+    grid-area: about-nv;
+}
+#about-persons {
+    grid-area: about-persons;
+}
+#about-address {
+    grid-area: about-address;
+}
+#about-requisites {
+    grid-area: about-requisites;
+}
+#about-zanger {
+    grid-area: about-zanger;
+}
+#about-zanger-2 {
+    grid-area: about-zanger-2;
+}
+#about-zanger-div {
+    grid-area: about-zanger-div;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+/*Desktop about*/
+#about-div{
+    width: 60%;
+    margin: 10px auto;
+    display: grid;
+    column-gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 10rem 15rem;
+    grid-template-areas:
+        "about-nv about-persons about-zanger-div"
+        "about-requisites about-address about-zanger-div";
+}
+/*Desktop about*/
+/*Mobile about*/
+html.mobile #about-div {
+    width: auto;
+    margin: 10px;
+    grid-template-columns: none;
+    grid-template-rows: repeat(4, 10rem) 20rem;
+    grid-template-areas:
+        "about-nv"
+        "about-persons"
+        "about-requisites"
+        "about-address"
+        "about-zanger-div";
+}
+html.mobile #about-zanger-div {
+    align-items: start;
+}
+/*Mobile about*/

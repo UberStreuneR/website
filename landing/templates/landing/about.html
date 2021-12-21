@@ -1,44 +1,49 @@
 {% extends 'landing/base.html' %}
 {% load static %}
 {% block content %}
-<div class="d-flex justify-content-center" style="margin-top: 10px;">
-    <div class="d-flex flex-column align-items-center">
-        <div class="d-flex flex-column">
-            <span style="width: 300px;"><b>ООО "НВ ГРУПП"</b></span>
-            <span style="width: 300px;">ИНН: 7722467460</span>
-            <span style="width: 300px;">КПП: 772201001</span>
-            <span style="width: 300px;">ОГРН: 1187746843327</span>
-            <span style="width: 300px;">ОКПО: 33323592</span>
-        </div>
-        <div class="d-flex flex-column">
-	<br>
-            <span style="width: 300px;"><b>Генеральный директор:</b></span>
-            <span style="width: 300px;">Трофимов Алексей Николаевич</span>
-            <span style="width: 300px;"><b>Главный бухгалтер:</b></span>
-            <span style="width: 300px;">Трофимов Алексей Николаевич</span>
-        </div>
+    <link rel="stylesheet" href="{% static 'landing/css/about.css' %}">
+<div id="about-div">
+    <div class="d-flex flex-column" id="about-nv">
+        <span><b>ООО "НВ ГРУПП"</b></span>
+        <span>ИНН: 7722467460</span>
+        <span>КПП: 772201001</span>
+        <span>ОГРН: 1187746843327</span>
+        <span>ОКПО: 33323592</span>
+    </div>
+    <div class="d-flex flex-column" id="about-persons">
+        <span><b>Генеральный директор:</b></span>
+        <span>Трофимов Алексей Николаевич</span>
+        <span><b>Главный бухгалтер:</b></span>
+        <span>Трофимов Алексей Николаевич</span>
     </div>
 
-    <div class="d-flex flex-column align-items-center">
-        <div class="d-flex flex-column">
-            <span style="width: 300px;"><b>Юридический адрес:</b></span>
-            <span style="width: 300px;">111250, г.Москва, Вн.Тер.Г. Муниципальный округ Лефортово,
-    ул.Лефортовский Вал, д. 24, офис 121</span>
-        </div>
-        <div class="d-flex flex-column">
-            <span style="width: 300px;"><b>Реквизиты рублевого счёта в АО "АЛЬФА-БАНК"</b></span>
-            <span style="width: 300px;">БИК: 044525593</span>
-            <span style="width: 300px;">Р/c: 40702810902610004081</span>
-            <span style="width: 300px;">К/с: 30101810200000000593</span>
-            <span style="width: 300px;">в ГУ БАНКА РОССИИ ПО ЦФО</span>
-        </div>
+    <div class="d-flex flex-column" id="about-address">
+        <span><b>Юридический адрес:</b></span>
+        <span>111250, г.Москва, Вн.Тер.Г. Муниципальный округ Лефортово,
+ул.Лефортовский Вал, д. 24, офис 121</span>
     </div>
+    <div class="d-flex flex-column" id="about-requisites">
+        <span><b>Реквизиты рублевого счёта в АО "АЛЬФА-БАНК"</b></span>
+        <span>БИК: 044525593</span>
+        <span>Р/c: 40702810902610004081</span>
+        <span>К/с: 30101810200000000593</span>
+        <span>в ГУ БАНКА РОССИИ ПО ЦФО</span>
+    </div>
+    <div id="about-zanger-div">
+        <span style="font-style: italic;">Для закупок физ.лицами и ИП</span>
+        <div>
+            <div class="d-flex flex-column" id="about-zanger">
+                {% include 'landing/zanger.htm' %}
+            </div>
+            <div class="d-flex flex-column" id="about-zanger-2">
+                {% include 'landing/zanger2.html' %}
+            </div>
+        </div>
+
+    </div>
+
 </div>
 
-<div class="d-flex justify-content-center" style="margin-left: -200px;margin-top: 20px;">
-        <div class="d-flex flex-column" style="width: 400px;">
-            {% include 'landing/zanger.htm' %}
-        </div>
-</div>
+
 
 {% endblock %}

@@ -28,10 +28,10 @@
                 {% endif %}
             {% endif %}
         {% endif %}
-        <div class="row row-cols-4 g-2 mb-5">
+        <div class="row row-cols-4 g-2 mb-5 mt-1">
             {% for subcategory in category.subcategories.all %}
                 <div> {# TODO: if category.name != subcategory.name -> show subcategory.name #}
-                    <a class="d-block text-decoration-none fw-bold" style="font-size: 15px; color: {% if subcategory.comment != 'nan' %}#0066BB{% else %}black{% endif %};" href="{% url 'categories' company %}?category={{ category.name }}&subcategory={{ subcategory.name }}&page=1/" id="{{ forloop.counter }}">{{ subcategory.name }}</a>
+                    <a class="d-block text-decoration-none" style="font-size: 1rem; font-weight: 600; color: {% if subcategory.comment != 'nan' %}#0066BB{% else %}black{% endif %};" href="{% url 'categories' company %}?category={{ category.name }}&subcategory={{ subcategory.name }}&page=1/" id="{{ forloop.counter }}">{{ subcategory.name }}</a>
                     {% if subcategory.comment != 'nan' %}
 
                     <label for="{{ forloop.counter }}" style="font-size: 14px; color: black;">{{ subcategory.comment }}</label>
@@ -44,5 +44,14 @@
         <hr>
     {% endfor %}
     </div>
-
+    <script>
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            var rows = document.querySelectorAll('div.row');
+            console.log(rows);
+            console.log("dummy");
+            rows.forEach((row) => {
+                row.classList.remove("row-cols-4");
+            })
+        }
+    </script>
 {% endblock %}
