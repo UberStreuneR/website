@@ -98,11 +98,14 @@ function yrzg(){var c9="@"; c9=c9+"company.c"; c9="20office"+c9; c9=c9+"om"; c9=
 <script>
     $(document).scroll(function() {
       var y = $(this).scrollTop();
-      if (y > 200) {
-          $('#top-navbar').addClass("active");
-
-      } else {
-        $('#top-navbar').removeClass("active");
+      if( !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ){
+        if (y > 200) {
+            $('#top-navbar').addClass("active");
+        }
+        else {
+            $('#top-navbar').removeClass("active");
+        }
       }
+
     });
 </script>

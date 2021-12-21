@@ -10,16 +10,19 @@ footer {
     margin-top: 15px;
     background-color: #212529;
     color: white;
+
 }
 #footer-div {
     width: 70%;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 10rem 10rem 8rem 9rem 10rem;
+    grid-template-columns: 10rem 10rem 8rem 9rem 13rem;
     grid-template-areas: "footer-email footer-phone-and-time footer-address footer-info-div footer-disclaimer";
 }
 /*Desktop footer*/
 /*Mobile footer*/
+footer.mobile {
+}
 footer.mobile #footer-div {
     width: 100%;
     grid-template-columns: 1fr 1fr;

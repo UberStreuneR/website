@@ -3,6 +3,10 @@
     html{
         font-size: 1.4vw;
     }
+    body{
+        min-height: 100vh;
+        position: absolute;
+    }
     .screen{
         margin: 10px auto;
         width: 60%;
