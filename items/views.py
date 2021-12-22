@@ -134,7 +134,6 @@ class CategoryListView(View):
         s_form = SearchForm()
         h_form = HowMuchCounterForm()
 
-        is_mobile = self.request.user_agent.is_mobile
         context = {
             'items': items,
             'category': category,
@@ -144,7 +143,6 @@ class CategoryListView(View):
             's_form': s_form,
             'h_form': h_form,
             'tile_view': tile_view,
-            'is_mobile': is_mobile
         }
         companies = ['Danfoss', 'Uponor', 'Tecofi']
         if company in companies:

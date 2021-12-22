@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="{% static 'landing/css/categories.css' %}">
 {% if tile_view == 'True' %}
     <div class="d-flex justify-content-center" id="categories-div">
-        {% if not is_mobile %}
+        {% if not request.user_agent.is_mobile and not request.user_agent.is_tablet %}
             {% include 'items/accordion.html' %}
         {% endif %}
         <div class="items" id="categories-items">
@@ -78,7 +78,7 @@
     </div>
 {% else %}
     <div class="d-flex">
-        {% if not is_mobile %}
+        {% if not request.user_agent.is_mobile and not request.user_agent.is_tablet %}
             {% include 'items/accordion.html' %}
         {% endif %}
         <div class="d-flex flex-column mx-3">
