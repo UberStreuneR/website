@@ -1,0 +1,8 @@
+#categories-div {
+    width: 80%;
+    margin: 10px auto;
+}
+#categories-items {
+    display: flex;
+    flex-direction: column;
+}

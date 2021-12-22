@@ -1,38 +1,43 @@
 {% extends 'landing/base.html' %}
 {% load truncate_name_filter %}
+{% load static %}
 {% block content %}
-<div class="d-flex flex-column align-items-center">
-    <div class="container d-flex justify-content-center align-items-start">
-        <div class="d-flex flex-column">
-            <img src="{{ item.image.url }}" alt="{{ item.article }}" style="max-width: 500px; margin-top: 20px;">
+<link rel="stylesheet" href="{% static 'landing/css/item.css' %}">
+<div class="d-flex flex-column">
+    <div id="item-div">
+        <div id="item-image-div">
+            <img id="item-image" src="{{ item.image.url }}" alt="{{ item.article }}">
         </div>
-        <div class="d-flex flex-column align-items-start m-4 col-3">
-            <h5>{{ item.name }} арт.{{ item.article }}</h5>
-            {% comment %}<span style="color: grey; font-size: 20px;">Артикул: {{ item.article }}</span>{% endcomment %}
-            <h5 id="price">{{ item.get_cool_price }}</h5>
-            <label for="price" style="color: grey;">цена за штуку</label>
-            {% if item.weight > 0 %}<h3>Вес: {{ item.weight }} кг</h3>{% endif %}
-            <div class="d-flex align-items-center mt-3">
-                <form action="{% url 'add-to-cart' item.slug %}" method="POST">
-                    {% csrf_token %}
-                    <a style="margin-right: 5px;" id="decrement"><i class="fas fa-minus text-black"></i></a>
-                    {{ h_form }}
-                    <a style="margin-left: 5px; margin-right: 10px;" id="increment"><i class="fas fa-plus text-black"></i></a>
-                    <button type="submit" class="btn btn-success">Добавить в корзину</button>
-                </form>
+        <span id="item-name">{{ item.name }} арт.{{ item.article }}</span>
+        {% comment %}<span style="color: grey; font-size: 20px;">Артикул: {{ item.article }}</span>{% endcomment %}
+        <div id="item-price">
+            <span id="item-price-span">{{ item.get_cool_price }}</span>
+            <label for="item-price-span" style="color: grey;">цена за штуку</label>
+        </div>
+        {% if item.weight > 0 %}<span id="item-weight">Вес: {{ item.weight }} кг</span>{% endif %}
+        <div class="d-flex align-items-center mt-3" id="item-add">
+            <form action="{% url 'add-to-cart' item.slug %}" method="POST">
+                {% csrf_token %}
+                <a style="margin-right: 5px;" id="decrement"><i class="fas fa-minus text-black"></i></a>
+                {{ h_form }}
+                <a style="margin-left: 5px;" id="increment"><i class="fas fa-plus text-black"></i></a>
+                <button type="submit" class="btn btn-success">Добавить в корзину</button>
+            </form>
 
-            </div>
-            {% if welcome %}
-            <h5 class="mt-5">Производитель: {{ company.name }}</h5>
-            <img src="{{ company.image.url }}" alt="{{ company.name }}" style="max-width: 200px;">
-            {% endif %}
         </div>
+        {% if welcome %}
+        <div class="d-flex flex-column" id="item-manu-div">
+            <span id="item-manu">Производитель: {{ company.name }}</span>
+            <img id="item-manu-image" src="{{ company.image.url }}" alt="{{ company.name }}">
+        </div>
+
+        {% endif %}
     </div>
     {% if related_items %}
-    <hr width="700px">
-    <h3>Похожие товары</h3>
-    <hr width="700px">
-    <div class="d-flex flex-column align-items-left" style="width: 700px;">
+    <hr>
+    <span id="similar-items">Похожие товары</span>
+    <hr>
+    <div class="d-flex flex-column align-items-left" id="related-items-div">
         <table class="table">
             <tbody>
                 {% for related_item in related_items %}

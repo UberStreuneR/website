@@ -1,0 +1,16 @@
+#contacts-div {
+    display: flex;
+    width: 55%;
+    margin: 1rem auto;
+    height: auto;
+}
+#contacts-map {
+}
+html.mobile #contacts-map {
+    width: 100%;
+}
+html.mobile #contacts-div {
+    flex-direction: column;
+    width: 100%;
+    padding: 10px;
+}

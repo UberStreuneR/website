@@ -3,16 +3,17 @@
 {% extends 'landing/base.html' %}
 {% load static %}
 {% block content %}
-<div class="d-flex" style="margin-left: 240px;">
-    <div class="d-flex" style="width: 550px;">
+    <link rel="stylesheet" href="{% static 'landing/css/contacts.css' %}">
+<div id="contacts-div">
+    <div class="d-flex" id="contacts-map">
         <script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3Ac9e79b1b426280fca77cdcf5dffd61fcd4c414860100748a4f5691d92ce7e99e&amp;width=568&amp;height=323&amp;lang=ru_RU&amp;scroll=true"></script>
     </div>
-    <div class="d-flex flex-column ms-3" style="">
+    <div class="d-flex flex-column justify-content-around ms-3">
         <div class="d-flex align-items-start flex-column w-75">
             <h5>Адрес</h5>
             <span>125009, Москва, Охотный Ряд, 1</span>
         </div>
-        <div class="d-flex align-items-start flex-column my-4">
+        <div class="d-flex align-items-start flex-column">
             <h5>Время работы</h5>
             <span>ПН-СБ: 9:00 - 18:00</span>
         </div>
@@ -38,6 +39,9 @@ function a5b8(){var ivbf="@"; ivbf=ivbf+"nv"; ivbf="fice"+ivbf; ivbf=ivbf+"snab.
 
 </div>
 
-
+    <script>
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        }
+    </script>
 {% endblock %}
 {# https://yandex.ru/maps/?um=constructor%3Ac9e79b1b426280fca77cdcf5dffd61fcd4c414860100748a4f5691d92ce7e99e&source=constructorLink #}

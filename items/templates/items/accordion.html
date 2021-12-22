@@ -1,25 +1,25 @@
-<div class="items-sidebar">
+<div class="items-sidebar" id="accordion-div">
     <div class="accordion accordion-flush" id="accordionFlushExample" style="width: 300px;">
-            {% for category in categories %}
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="flush-heading{{ forloop.counter }}">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="flush-collapse{{ forloop.counter }}">
-                        {{ category.name }}
-                    </button>
-                </h2>
-                <div id="flush-collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{ forloop.counter }}" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">
-                        {% for subcategory in category.subcategories.all %}
-                        <div class="list-group-item">
-                            <a class="text-decoration-none text-dark" href="{% url 'categories' company %}?category={{ category.name }}&subcategory={{ subcategory.name }}&tile_view={{ tile_view }}" id="{{ subcategory.name }}">{{ subcategory.name }}</a>
-                            {% if subcategory.comment != 'nan' %}
-                            <label for="{{ subcategory.name }}" style="font-size: 12px; color: grey">{{ subcategory.comment }}</label>
-                            {% endif %}
-                        </div>
-                        {% endfor %}
+        {% for category in categories %}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="flush-heading{{ forloop.counter }}">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="flush-collapse{{ forloop.counter }}">
+                    {{ category.name }}
+                </button>
+            </h2>
+            <div id="flush-collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{ forloop.counter }}" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">
+                    {% for subcategory in category.subcategories.all %}
+                    <div class="list-group-item">
+                        <a class="text-decoration-none text-dark" href="{% url 'categories' company %}?category={{ category.name }}&subcategory={{ subcategory.name }}&tile_view={{ tile_view }}" id="{{ subcategory.name }}">{{ subcategory.name }}</a>
+                        {% if subcategory.comment != 'nan' %}
+                        <label for="{{ subcategory.name }}" style="font-size: 12px; color: grey">{{ subcategory.comment }}</label>
+                        {% endif %}
                     </div>
+                    {% endfor %}
                 </div>
             </div>
-            {% endfor %}
+        </div>
+        {% endfor %}
     </div>
 </div>
