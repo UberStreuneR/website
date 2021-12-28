@@ -64,6 +64,11 @@
 <body>
 
 {% include 'landing/header.html' %}
+<script src="{% static 'landing/js/header.js' %}"></script>
+{% if request.user_agent.is_mobile or request.user_agent.is_tablet %}
+    {% include 'landing/offcanvas-header.html' %}
+    <script src="{% static 'landing/js/offcanvas-header.js' %}"></script>
+{% endif %}
 {% comment %}    {% if messages %}
         {% for message in messages %}
         <div class="alert alert-{{ message.tags }} text-center" role="alert">
