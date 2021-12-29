@@ -57,7 +57,7 @@ function yrzg(){var c9="@"; c9=c9+"company.c"; c9="20office"+c9; c9=c9+"om"; c9=
 
 <!-- SideNav -->
 
-<div class="offcanvas offcanvas-start navbar-dark bg-dark w-auto" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+{% comment %}<div class="offcanvas offcanvas-start navbar-dark bg-dark w-auto" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
   <div class="offcanvas-header">
     <h5 class="offcanvas-title text-white" id="offcanvasNavbarLabel">Меню</h5>
     <button type="button" class="btn-close text-reset bg-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -76,7 +76,7 @@ function yrzg(){var c9="@"; c9=c9+"company.c"; c9="20office"+c9; c9=c9+"om"; c9=
           <a class="nav-link {% if title == 'contacts' %}active{% endif %}" href="{% url 'contacts' %}">Контакты</a>
         </li>
 
-      {% comment %}<li class="nav-item dropdown">
+      <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="offcanvasNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
           Dropdown
         </a>
@@ -88,10 +88,10 @@ function yrzg(){var c9="@"; c9=c9+"company.c"; c9="20office"+c9; c9=c9+"om"; c9=
           </li>
           <li><a class="dropdown-item" href="#">Something else here</a></li>
         </ul>
-      </li>{% endcomment %}
+      </li>
     </ul>
   </div>
-</div>
+</div>{% endcomment %}
 
 </div>
 

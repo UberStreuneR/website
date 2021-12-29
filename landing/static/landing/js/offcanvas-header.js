@@ -1,3 +1,33 @@
+let b = $("#fixed-offcanvas-btn");
+b.on("click", () => {
+    b.toggleClass("button-activated");
+    if (b.hasClass("button-activated")) {
+        b.html("<i class=\"fas fa-arrow-up\"></i>")
+    }
+    else {
+        b.html("<i class=\"fas fa-bars\"></i>")
+    }
+});
+$(document).on("click", e => {
+    if (!e.target.matches("#fixed-offcanvas-btn") && !e.target.matches(".fas.fa-bars") && b.hasClass("button-activated")) { // element is not a button
+        b.toggleClass("button-activated");                                                                                    // not an icon inside button
+        if (b.hasClass("button-activated")) {                                                                               // button is activated
+            b.html("<i class=\"fas fa-arrow-up\"></i>")
+        }
+        else {
+            b.html("<i class=\"fas fa-bars\"></i>")
+        }
+    }
+});
+var header_height = $(".screen.mobile").height();
+$(window).on("scroll", () => {
+    if ($(window).scrollTop() > header_height) {
+        b.addClass("btn-visible");
+    }
+    else {
+        b.removeClass("btn-visible");
+    }
+});
 $.ajax({
     url: '/ajax-get-all-partners/',
     type: 'GET',
