@@ -92,7 +92,7 @@
 
 {% comment %}<script type="text/javascript" src="{% static 'landing/js/mdb.min.js' %}"></script>{% endcomment %}
 <script>
-    function printMousePos(event) {
+    {% comment %}function printMousePos(event) {
         // 830 60
         var cart_content = $("#cart-content");
         if (event.clientX < 830){
@@ -118,7 +118,7 @@
                 j_cart_content.addClass("inactive")
             }
         }
-    });
+    });{% endcomment %}
 </script>
 </body>
 </html>

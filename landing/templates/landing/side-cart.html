@@ -10,48 +10,47 @@
         </a>
     </div>
     <div class="inactive bg-white" id="cart-content">
-            <div style="height: 300px; overflow-y: scroll;">
-            {% comment %}{% if request|cart_items != 0 %}{% endcomment %}
-                <table class="table">
-                    <thead>
+        <div style="height: 300px; overflow-y: scroll;">
+        {% comment %}{% if request|cart_items != 0 %}{% endcomment %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th scope="col">Наименование</th>
+                        <th scope="col">Цена</th>
+                        <th style="width: 120px;" scope="col">Количество </th>
+                        <th class="float-end" scope="col">Сумма</th>
+
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                {% if request|cart_items != 0 %}
+                    {% for order_item in request|cart_items %}
                         <tr>
-                            <th></th>
-                            <th scope="col">Наименование</th>
-                            <th scope="col">Цена</th>
-                            <th style="width: 120px;" scope="col">Количество </th>
-                            <th class="float-end" scope="col">Сумма</th>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td><a style="text-decoration: none; color: black;" href="{{ order_item.item.get_absolute_url }}">{{ order_item.item.name }}</a></td>
+                            <td>{{ order_item.item.get_cool_price }}</td>
+                            <td>
+                                <div>
+                                    <a style="margin-right: 5px;" id="side_decrement_{{ order_item.item.article }}"><i class="fas fa-minus text-black"></i></a>
+                                    {% comment %}{{ h_form }}{% endcomment %}
+                                    <input value="{{ order_item.quantity }}" id="side_counter_{{ order_item.item.article }}" name="side-cart-counter" class="text-center side" style="width: 40px;">
+                                    <a style="margin-left: 5px; margin-right: 10px;" id="side_increment_{{ order_item.item.article }}"><i class="fas fa-plus text-black"></i></a>
+                                    <div id="slug_{{ order_item.item.article }}" style="display: none;">{{ order_item.item.slug }}</div>
+                                </div>
 
+                            </td>
+                            <td align="right" style="width: 100px;"><span id="order_item_sum_{{ order_item.item.article }}">{{ order_item.get_cool_price }}</span></td>
+                            <td><a id="side_cart_remove_{{ order_item.item.article }}"><i class="fas fa-times text-danger"></i></a></td>
                         </tr>
-                    </thead>
-                    <tbody id="table-body">
-                    {% if request|cart_items != 0 %}
-                        {% for order_item in request|cart_items %}
-                            <tr>
-                                <th scope="row">{{ forloop.counter }}</th>
-                                <td><a style="text-decoration: none; color: black;" href="{{ order_item.item.get_absolute_url }}">{{ order_item.item.name }}</a></td>
-                                <td>{{ order_item.item.get_cool_price }}</td>
-                                <td>
-                                    <div>
-                                        <a style="margin-right: 5px;" id="side_decrement_{{ order_item.item.article }}"><i class="fas fa-minus text-black"></i></a>
-                                        {% comment %}{{ h_form }}{% endcomment %}
-                                        <input value="{{ order_item.quantity }}" id="side_counter_{{ order_item.item.article }}" name="side-cart-counter" class="text-center side" style="width: 40px;">
-                                        <a style="margin-left: 5px; margin-right: 10px;" id="side_increment_{{ order_item.item.article }}"><i class="fas fa-plus text-black"></i></a>
-                                        <div id="slug_{{ order_item.item.article }}" style="display: none;">{{ order_item.item.slug }}</div>
-                                    </div>
-
-                                </td>
-                                <td align="right" style="width: 100px;"><span id="order_item_sum_{{ order_item.item.article }}">{{ order_item.get_cool_price }}</span></td>
-                                <td><a id="side_cart_remove_{{ order_item.item.article }}"><i class="fas fa-times text-danger"></i></a></td>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
-                    </tbody>
-                </table>
-            {% comment %}{% endif %}{% endcomment %}
-            </div>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+        {% comment %}{% endif %}{% endcomment %}
+        </div>
         <hr>
             <div class="d-flex align-items-center mt-2">
-
                 <a class="btn btn-sm btn-success mx-3" href="/cart/" id="go-to-cart">Оформить</a>
                 <h2 id="order-price">Итого: {{ request|cart_sum }} руб.<a id="side-cart-save" class="btn btn-sm text-white" style="background-color: #c44620; margin-left: 10px; visibility: hidden;">Пересчитать</a></h2>
                 <div class="d-none" id="hidden-side-cart-sum">{{ request|cart_sum }}</div>
