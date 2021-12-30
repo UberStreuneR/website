@@ -2,7 +2,7 @@
 {% load static %}
 <div class="position-fixed d-flex align-items-start border-box-sizing" id="side-cart" style="top: 64px; right:0; z-index:10;">
     <div id="buttons">
-        <a id="side-cart" class="text-decoration-none text-white bg-dark" style="display: block; padding: 20px;">
+        <a id="side-cart-icon" class="text-decoration-none text-white bg-dark" style="display: block; padding: 20px;">
             <div class="d-flex align-items-center">
                 <i class="fas fa-2x fa-shopping-cart nav-icon"></i>
                 <span class="badge rounded-pill {% if request|cart_item_count > 0 %}bg-danger{% else %}bg-dark{% endif %}" id="side-cart-count"> {{ request|cart_item_count }} </span>
@@ -59,9 +59,8 @@
 </div>
 <link rel="stylesheet" href="{% static 'landing/css/side-cart.css' %}">
 <script>
-    $("#side-cart").on('click', function() {
+    $("#side-cart-icon").on('click', function() {
         var cart_content = $("#cart-content");
-        console.log("Working!!!");
         cart_content.toggleClass("inactive");
     });
 </script>
@@ -70,8 +69,8 @@
         $("#side-cart").removeClass("d-flex").addClass("d-none");
     }
 </script>
-<script src="{% static 'landing/js/script.js' %}"></script>
-<script src="{% static 'landing/js/initialize_side_cart.js' %}"></script>
+{#<script src="{% static 'landing/js/script.js' %}"></script>#}
+{#<script src="{% static 'landing/js/initialize_side_cart.js' %}"></script>#}
 {% comment %}<script>
 $(window).on("hashchange", function(e){
     var origEvent = e.originalEvent;
@@ -104,6 +103,30 @@ $(window).on("hashchange", function(e){
     });
 })
 </script>{% endcomment %}
-<script>initialize();</script>
-
+{#<script>initialize();</script>#}
+<script src="{% static 'landing/js/cookie_side_cart.js' %}"></script>
+<script>load_side_cart()</script>
+{% comment %}<script>
+        var allCountersList = [].slice.call(document.querySelectorAll('input[name=side-cart-counter]'));
+        var countersList = allCountersList.map((counter) => {
+            var id = counter.getAttribute("id");
+            id = id.slice(13);
+            var decrementButton = document.querySelector("a[id=side_decrement_" + id + "]");
+            var incrementButton = document.querySelector("a[id=side_increment_" + id + "]");
+            decrementButton.addEventListener("click", function() {
+                if (counter.value > 1){
+                    counter.value = parseInt(counter.value) - 1;
+                }
+                console.log(id, counter.value);
+                update_cart_item_value(id, counter.value);
+                load_side_cart();
+            });
+            incrementButton.addEventListener("click", function() {
+                counter.value = parseInt(counter.value) + 1;
+                console.log(id, counter.value);
+                update_cart_item_value(id, counter.value);
+                load_side_cart();
+            });
+        });
+</script>{% endcomment %}
 

@@ -40,17 +40,21 @@
                             </p>
                             <h5 class="price">{{ item.get_cool_price }}</h5>
                                 {% comment %}<a tabindex="0" href="{% url 'add-to-cart' item.slug %}" class="btn btn-success" role="button" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Добавление товара" data-bs-content="Чтобы посмотреть все добавленные товары, кликните на иконку корзины вверху">Добавить</a>{% endcomment %}
-                            <form action="" method="POST" id="post-form-{{ item.article }}">
-                                {% csrf_token %}
-                                <div class="d-flex align-items-center">
+{#                            <form action="" method="POST" id="post-form-{{ item.article }}">#}
+{#                                {% csrf_token %}#}
+                                <div class="d-flex align-items-center mt-1">
                                     <a style="margin-right: 5px;" id="decrement_{{ item.article }}"><i class="fas fa-minus text-black"></i></a>
                                     {% comment %}{{ h_form }}{% endcomment %}
                                     <input type="text" value="1" id="counter_{{ item.article }}" name="counter" class="text-center" style="width: 40px;">
                                     <a style="margin-left: 5px; margin-right: 10px;" id="increment_{{ item.article }}"><i class="fas fa-plus text-black"></i></a>
                                     <div id="slug_{{ item.article }}" style="display: none;">{{ item.slug }}</div>
-                                    <button type="submit" class="btn btn-success">Добавить</button>
+                                    <button id="add_{{ item.article }}" type="submit" class="btn btn-success btn-sm">Добавить</button>
+                                    <div class="d-none" id="tileview_name_{{ item.article }}">{{ item.name|truncate_name }}</div>
+                                    <div class="d-none" id="tileview_price_{{ item.article }}">{{ item.price }}</div>
+                                    <div class="d-none" id="tileview_url_{{ item.article }}">{{ item.get_absolute_url }}</div>
+                                    <div class="d-none" id="tileview_slug_{{ item.article }}">{{ item.slug }}</div>
                                 </div>
-                            </form>
+{#                            </form>#}
                         </div>
                     </div>
                 {% endfor %}
@@ -100,7 +104,7 @@
         </div>
     </div>
 {% endif %}
-<script>
+{% comment %}<script>
     //TODO:
     // minus deletes from side-cart even before it loaded to backend
     // change position in side-cart before it was sent to backend
@@ -125,7 +129,7 @@
 
                     success : function(json) {
                         $("#counter_" + id).val('1');
-                        {% comment %}$("#cart-count").text(json['count']).removeClass("bg-dark").addClass("bg-danger");{% endcomment %}
+                        $("#cart-count").text(json['count']).removeClass("bg-dark").addClass("bg-danger");
                         get_order_items();
                         console.log("Success");
 
@@ -301,7 +305,7 @@
                 globalTimer = setTimeout(function(){
                     read_counters();
                 }, 3000);
-                {% comment %}$.ajax({
+                $.ajax({
                     url: '/ajax-remove-from-cart/',
                     type: 'POST',
                     data: { article : id},
@@ -312,7 +316,7 @@
                     error : function(xhr, errmsg, err){
                         console.log(xhr.status + ": " + xhr.responseText);
                     }
-                });{% endcomment %}
+                });
             });
             j_counter.on("change", function(event){
                 console.log(j_counter.val());
@@ -381,34 +385,44 @@
             }
         }
     {% endif %}
-</script>
-<script>
-    {% if tile_view != 'True' %}
-
-        console.log("List view categories script");
-        function getCookie(name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie != '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = jQuery.trim(cookies[i]);
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
+</script>{% endcomment %}
+    <script src="{% static 'landing/js/cookie_side_cart.js'  %}"></script>
+    <script>
+        {% if tile_view == 'True' %}
+            var allCountersList = [].slice.call(document.querySelectorAll('input[name=counter]'));
+            var countersList = allCountersList.map((counter) => {
+                var id = counter.getAttribute("id");
+                id = id.slice(8);
+                var decrementButton = document.querySelector("a[id=decrement_" + id + "]");
+                var incrementButton = document.querySelector("a[id=increment_" + id + "]");
+                var addButton = document.querySelector("button[id=add_" + id + "]");
+                decrementButton.addEventListener("click", function() {
+                    if (counter.value > 1){
+                        counter.value = parseInt(counter.value) - 1;
                     }
-                }
-            }
-            return cookieValue;
-        }
-        {% comment %}$(window).on('unload', function(e){
-            // sendbeacon + csrf
-            var data = new FormData();
-            var token = getCookie("csrftoken");
-            data.append("csrfmiddlewaretoken", token);
-            data.append("some_cool_data", JSON.stringify({'asdf': '1234', 'qwer': 'zxcv'}));
-            navigator.sendBeacon("/test-ajax/", data);
-        });{% endcomment %}
-    {% endif %}
-</script>
+                });
+                incrementButton.addEventListener("click", function() {
+                    counter.value = parseInt(counter.value) + 1;
+                });
+                addButton.addEventListener("click", () => {
+                    var values = {}; // value, name, price, url, slug
+
+                    var value = $("#counter_" + id).val();
+                    var name = $("#tileview_name_" + id).text();
+                    var price = parseInt($("#tileview_price_" + id).text());
+                    var url = $("#tileview_url_" + id).text();
+                    var slug = $("#tileview_slug_" + id).text();
+
+                    values['value'] = value;
+                    values['name'] = name;
+                    values['price'] = price;
+                    values['url'] = url;
+                    values['slug'] = slug;
+
+                    update_cart_item(id, values);
+                    load_side_cart();
+                });
+            });
+        {% endif %}
+    </script>
 {% endblock %}

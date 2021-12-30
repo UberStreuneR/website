@@ -40,19 +40,13 @@
         }
 
         document.cookie = 'device=' + device + ';domain=;path=/';
-
+        if (getCookie("cart") == null) {
+            document.cookie = "cart = {}" + ';domain=;path=/';
+        }
 
     </script>
 
     <style>
-        {% comment %}body {
-            background-color: white;
-            background-repeat: no-repeat;
-            background-size: 100% 100%;
-            min-height: 100vh;
-            font-size: 16px;
-            box-sizing: border-box;
-        }{% endcomment %}
         a:hover {
             cursor: pointer
         }
@@ -91,8 +85,8 @@
 
 
 {% comment %}<script type="text/javascript" src="{% static 'landing/js/mdb.min.js' %}"></script>{% endcomment %}
-<script>
-    {% comment %}function printMousePos(event) {
+{% comment %}<script>
+    function printMousePos(event) {
         // 830 60
         var cart_content = $("#cart-content");
         if (event.clientX < 830){
@@ -118,7 +112,7 @@
                 j_cart_content.addClass("inactive")
             }
         }
-    });{% endcomment %}
-</script>
+    });
+</script>{% endcomment %}
 </body>
 </html>
