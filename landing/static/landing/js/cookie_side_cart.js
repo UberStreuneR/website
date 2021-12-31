@@ -22,12 +22,23 @@ function numberWithCommas(x) {
     if (x === "цена по запросу") {
         return x;
     }
+    if (x === -2) {
+        return "цена по запросу";
+    }
+    if (x === -1) {
+        return "нет в наличии";
+    }
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 function update_cart_item(id, values) {
     var dict_string = getCookie("cart");
     var dict = JSON.parse(dict_string);
-    dict[id] = values;
+    if (dict[id] === undefined) {
+        dict[id] = values;
+    }
+    else {
+        dict[id]['value'] = parseInt(dict[id]['value']) + parseInt(values['value']);
+    }
     document.cookie = 'cart = ' + JSON.stringify(dict) + ';domain=;path=/';
 }
 function update_cart_item_value(id, value) {
@@ -39,13 +50,15 @@ function update_cart_item_value(id, value) {
 function increment_cart_item(id) {
     var dict_string = getCookie("cart");
     var dict = JSON.parse(dict_string);
-    dict[id] += 1;
+    dict[id]['value'] = parseInt(dict[id]['value']) + 1;
     document.cookie = 'cart = ' + JSON.stringify(dict) + ';domain=;path=/';
 }
 function decrement_cart_item(id) {
     var dict_string = getCookie("cart");
     var dict = JSON.parse(dict_string);
-    dict[id] += 1;
+    if (parseInt(dict[id]['value']) > 1) {
+        dict[id]['value'] = parseInt(dict[id]['value']) - 1;
+    }
     document.cookie = 'cart = ' + JSON.stringify(dict) + ';domain=;path=/';
 }
 function get_cart_item_value(id) {
@@ -55,7 +68,6 @@ function get_cart_item_value(id) {
 }
 function get_cart_items() {
     var dict_string = getCookie("cart");
-    console.log("get cart items: ", dict_string);
     return JSON.parse(dict_string);
 }
 function delete_cart_item(id) {
@@ -68,10 +80,8 @@ function clear_cart() {
 }
 function load_side_cart() {
     var tbody = $("#table-body")[0];
-    console.log(tbody);
     tbody.innerHTML = "";
     var cart = get_cart_items();
-    console.log(Object.entries(cart));
     var counter_span = $("#side-cart-count");
     if (Object.entries(cart).length > 0) {
         counter_span.removeClass("bg-dark").addClass("bg-danger");
@@ -92,7 +102,6 @@ function load_side_cart() {
         var slug = values['slug'];
         if (parseInt(price) > 0) {
             var item_price = price * value;
-            console.log("price is: ", price);
             sum_price += item_price;
         }
         else {
@@ -113,6 +122,7 @@ function load_side_cart() {
                 "<td><a id=\"side_cart_remove_" + article + "\"><i class=\"fas fa-times text-danger\"></i></a></td></tr>"
             ;
         count += 1;
+
     }
     var order_price = $("#order-price");
     order_price.text("Итого: " + numberWithCommas(sum_price) + " руб.")
@@ -122,19 +132,24 @@ function load_side_cart() {
         id = id.slice(13);
         var decrementButton = document.querySelector("a[id=side_decrement_" + id + "]");
         var incrementButton = document.querySelector("a[id=side_increment_" + id + "]");
+        var removeButton = document.querySelector("a[id=side_cart_remove_" + id + "]");
         decrementButton.addEventListener("click", function() {
             if (counter.value > 1){
                 counter.value = parseInt(counter.value) - 1;
             }
-            console.log(id, counter.value);
             update_cart_item_value(id, counter.value);
             load_side_cart();
         });
         incrementButton.addEventListener("click", function() {
             counter.value = parseInt(counter.value) + 1;
-            console.log(id, counter.value);
             update_cart_item_value(id, counter.value);
             load_side_cart();
         });
+        removeButton.addEventListener("click", function() {
+            delete_cart_item(id);
+            load_side_cart();
+        });
+        j_counter = $("#side_counter_" + id);
+        console.log(j_counter);
     });
 }

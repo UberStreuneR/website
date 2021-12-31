@@ -2,7 +2,7 @@ from functools import reduce
 
 from django.shortcuts import render, redirect
 from django.views.generic import View
-from .models import Partner, Order
+from .models import Partner, Order, OrderItem, Item
 from items.models import Item
 from django.db.models import Q
 from clients.models import Client
@@ -72,12 +72,21 @@ class CartView(View):
         except:
             device = self.request.COOKIES['device']
             client, created = Client.objects.get_or_create(device=device)
-        try:
-            order = Order.objects.get(client=client, complete=False)
-        except ObjectDoesNotExist:
-            messages.error(self.request, "Добавь сначала что-нибудь в корзину")
-            return redirect('/')
+        cart = json.loads(self.request.COOKIES['cart'])
+        order, created = Order.objects.get_or_create(client=client, complete=False)
+        for order_item in order.items.all():
+            order.items.remove(order_item)
+            order_item.delete()
+        for article, values in cart.items():
+            item = Item.objects.filter(article=article)[0]
+            order_item, created = OrderItem.objects.get_or_create(
+                item=item,
+                ordered=False
+            )
+            order_item.quantity = int(values['value'])
+            order_item.save()
 
+            order.items.add(order_item)
         d_form = OrderDetailsForm()
         f_form = OrderFilesForm()
         context = {

@@ -393,6 +393,9 @@
             var countersList = allCountersList.map((counter) => {
                 var id = counter.getAttribute("id");
                 id = id.slice(8);
+                if ($("#side_counter_" + id).length) {
+                    $("#counter_" + id).val($("#side_counter_" + id).val());
+                }
                 var decrementButton = document.querySelector("a[id=decrement_" + id + "]");
                 var incrementButton = document.querySelector("a[id=increment_" + id + "]");
                 var addButton = document.querySelector("button[id=add_" + id + "]");
@@ -400,9 +403,13 @@
                     if (counter.value > 1){
                         counter.value = parseInt(counter.value) - 1;
                     }
+                    {#decrement_cart_item(id);#} //unnecessary because it merges two tasks of adding to the cart and incrementing the value
+                    {#load_side_cart();#}
                 });
                 incrementButton.addEventListener("click", function() {
                     counter.value = parseInt(counter.value) + 1;
+                    {#increment_cart_item(id);#} //unnecessary because it merges two tasks of adding to the cart and incrementing the value
+                    {#load_side_cart();#}
                 });
                 addButton.addEventListener("click", () => {
                     var values = {}; // value, name, price, url, slug
