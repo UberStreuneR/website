@@ -133,6 +133,10 @@ function load_side_cart() {
         var decrementButton = document.querySelector("a[id=side_decrement_" + id + "]");
         var incrementButton = document.querySelector("a[id=side_increment_" + id + "]");
         var removeButton = document.querySelector("a[id=side_cart_remove_" + id + "]");
+        var j_counter = $("#side_counter_" + id);
+        var listview_div = $("#listview-item-div-" + id);
+        var tileview_div = $("#tileview_item_div_" + id);
+
         decrementButton.addEventListener("click", function() {
             if (counter.value > 1){
                 counter.value = parseInt(counter.value) - 1;
@@ -148,8 +152,24 @@ function load_side_cart() {
         removeButton.addEventListener("click", function() {
             delete_cart_item(id);
             load_side_cart();
+            if (listview_div.length) {
+                $("#listview-counter-" + id).val(1);
+                listview_div.css("visibility", "hidden");
+            }
+            if (tileview_div.length) {
+                $("#counter_" + id).val(1);
+                tileview_div.removeClass("d-inline").addClass("d-none");
+            }
         });
-        j_counter = $("#side_counter_" + id);
-        console.log(j_counter);
+        j_counter.on("change", () => {
+            if (listview_div.length) {
+                $("#listview-counter-" + id).val(j_counter.val());
+            }
+            if (tileview_div.length) {
+                $("#counter_" + id).val(j_counter.val());
+            }
+            update_cart_item_value(id, j_counter.val());
+            load_side_cart();
+        });
     });
 }
