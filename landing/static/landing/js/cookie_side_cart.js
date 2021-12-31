@@ -140,14 +140,26 @@ function load_side_cart() {
         decrementButton.addEventListener("click", function() {
             if (counter.value > 1){
                 counter.value = parseInt(counter.value) - 1;
+                update_cart_item_value(id, counter.value);
+                if (listview_div.length) {
+                    $("#listview-counter-" + id).val(counter.value);
+                }
+                if (tileview_div.length) {
+                    $("#counter_" + id).val(counter.value);
+                }
             }
-            update_cart_item_value(id, counter.value);
-            if (listview_div.length) {
-                $("#listview-counter-" + id).val(counter.value);
+            else if (counter.value == 1) {
+                console.log("1 at", id);
+                delete_cart_item(id);
+                if (tileview_div.length) {
+                    tileview_div.removeClass("d-inline").addClass("d-none");
+                    addButton.removeClass("d-none");
+                }
+                if (listview_div.length) {
+                    listview_div.css("visibility", "hidden");
+                }
             }
-            if (tileview_div.length) {
-                $("#counter_" + id).val(counter.value);
-            }
+
             load_side_cart();
         });
         incrementButton.addEventListener("click", function() {
