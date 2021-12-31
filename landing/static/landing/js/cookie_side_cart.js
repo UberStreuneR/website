@@ -136,18 +136,30 @@ function load_side_cart() {
         var j_counter = $("#side_counter_" + id);
         var listview_div = $("#listview-item-div-" + id);
         var tileview_div = $("#tileview_item_div_" + id);
-
+        var addButton = $("#add_" + id);
         decrementButton.addEventListener("click", function() {
             if (counter.value > 1){
                 counter.value = parseInt(counter.value) - 1;
             }
             update_cart_item_value(id, counter.value);
+            if (listview_div.length) {
+                $("#listview-counter-" + id).val(counter.value);
+            }
+            if (tileview_div.length) {
+                $("#counter_" + id).val(counter.value);
+            }
             load_side_cart();
         });
         incrementButton.addEventListener("click", function() {
             counter.value = parseInt(counter.value) + 1;
             update_cart_item_value(id, counter.value);
             load_side_cart();
+            if (listview_div.length) {
+                $("#listview-counter-" + id).val(counter.value);
+            }
+            if (tileview_div.length) {
+                $("#counter_" + id).val(counter.value);
+            }
         });
         removeButton.addEventListener("click", function() {
             delete_cart_item(id);
@@ -160,6 +172,7 @@ function load_side_cart() {
                 $("#counter_" + id).val(1);
                 tileview_div.removeClass("d-inline").addClass("d-none");
             }
+            addButton.removeClass("d-none");
         });
         j_counter.on("change", () => {
             if (listview_div.length) {

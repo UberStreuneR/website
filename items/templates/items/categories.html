@@ -397,30 +397,36 @@
             var countersList = allCountersList.map((counter) => {
                 var id = counter.getAttribute("id");
                 id = id.slice(8);
+                var tileview_counter = $("#counter_" + id);
                 var tileview_div = $("#tileview_item_div_" + id);
-                if ($("#side_counter_" + id).length) {
-                    $("#counter_" + id).val($("#side_counter_" + id).val());
-                    tileview_div.removeClass("d-none").addClass("d-inline");
-                }
                 var decrementButton = document.querySelector("a[id=decrement_" + id + "]");
                 var incrementButton = document.querySelector("a[id=increment_" + id + "]");
                 var addButton = document.querySelector("button[id=add_" + id + "]");
+
+                if ($("#side_counter_" + id).length) {
+                    tileview_counter.val($("#side_counter_" + id).val());
+                    tileview_div.removeClass("d-none").addClass("d-inline");
+                    addButton.classList.add("d-none");
+                }
+
+
                 decrementButton.addEventListener("click", function() {
                     if (counter.value > 1){
                         counter.value = parseInt(counter.value) - 1;
                     }
-                    {#decrement_cart_item(id);#} //unnecessary because it merges two tasks of adding to the cart and incrementing the value
-                    {#load_side_cart();#}
+                    decrement_cart_item(id);
+                    load_side_cart();
                 });
                 incrementButton.addEventListener("click", function() {
                     counter.value = parseInt(counter.value) + 1;
-                    {#increment_cart_item(id);#} //unnecessary because it merges two tasks of adding to the cart and incrementing the value
-                    {#load_side_cart();#}
+                    increment_cart_item(id);
+                    load_side_cart();
                 });
                 addButton.addEventListener("click", () => {
                     if (tileview_div.hasClass("d-none")) {
                         if (tileview_div.length) {
                             tileview_div.removeClass("d-none").addClass("d-inline");
+                            addButton.classList.add("d-none");
                         }
                     }
                     var values = {}; // value, name, price, url, slug
@@ -438,6 +444,10 @@
                     values['slug'] = slug;
 
                     update_cart_item(id, values);
+                    load_side_cart();
+                });
+                tileview_counter.on("change", () => {
+                    update_cart_item_value(id, tileview_counter.val());
                     load_side_cart();
                 });
             });
