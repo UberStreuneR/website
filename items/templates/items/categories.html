@@ -46,9 +46,9 @@
                                     <div>
                                         <span class="price me-2" style="font-size: 1.3rem">{{ item.get_cool_price }}</span>
                                         <div class="d-none" id="tileview_item_div_{{ item.article }}">
-                                            <a style="margin-right: 5px;" id="decrement_{{ item.article }}"><i class="fas fa-minus text-black"></i></a>
+                                            <a style="margin-right: 5px; user-select: none;" id="decrement_{{ item.article }}"><i class="fas fa-minus text-black"></i></a>
                                             <input type="text" value="1" id="counter_{{ item.article }}" name="counter" class="text-center" style="width: 40px;">
-                                            <a style="margin-left: 5px; margin-right: 10px;" id="increment_{{ item.article }}"><i class="fas fa-plus text-black"></i></a>
+                                            <a style="margin-left: 5px; user-select: none;; margin-right: 10px;" id="increment_{{ item.article }}"><i class="fas fa-plus text-black"></i></a>
                                         </div>
                                     </div>
                                     <div id="slug_{{ item.article }}" style="display: none;">{{ item.slug }}</div>
@@ -93,8 +93,8 @@
             {% for item in items %}
                 <div class="d-flex align-items-center my-2">
                     <div class="d-flex align-items-center" id="listview-item-div-{{ item.article }}" style="visibility: hidden;">
-                        <a id="listview-remove-{{ item.article }}"><i class="fas fa-times text-danger ms-3"></i></a>
-                        <a id="listview-minus-{{ item.article }}"><i class="fas fa-minus text-black mx-3"></i></a>
+                        <a style="user-select: none;" id="listview-remove-{{ item.article }}"><i class="fas fa-times text-danger ms-3"></i></a>
+                        <a style="user-select: none;" id="listview-minus-{{ item.article }}"><i class="fas fa-minus text-black mx-3"></i></a>
                         <input type="text" value="1" id="listview-counter-{{ item.article }}" name="listview_counter" class="text-center" style="width: 40px; height: 25px;">
                         <div class="d-none" id="listview-price-{{ item.article }}">{{ item.price }}</div>
                         <div class="d-none" id="listview-url-{{ item.article }}">{{ item.get_absolute_url }}</div>
@@ -490,7 +490,6 @@
                     clearInterval(decrementInterval);
                     clearInterval(incrementTimeout);
                     clearInterval(decrementTimeout);
-                    console.log(activeId);
                     if (activeId && !deleteAction) {
                         update_cart_item_value(activeId, tileview_counter.val());
                         load_side_cart();
@@ -535,8 +534,11 @@
                     load_side_cart();
                 });
                 tileview_counter.on("change", () => {
-                    update_cart_item_value(id, tileview_counter.val());
-                    load_side_cart();
+                    if (parseInt(tileview_counter.val())) {
+                        tileview_counter.val(parseInt(tileview_counter.val()));
+                        update_cart_item_value(id, tileview_counter.val());
+                        load_side_cart();
+                    }
                 });
             });
         {% else %}
@@ -661,8 +663,11 @@
                     item_div.css("visibility", "hidden");
                 });
                 j_counter.on("change", () => {
-                    update_cart_item_value(id, j_counter.val());
-                    load_side_cart();
+                    if (parseInt(j_counter.val())) {
+                        j_counter.val(parseInt(j_counter.val()));
+                        update_cart_item_value(id, j_counter.val());
+                        load_side_cart();
+                    }
                 });
                 document.addEventListener("mouseup", () => {
                     clearInterval(incrementInterval);

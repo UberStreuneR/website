@@ -247,14 +247,17 @@ function load_side_cart() {
             addButton.removeClass("d-none");
         });
         j_counter.on("change", () => {
-            if (listview_div.length) {
-                $("#listview-counter-" + id).val(j_counter.val());
+            if (parseInt(j_counter.change())) {
+                j_counter.val(parseInt(j_counter.val()));
+                if (listview_div.length) {
+                    $("#listview-counter-" + id).val(j_counter.val());
+                }
+                if (tileview_div.length) {
+                    $("#counter_" + id).val(j_counter.val());
+                }
+                update_cart_item_value(id, j_counter.val());
+                load_side_cart();
             }
-            if (tileview_div.length) {
-                $("#counter_" + id).val(j_counter.val());
-            }
-            update_cart_item_value(id, j_counter.val());
-            load_side_cart();
         });
         document.addEventListener("mouseup", () => {
             clearInterval(incrementInterval);

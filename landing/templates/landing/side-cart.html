@@ -52,7 +52,7 @@
         <hr>
             <div class="d-flex align-items-center mt-2">
                 <a class="btn btn-sm btn-success mx-3" href="/cart/" id="go-to-cart">Оформить</a>
-                <h2 id="order-price">Итого: {{ request|cart_sum }} руб.<a id="side-cart-save" class="btn btn-sm text-white" style="background-color: #c44620; margin-left: 10px; visibility: hidden;">Пересчитать</a></h2>
+                <h4 id="order-price">Итого: {{ request|cart_sum }} руб.<a id="side-cart-save" class="btn btn-sm text-white" style="background-color: #c44620; margin-left: 10px; visibility: hidden;">Пересчитать</a></h4>
                 <div class="d-none" id="hidden-side-cart-sum">{{ request|cart_sum }}</div>
             </div>
     </div>
