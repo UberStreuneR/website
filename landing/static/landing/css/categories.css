@@ -1,10 +1,11 @@
 #categories-div {
-    width: 80%;
+    width: 90%;
     margin: 10px auto;
 }
 #categories-items {
     display: flex;
     flex-direction: column;
+    width: auto;
 }
 #listview-div {
     width: 75%;

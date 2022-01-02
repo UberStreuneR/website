@@ -2,6 +2,7 @@ var script = document.createElement('script');
 script.src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js';
 script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
+console.log("cookie side cart script");
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -137,7 +138,15 @@ function load_side_cart() {
         var listview_div = $("#listview-item-div-" + id);
         var tileview_div = $("#tileview_item_div_" + id);
         var addButton = $("#add_" + id);
-        decrementButton.addEventListener("click", function() {
+
+        var decrementInterval;
+        var decrementTimeout;
+        var incrementInterval;
+        var incrementTimeout;
+
+        var activeId;
+        var deleteAction = false;
+        /*decrementButton.addEventListener("click", function() {
             if (counter.value > 1){
                 counter.value = parseInt(counter.value) - 1;
                 update_cart_item_value(id, counter.value);
@@ -149,7 +158,6 @@ function load_side_cart() {
                 }
             }
             else if (counter.value == 1) {
-                console.log("1 at", id);
                 delete_cart_item(id);
                 if (tileview_div.length) {
                     tileview_div.removeClass("d-inline").addClass("d-none");
@@ -159,10 +167,42 @@ function load_side_cart() {
                     listview_div.css("visibility", "hidden");
                 }
             }
-
+            load_side_cart();
+        });*/
+        decrementButton.addEventListener("mousedown", function() {
+            if (counter.value > 1){
+                activeId = id;
+                counter.value = parseInt(counter.value) - 1;
+                update_cart_item_value(id, counter.value);
+                if (listview_div.length) {
+                    $("#listview-counter-" + id).val(counter.value);
+                }
+                if (tileview_div.length) {
+                    $("#counter_" + id).val(counter.value);
+                }
+                decrementTimeout = setTimeout(holdDecrement, 300);
+                function holdDecrement() {
+                    decrementInterval = setInterval(() => {
+                        if (parseInt(j_counter.val()) > 1) {
+                            j_counter.val(parseInt(j_counter.val()) - 1);
+                        }
+                    }, 50);
+                }
+            }
+            else if (counter.value == 1) {
+                delete_cart_item(id);
+                deleteAction = true;
+                if (tileview_div.length) {
+                    tileview_div.removeClass("d-inline").addClass("d-none");
+                    addButton.removeClass("d-none");
+                }
+                if (listview_div.length) {
+                    listview_div.css("visibility", "hidden");
+                }
+            }
             load_side_cart();
         });
-        incrementButton.addEventListener("click", function() {
+        /*incrementButton.addEventListener("click", function() {
             counter.value = parseInt(counter.value) + 1;
             update_cart_item_value(id, counter.value);
             load_side_cart();
@@ -171,6 +211,26 @@ function load_side_cart() {
             }
             if (tileview_div.length) {
                 $("#counter_" + id).val(counter.value);
+            }
+        });*/
+        incrementButton.addEventListener("mousedown", function() {
+            activeId = id;
+            counter.value = parseInt(counter.value) + 1;
+            update_cart_item_value(id, counter.value);
+            load_side_cart();
+            if (listview_div.length) {
+                $("#listview-counter-" + id).val(counter.value);
+            }
+            if (tileview_div.length) {
+                $("#counter_" + id).val(counter.value);
+            }
+            incrementTimeout = setTimeout(holdIncrement, 300);
+            function holdIncrement() {
+                incrementInterval = setInterval(() => {
+                    if (parseInt(j_counter.val()) > 1) {
+                        j_counter.val(parseInt(j_counter.val()) + 1);
+                    }
+                }, 50);
             }
         });
         removeButton.addEventListener("click", function() {
@@ -195,6 +255,42 @@ function load_side_cart() {
             }
             update_cart_item_value(id, j_counter.val());
             load_side_cart();
+        });
+        document.addEventListener("mouseup", () => {
+            clearInterval(incrementInterval);
+            clearInterval(decrementInterval);
+            clearInterval(incrementTimeout);
+            clearInterval(decrementTimeout);
+            if (activeId && !deleteAction) {
+                update_cart_item_value(activeId, j_counter.val());
+                load_side_cart();
+                if (listview_div.length) {
+                    $("#listview-counter-" + id).val(counter.value);
+                }
+                if (tileview_div.length) {
+                    $("#counter_" + id).val(counter.value);
+                }
+                activeId = undefined;
+                deleteAction = false;
+            }
+        });
+        document.addEventListener("touchend", () => {
+            clearInterval(incrementInterval);
+            clearInterval(decrementInterval);
+            clearInterval(incrementTimeout);
+            clearInterval(decrementTimeout);
+            if (activeId && !deleteAction) {
+                update_cart_item_value(activeId, j_counter.val());
+                load_side_cart();
+                if (listview_div.length) {
+                    $("#listview-counter-" + id).val(counter.value);
+                }
+                if (tileview_div.length) {
+                    $("#counter_" + id).val(counter.value);
+                }
+                activeId = undefined;
+                deleteAction = false;
+            }
         });
     });
 }

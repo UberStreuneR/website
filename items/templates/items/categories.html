@@ -15,7 +15,7 @@
             {% include 'items/accordion.html' %}
         {% endif %}
         <div class="items" id="categories-items">
-            <div class="row">
+            <div class="row d-flex justify-content-center w-100">
                 {% for item in page_obj %}
                     <div class="card px-0 m-2" style="width: 18rem;">
                         {% if item.status == 'A' %}
@@ -393,6 +393,7 @@
     <script src="{% static 'landing/js/cookie_side_cart.js'  %}"></script>
     <script>
         {% if tile_view == 'True' %}
+
             var allCountersList = [].slice.call(document.querySelectorAll('input[name=counter]'));
             var countersList = allCountersList.map((counter) => {
                 var id = counter.getAttribute("id");
@@ -403,29 +404,111 @@
                 var incrementButton = document.querySelector("a[id=increment_" + id + "]");
                 var addButton = document.querySelector("button[id=add_" + id + "]");
 
+                var decrementInterval;
+                var incrementInterval;
+                var decrementTimeout;
+                var incrementTimeout;
+
+                var activeId = undefined;
+                var deleteAction = false; // check if decrement deletes, necessary to avoid error in "mouseup"
                 if ($("#side_counter_" + id).length) {
                     tileview_counter.val($("#side_counter_" + id).val());
                     tileview_div.removeClass("d-none").addClass("d-inline");
                     addButton.classList.add("d-none");
                 }
-
-                decrementButton.addEventListener("click", function() {
+                decrementButton.addEventListener("mousedown", function() {
+                    activeId = id;
                     if (counter.value > 1){
                         counter.value = parseInt(counter.value) - 1;
                         decrement_cart_item(id);
                     }
                     else if (counter.value == 1) {
                         delete_cart_item(id);
+                        deleteAction = true;
                         tileview_div.removeClass("d-inline").addClass("d-none");
                         addButton.classList.remove("d-none");
                     }
                     load_side_cart();
-
+                    decrementTimeout = setTimeout(holdDecrement, 300);
+                    function holdDecrement() {
+                        decrementInterval = setInterval(() => {
+                            if (parseInt(tileview_counter.val()) > 1) {
+                                tileview_counter.val(parseInt(tileview_counter.val()) - 1);
+                            }
+                        }, 50);
+                    }
                 });
-                incrementButton.addEventListener("click", function() {
+                decrementButton.addEventListener("touchstart", function() {
+                    activeId = id;
+                    if (counter.value > 1){
+                        counter.value = parseInt(counter.value) - 1;
+                        decrement_cart_item(id);
+                    }
+                    else if (counter.value == 1) {
+                        delete_cart_item(id);
+                        deleteAction = true;
+                        tileview_div.removeClass("d-inline").addClass("d-none");
+                        addButton.classList.remove("d-none");
+                    }
+                    load_side_cart();
+                    decrementTimeout = setTimeout(holdDecrement, 300);
+                    function holdDecrement() {
+                        decrementInterval = setInterval(() => {
+                            if (parseInt(tileview_counter.val()) > 1) {
+                                tileview_counter.val(parseInt(tileview_counter.val()) - 1);
+                            }
+                        }, 50);
+                    }
+                });
+                incrementButton.addEventListener("mousedown", function() {
+                    activeId = id;
+                    counter.value = parseInt(counter.value) + 1;
+                    increment_cart_item(id);
+                    incrementTimeout = setTimeout(holdIncrement, 300);
+                    function holdIncrement() {
+                        incrementInterval = setInterval(() => {
+                            tileview_counter.val(parseInt(tileview_counter.val()) + 1);
+                        }, 50);
+                    }
+                    update_cart_item_value(id, parseInt(tileview_counter.val()));
+                    load_side_cart();
+                });
+                incrementButton.addEventListener("touchstart", function() {
+                    activeId = id;
                     counter.value = parseInt(counter.value) + 1;
                     increment_cart_item(id);
                     load_side_cart();
+                    incrementTimeout = setTimeout(holdIncrement, 300);
+                    function holdIncrement() {
+                        incrementInterval = setInterval(() => {
+                            tileview_counter.val(parseInt(tileview_counter.val()) + 1);
+                        }, 50);
+                    }
+                });
+                document.addEventListener("mouseup", () => {
+                    clearInterval(incrementInterval);
+                    clearInterval(decrementInterval);
+                    clearInterval(incrementTimeout);
+                    clearInterval(decrementTimeout);
+                    console.log(activeId);
+                    if (activeId && !deleteAction) {
+                        update_cart_item_value(activeId, tileview_counter.val());
+                        load_side_cart();
+                        activeId = undefined;
+                        deleteAction = false;
+                    }
+                });
+                document.addEventListener("touchend", () => {
+                    clearInterval(incrementInterval);
+                    clearInterval(decrementInterval);
+                    clearInterval(incrementTimeout);
+                    clearInterval(decrementTimeout);
+                    if (activeId && !deleteAction) {
+                        update_cart_item_value(activeId, tileview_counter.val());
+                        load_side_cart();
+                        activeId = undefined;
+                        deleteAction = false;
+                    }
                 });
                 addButton.addEventListener("click", () => {
                     if (tileview_div.hasClass("d-none")) {
@@ -474,6 +557,14 @@
                 var minus = $("#listview-minus-" + id);
                 var cross = $("#listview-remove-" + id);
 
+                var decrementInterval;
+                var incrementInterval;
+                var decrementTimeout;
+                var incrementTimeout;
+
+                var activeId = undefined;
+                var deleteAction = false; // check if decrement deletes, necessary to avoid error in "mouseup"
+
                 plus.on("click", () => {
                     if (item_div.css("visibility") === "hidden"){
                         item_div.css("visibility", "visible");
@@ -490,28 +581,80 @@
                         values['price'] = price;
                         values['url'] = url;
                         values['slug'] = slug;
-
                         update_cart_item(id, values);
                         load_side_cart();
                     }
-                    else {
+                });
+                plus.on("mousedown", () => {
+                    activeId = id;
+                    if (get_cart_item_value(id)) {
                         j_counter.val(parseInt(j_counter.val()) + 1);
                         increment_cart_item(id);
                         load_side_cart();
+                        incrementTimeout = setTimeout(holdIncrement, 300);
+                        function holdIncrement() {
+                            incrementInterval = setInterval(() => {
+                                j_counter.val(parseInt(j_counter.val()) + 1);
+                            }, 50);
+                        }
                     }
                 });
-                minus.on("click", () => {
+                plus.on("touchstart", () => {
+                    activeId = id;
+                    j_counter.val(parseInt(j_counter.val()) + 1);
+                    increment_cart_item(id);
+                    load_side_cart();
+                    incrementTimeout = setTimeout(holdIncrement, 300);
+                    function holdIncrement() {
+                        incrementInterval = setInterval(() => {
+                            j_counter.val(parseInt(j_counter.val()) + 1);
+                        }, 50);
+                    }
+                });
+                minus.on("mousedown", () => {
+                    activeId = id;
                     if (parseInt(j_counter.val()) > 1){
                         j_counter.val(parseInt(j_counter.val()) - 1);
                         decrement_cart_item(id);
                     }
                     else if (parseInt(j_counter.val()) === 1) {
                         delete_cart_item(id);
+                        deleteAction = true;
                         item_div.css("visibility", "hidden");
                     }
                     load_side_cart();
+                    decrementTimeout = setTimeout(holdDecrement, 300);
+                    function holdDecrement() {
+                        decrementInterval = setInterval(() => {
+                            if (parseInt(j_counter.val()) > 1){
+                                j_counter.val(parseInt(j_counter.val()) - 1);
+                            }
+                        }, 50);
+                    }
+                });
+                minus.on("touchstart", () => {
+                    activeId = id;
+                    if (parseInt(j_counter.val()) > 1){
+                        j_counter.val(parseInt(j_counter.val()) - 1);
+                        decrement_cart_item(id);
+                    }
+                    else if (parseInt(j_counter.val()) === 1) {
+                        delete_cart_item(id);
+                        deleteAction = true;
+                        item_div.css("visibility", "hidden");
+                    }
+                    load_side_cart();
+                    decrementTimeout = setTimeout(holdDecrement, 300);
+                    function holdDecrement() {
+                        decrementInterval = setInterval(() => {
+                            if (parseInt(j_counter.val()) > 1){
+                                j_counter.val(parseInt(j_counter.val()) - 1);
+                            }
+                        }, 50);
+                    }
                 });
                 cross.on("click", () => {
+                    deleteAction = true;
                     delete_cart_item(id);
                     load_side_cart();
                     j_counter.val(1);
@@ -520,7 +663,33 @@
                 j_counter.on("change", () => {
                     update_cart_item_value(id, j_counter.val());
                     load_side_cart();
-                })
+                });
+                document.addEventListener("mouseup", () => {
+                    clearInterval(incrementInterval);
+                    clearInterval(decrementInterval);
+                    clearInterval(incrementTimeout);
+                    clearInterval(decrementTimeout);
+                    if (activeId != null && !deleteAction) {
+                        if (get_cart_item_value(activeId)) {
+                            update_cart_item_value(activeId, j_counter.val());
+                        }
+                        load_side_cart();
+                        activeId = undefined;
+                        deleteAction = false;
+                    }
+                });
+                document.addEventListener("touchend", () => {
+                    clearInterval(incrementInterval);
+                    clearInterval(decrementInterval);
+                    clearInterval(incrementTimeout);
+                    clearInterval(decrementTimeout);
+                    if (activeId && !deleteAction) {
+                        update_cart_item_value(activeId, j_counter.val());
+                        load_side_cart();
+                        activeId = undefined;
+                        deleteAction = false;
+                    }
+                });
             });
         {% endif %}
     </script>
