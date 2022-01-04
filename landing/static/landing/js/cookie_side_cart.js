@@ -70,6 +70,11 @@ function get_cart_item_value(id) {
     var dict = JSON.parse(dict_string);
     return dict[id];
 }
+function get_cart_item_price(id) {
+    var dict_string = getCookie("cart");
+    var dict = JSON.parse(dict_string);
+    return parseInt(dict[id]['price']);
+}
 function get_cart_items() {
     var dict_string = getCookie("cart");
     return JSON.parse(dict_string);
@@ -86,6 +91,14 @@ function delete_cart_item(id) {
 }
 function clear_cart() {
     document.cookie = "cart = {}" + ';domain=;path=/';
+}
+function cart_sum() {
+    var items = Object.entries(get_cart_items());
+    var result = items.reduce((total, item) => {
+        return total + parseInt(item[1]['value']) * parseInt(item[1]['price']);
+    }, 0);
+    return numberWithCommas(result);
+    // console.log(items);
 }
 function load_side_cart() {
     var tbody = $("#table-body")[0];

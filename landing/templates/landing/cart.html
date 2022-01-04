@@ -2,81 +2,77 @@
 {% load static %}
 {% load cart_template_tags %}
 {% block content %}
-<div class="d-flex flex-column align-items-center">
-    <table class="table w-75 table-hover">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                {% comment %}<th scope="col">Категория</th>
-                <th scope="col">Подкатегория</th>{% endcomment %}
-                <th scope="col">Название</th>
-                <th scope="col">Количество</th>
-                <th scope="col">Цена (руб.)</th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for order_item in order.items.all %}
+{% if not request.user_agent.is_mobile and not request.user_agent.is_tablet %}
+    <div class="d-flex flex-column align-items-center">
+        <table class="table w-75 table-hover">
+            <thead>
                 <tr>
-                    <th scope="row">{{ forloop.counter }}</th>
-                    {% comment %}<td>{{ order_item.item.category}}</td>
-                    <td>{{ order_item.item.subcategory }}</td>{% endcomment %}
-                    <td style="width: 400px;">{{ order_item.item.name }}</td>
-                    <td style="width: 140px;">
-                        <a style="margin-right: 5px; user-select: none;" id="decrement_{{ order_item.item.article }}"><i class="fas fa-minus text-black"></i></a>
-                        <input type="text" id="cart_counter_{{ order_item.item.article }}" name="cart-counter" value="{{ order_item.quantity }}" style="width: 50px; text-align: center;">
-                        <a style="margin-left: 5px; margin-right: 10px; user-select: none;" id="increment_{{ order_item.item.article }}"><i class="fas fa-plus text-black"></i></a>
-                        <div id="slug_{{ order_item.item.article }}" style="display: none;">{{ order_item.item.slug }}</div>
-                    </td>
-                    <td style="width: 150px;" id="order_item_sum_{{ order_item.item.article }}" colspan="2">{{ order_item.get_cool_price }}</td>
-                    <td><a href="{% url 'remove-from-cart' order_item.item.slug %}?redirect_to=cart"><i class="fas fa-2x fa-times text-danger"></i></a></td>
+                    <th scope="col">#</th>
+                    <th scope="col">Название</th>
+                    <th scope="col">Цена</th>
+                    <th scope="col">Количество</th>
+                    <th scope="col">Сумма (руб.)</th>
                 </tr>
+            </thead>
+            <tbody id="cart_tbody">
+            </tbody>
+        </table>
+        <form action="{% url 'cart' %}" method="POST" id="details-form">
+                <div class="d-flex align-items-center justify-content-between" style="width: 900px;">
 
-            {% endfor %}
-            <tr>
-                <td colspan="3"><b><h3>Сумма заказа</h3></b></td>
-                <td colspan="2"><b><h3 id="order_price">{{ order.get_cool_price }} руб.</h3></b></td>
-                <td>
-                    <a id="cart-save" class="btn btn-sm text-white" style="background-color: #c44620; visibility: hidden;">Пересчитать</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <form action="{% url 'cart' %}" method="POST" id="details-form">
-            <div class="d-flex align-items-center justify-content-between" style="width: 900px;">
-
-                {% csrf_token %}
-                {{ d_form }}
-                <div class="d-flex flex-column align-items-center">
-                    <button class="btn btn-outline-primary" type="submit" id="save-details-button" style="visibility: hidden;">Сохранить детали</button>
-                    <label for="save-details-button" class="d-none" style="color: green;" id="save-details-success">Сохранено</label>
-                    <label for="save-details-button" class="d-none" style="color: darkred;" id="save-details-error">Ошибка</label>
+                    {% csrf_token %}
+                    {{ d_form }}
+                    <div class="d-flex flex-column align-items-center">
+                        <button class="btn btn-outline-primary" type="submit" id="save-details-button" style="visibility: hidden;">Сохранить детали</button>
+                        <label for="save-details-button" class="d-none" style="color: green;" id="save-details-success">Сохранено</label>
+                        <label for="save-details-button" class="d-none" style="color: darkred;" id="save-details-error">Ошибка</label>
+                    </div>
                 </div>
-            </div>
 
+            </form>
+        <form enctype="multipart/form-data" action="{% url 'upload-file-to-order' %}" method="POST">
+            {% csrf_token %}
+            {{ f_form }}
+            <button class="btn btn-outline-primary" type="submit">Загрузить</button>
         </form>
-    <form enctype="multipart/form-data" action="{% url 'upload-file-to-order' %}" method="POST">
-        {% csrf_token %}
-        {{ f_form }}
-        <button class="btn btn-outline-primary" type="submit">Загрузить</button>
-    </form>
-    {% for file in order.files.all %}
-        <div class="d-flex">
-            <span>{{ file.name }}</span>
-            <a href="{% url 'delete-file-from-order' %}?name={{ file.name|no_extension }}"><i class="fas fa-times text-danger mx-2"></i></a>
+        {% for file in order.files.all %}
+            <div class="d-flex">
+                <span>{{ file.name }}</span>
+                <a href="{% url 'delete-file-from-order' %}?name={{ file.name|no_extension }}"><i class="fas fa-times text-danger mx-2"></i></a>
+            </div>
+        {% endfor %}
+
+        <div class="d-flex justify-content-around my-3" style="width: 600px;">
+            <a href="{% url 'discard' %}" class="btn btn-danger">Очистить корзину</a>
+            <a href="{% url 'checkout' %}" class="btn btn-success">Подтвердить заказ</a>
         </div>
-    {% endfor %}
-
-    <div class="d-flex justify-content-around my-3" style="width: 600px;">
-        <a href="{% url 'discard' %}" class="btn btn-danger">Очистить корзину</a>
-        <a href="{% url 'checkout' %}" class="btn btn-success">Подтвердить заказ</a>
     </div>
+{% else %}
+    <div class="d-flex flex-column align-items-center">
+        <table class="table table-hover" style="font-size: 0.8rem;">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Название</th>
+                    <th scope="col">Количество</th>
+                    <th scope="col">Сумма</th>
+                </tr>
+            </thead>
+            <tbody id="cart_tbody">
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-around my-3 w-100">
+            <a href="{% url 'discard' %}" class="btn btn-danger">Очистить корзину</a>
+            <a href="{% url 'checkout' %}" class="btn btn-success">Подтвердить заказ</a>
+        </div>
+    </div>
+{% endif %}
 
-
-
-</div>
 {#<script src="{% static 'landing/js/initialize_cart.js' %}"></script>#}
 {#<script>initialize_cart();</script>#}
+<script src="{% static 'landing/js/cookie_side_cart.js' %}"></script>
+<script src="{% static 'landing/js/cart.js' %}"></script>
+<script>load_cart()</script>
 <script>
     $('#details-form').on('submit', function(event) {
             event.preventDefault();

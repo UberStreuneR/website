@@ -71,7 +71,7 @@
         {% endfor %}
     {% endif %}{% endcomment %}
 {% block side_cart %}
-    {% if title != 'cart' %}
+    {% if title != 'cart' and title != 'checkout' and title != 'payment' %}
         {% include 'landing/side-cart.html' %}
     {% endif %}
 {% endblock %}

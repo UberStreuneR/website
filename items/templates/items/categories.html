@@ -4,7 +4,7 @@
 {% load pagination_tags %}
 {% load static %}
 {% block content %}
-<div class="d-flex justify-content-center align-items-start">
+<div class="d-flex justify-content-center align-items-start mt-3">
     <a class="btn btn-sm {% if tile_view == 'True' %}btn-dark{% else %}btn-outline-dark{% endif %}" href="{{ request.path}}?category={{ category }}&subcategory={{ subcategory }}&tile_view=True">Галерея</a>
     <a class="btn btn-sm {% if tile_view == 'True' %}btn-outline-dark {% else %}btn-dark {% endif %}mx-3" href="{{ request.path }}?category={{ category }}&subcategory={{ subcategory }}&tile_view=False">Список</a>
 </div>
@@ -85,11 +85,11 @@
         </div>
     </div>
 {% else %}
-    <div class="d-flex" id="listview-div">
+    <div class="d-flex justify-content-center my-2" id="listview-div">
         {% if not request.user_agent.is_mobile and not request.user_agent.is_tablet %}
 {#            {% include 'items/accordion.html' %}#}
         {% endif %}
-        <div class="d-flex flex-column mx-3">
+        <div class="d-flex flex-column">
             {% for item in items %}
                 <div class="d-flex align-items-center my-2">
                     <div class="d-flex align-items-center" id="listview-item-div-{{ item.article }}" style="visibility: hidden;">
@@ -438,7 +438,7 @@
                         }, 50);
                     }
                 });
-                decrementButton.addEventListener("touchstart", function() {
+                {% comment %}decrementButton.addEventListener("touchstart", function() {
                     activeId = id;
                     if (counter.value > 1){
                         counter.value = parseInt(counter.value) - 1;
@@ -459,7 +459,7 @@
                             }
                         }, 50);
                     }
-                });
+                });{% endcomment %}
                 incrementButton.addEventListener("mousedown", function() {
                     activeId = id;
                     counter.value = parseInt(counter.value) + 1;
@@ -473,7 +473,7 @@
                     update_cart_item_value(id, parseInt(tileview_counter.val()));
                     load_side_cart();
                 });
-                incrementButton.addEventListener("touchstart", function() {
+                {% comment %}incrementButton.addEventListener("touchstart", function() {
                     activeId = id;
                     counter.value = parseInt(counter.value) + 1;
                     increment_cart_item(id);
@@ -484,7 +484,7 @@
                             tileview_counter.val(parseInt(tileview_counter.val()) + 1);
                         }, 50);
                     }
-                });
+                });{% endcomment %}
                 document.addEventListener("mouseup", () => {
                     clearInterval(incrementInterval);
                     clearInterval(decrementInterval);
@@ -497,7 +497,7 @@
                         deleteAction = false;
                     }
                 });
-                document.addEventListener("touchend", () => {
+                {% comment %}document.addEventListener("touchend", () => {
                     clearInterval(incrementInterval);
                     clearInterval(decrementInterval);
                     clearInterval(incrementTimeout);
@@ -508,7 +508,7 @@
                         activeId = undefined;
                         deleteAction = false;
                     }
-                });
+                });{% endcomment %}
                 addButton.addEventListener("click", () => {
                     if (tileview_div.hasClass("d-none")) {
                         if (tileview_div.length) {

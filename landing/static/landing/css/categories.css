@@ -8,6 +8,7 @@
     width: auto;
 }
 #listview-div {
-    width: 75%;
-    margin: 0 auto;
+    width: auto;
+    margin: 0;
+    font-size: 0.7rem;
 }

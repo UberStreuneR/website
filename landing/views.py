@@ -72,21 +72,21 @@ class CartView(View):
         except:
             device = self.request.COOKIES['device']
             client, created = Client.objects.get_or_create(device=device)
-        cart = json.loads(self.request.COOKIES['cart'])
         order, created = Order.objects.get_or_create(client=client, complete=False)
-        for order_item in order.items.all():
-            order.items.remove(order_item)
-            order_item.delete()
-        for article, values in cart.items():
-            item = Item.objects.filter(article=article)[0]
-            order_item, created = OrderItem.objects.get_or_create(
-                item=item,
-                ordered=False
-            )
-            order_item.quantity = int(values['value'])
-            order_item.save()
-
-            order.items.add(order_item)
+        # cart = json.loads(self.request.COOKIES['cart'])
+        # for order_item in order.items.all():
+        #     order.items.remove(order_item)
+        #     order_item.delete()
+        # for article, values in cart.items():
+        #     item = Item.objects.filter(article=article)[0]
+        #     order_item, created = OrderItem.objects.get_or_create(
+        #         item=item,
+        #         ordered=False
+        #     )
+        #     order_item.quantity = int(values['value'])
+        #     order_item.save()
+        #
+        #     order.items.add(order_item)
         d_form = OrderDetailsForm()
         f_form = OrderFilesForm()
         context = {
@@ -112,10 +112,25 @@ class CheckoutView(View):
         except ObjectDoesNotExist:
             messages.error(self.request, "Добавь сначала что-нибудь в корзину")
             return redirect('/')
+        cart = json.loads(self.request.COOKIES['cart'])
+        for order_item in order.items.all():
+            order.items.remove(order_item)
+            order_item.delete()
+        for article, values in cart.items():
+            item = Item.objects.filter(article=article)[0]
+            order_item, created = OrderItem.objects.get_or_create(
+                item=item,
+                ordered=False
+            )
+            order_item.quantity = int(values['value'])
+            order_item.save()
+            order.items.add(order_item)
+
         if order.items.count() == 0:
             messages.error(self.request, "Добавь сначала что-нибудь в корзину")
             return redirect('/')
         context = {
+            'title': 'checkout',
             'form': form,
             'order': order
         }
@@ -230,6 +245,7 @@ class PaymentView(View):
             messages.error(self.request, "Добавь сначала что-нибудь в корзину")
             return redirect('/')
         context = {
+            'title': 'payment',
             'order': order,
             'price': order.get_cool_price(),
             'items': order.items.all()
