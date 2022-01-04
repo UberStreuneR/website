@@ -98,7 +98,7 @@ function cart_sum() {
     var result = items.reduce((total, item) => {
         return total + parseInt(item[1]['value']) * parseInt(item[1]['price']);
     }, 0);
-    return numberWithCommas(result);
+    return result;
     // console.log(items);
 }
 function load_side_cart() {

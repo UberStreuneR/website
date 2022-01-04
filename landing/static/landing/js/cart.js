@@ -57,6 +57,8 @@ function load_cart() {
         "                </tr>";
     }
     var sum_with_delivery = parseInt(cart_sum());
+    console.log(sum_with_delivery);
+    console.log(cart_sum());
     if (cart_sum() < 10000) {
         sum_with_delivery += 800;
     }
