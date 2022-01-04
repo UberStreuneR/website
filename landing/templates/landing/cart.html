@@ -19,7 +19,6 @@
         </table>
         <form action="{% url 'cart' %}" method="POST" id="details-form">
                 <div class="d-flex align-items-center justify-content-between" style="width: 900px;">
-
                     {% csrf_token %}
                     {{ d_form }}
                     <div class="d-flex flex-column align-items-center">
@@ -28,7 +27,6 @@
                         <label for="save-details-button" class="d-none" style="color: darkred;" id="save-details-error">Ошибка</label>
                     </div>
                 </div>
-
             </form>
         <form enctype="multipart/form-data" action="{% url 'upload-file-to-order' %}" method="POST">
             {% csrf_token %}
