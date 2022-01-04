@@ -86,7 +86,7 @@
     }
     .screen.mobile{
         margin: 0 10px;
-        padding: 10px;
+        /*padding: 10px;*/
         width: auto;
     }
     .screen.mobile .my-container {

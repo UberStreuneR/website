@@ -13,6 +13,12 @@
     padding: 0;
     overflow-y: hidden;
 }
+.side-cart-icon {
+    transition: opacity 150ms linear;
+}
+.side-cart-icon:hover {
+    opacity: 0.75;
+}
 /*#side-cart.mobile {*/
 /*    display: none;*/
 /*}*/

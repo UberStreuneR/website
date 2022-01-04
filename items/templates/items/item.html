@@ -18,9 +18,9 @@
         <div class="d-flex align-items-center mt-3" id="item-add">
             <form action="{% url 'add-to-cart' item.slug %}" method="POST">
                 {% csrf_token %}
-                <a style="margin-right: 5px;" id="decrement"><i class="fas fa-minus text-black"></i></a>
+                <a style="margin-right: 5px; user-select: none;" id="decrement"><i class="fas fa-minus text-black"></i></a>
                 {{ h_form }}
-                <a style="margin-left: 5px;" id="increment"><i class="fas fa-plus text-black"></i></a>
+                <a style="margin-left: 5px; user-select: none;" id="increment"><i class="fas fa-plus text-black"></i></a>
                 <button type="submit" class="btn btn-success">Добавить в корзину</button>
             </form>
 

@@ -48,7 +48,7 @@
                                         <div class="d-none" id="tileview_item_div_{{ item.article }}">
                                             <a style="margin-right: 5px; user-select: none;" id="decrement_{{ item.article }}"><i class="fas fa-minus text-black"></i></a>
                                             <input type="text" value="1" id="counter_{{ item.article }}" name="counter" class="text-center" style="width: 40px;">
-                                            <a style="margin-left: 5px; user-select: none;; margin-right: 10px;" id="increment_{{ item.article }}"><i class="fas fa-plus text-black"></i></a>
+                                            <a style="margin-left: 5px; user-select: none; margin-right: 10px;" id="increment_{{ item.article }}"><i class="fas fa-plus text-black"></i></a>
                                         </div>
                                     </div>
                                     <div id="slug_{{ item.article }}" style="display: none;">{{ item.slug }}</div>
@@ -63,7 +63,7 @@
                     </div>
                 {% endfor %}
             </div>
-            <div class="pagination mt-5 d-flex align-items-center">
+            <div class="pagination d-flex align-items-center justify-content-center">
                 {% if page_obj.has_previous %}
                     {% if page_obj|more_than_one_from_start %}
                         <a style="text-decoration: none; color: black;" href="{% url 'categories' company%}?category={{ category }}&subcategory={{ subcategory }}&page=1&tile_view={{ tile_view }}"><i class="fas fa-2x fa-backward"></i></a>
@@ -588,8 +588,9 @@
                     }
                 });
                 plus.on("mousedown", () => {
+                    console.log("mousedown");
                     activeId = id;
-                    if (get_cart_item_value(id)) {
+                    if (get_cart_item_value(activeId) !== undefined) {
                         j_counter.val(parseInt(j_counter.val()) + 1);
                         increment_cart_item(id);
                         load_side_cart();
@@ -601,28 +602,33 @@
                         }
                     }
                 });
-                plus.on("touchstart", () => {
+                {% comment %}plus.on("touchstart", () => {
+                    console.log("touchstart");
                     activeId = id;
-                    j_counter.val(parseInt(j_counter.val()) + 1);
-                    increment_cart_item(id);
-                    load_side_cart();
-                    incrementTimeout = setTimeout(holdIncrement, 300);
-                    function holdIncrement() {
-                        incrementInterval = setInterval(() => {
-                            j_counter.val(parseInt(j_counter.val()) + 1);
-                        }, 50);
+                    if (get_cart_item_value(activeId) !== undefined) {
+                        console.log("not undefined for: ", activeId);
+                        j_counter.val(parseInt(j_counter.val()) + 1);
+                        increment_cart_item(id);
+                        load_side_cart();
+                        incrementTimeout = setTimeout(holdIncrement, 300);
+                        function holdIncrement() {
+                            incrementInterval = setInterval(() => {
+                                j_counter.val(parseInt(j_counter.val()) + 1);
+                            }, 50);
+                        }
                     }
-                });
+                });{% endcomment %}
                 minus.on("mousedown", () => {
                     activeId = id;
                     if (parseInt(j_counter.val()) > 1){
                         j_counter.val(parseInt(j_counter.val()) - 1);
-                        decrement_cart_item(id);
+                        decrement_cart_item(activeId);
                     }
                     else if (parseInt(j_counter.val()) === 1) {
-                        delete_cart_item(id);
+                        delete_cart_item(activeId);
                         deleteAction = true;
                         item_div.css("visibility", "hidden");
+                        activeId = undefined;
                     }
                     load_side_cart();
                     decrementTimeout = setTimeout(holdDecrement, 300);
@@ -634,16 +640,17 @@
                         }, 50);
                     }
                 });
-                minus.on("touchstart", () => {
+                {% comment %}minus.on("touchstart", () => {
                     activeId = id;
                     if (parseInt(j_counter.val()) > 1){
                         j_counter.val(parseInt(j_counter.val()) - 1);
-                        decrement_cart_item(id);
+                        decrement_cart_item(activeId);
                     }
                     else if (parseInt(j_counter.val()) === 1) {
-                        delete_cart_item(id);
+                        delete_cart_item(activeId);
                         deleteAction = true;
                         item_div.css("visibility", "hidden");
+                        activeId = undefined;
                     }
                     load_side_cart();
                     decrementTimeout = setTimeout(holdDecrement, 300);
@@ -654,13 +661,14 @@
                             }
                         }, 50);
                     }
-                });
+                });{% endcomment %}
                 cross.on("click", () => {
                     deleteAction = true;
                     delete_cart_item(id);
                     load_side_cart();
                     j_counter.val(1);
                     item_div.css("visibility", "hidden");
+                    activeId = undefined;
                 });
                 j_counter.on("change", () => {
                     if (parseInt(j_counter.val())) {
@@ -683,7 +691,8 @@
                         deleteAction = false;
                     }
                 });
-                document.addEventListener("touchend", () => {
+                {% comment %}document.addEventListener("touchend", () => {
+                    console.log("touchend");
                     clearInterval(incrementInterval);
                     clearInterval(decrementInterval);
                     clearInterval(incrementTimeout);
@@ -694,7 +703,7 @@
                         activeId = undefined;
                         deleteAction = false;
                     }
-                });
+                });{% endcomment %}
             });
         {% endif %}
     </script>

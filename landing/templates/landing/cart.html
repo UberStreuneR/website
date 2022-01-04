@@ -23,9 +23,9 @@
                     <td>{{ order_item.item.subcategory }}</td>{% endcomment %}
                     <td style="width: 400px;">{{ order_item.item.name }}</td>
                     <td style="width: 140px;">
-                        <a style="margin-right: 5px;" id="decrement_{{ order_item.item.article }}"><i class="fas fa-minus text-black"></i></a>
+                        <a style="margin-right: 5px; user-select: none;" id="decrement_{{ order_item.item.article }}"><i class="fas fa-minus text-black"></i></a>
                         <input type="text" id="cart_counter_{{ order_item.item.article }}" name="cart-counter" value="{{ order_item.quantity }}" style="width: 50px; text-align: center;">
-                        <a style="margin-left: 5px; margin-right: 10px;" id="increment_{{ order_item.item.article }}"><i class="fas fa-plus text-black"></i></a>
+                        <a style="margin-left: 5px; margin-right: 10px; user-select: none;" id="increment_{{ order_item.item.article }}"><i class="fas fa-plus text-black"></i></a>
                         <div id="slug_{{ order_item.item.article }}" style="display: none;">{{ order_item.item.slug }}</div>
                     </td>
                     <td style="width: 150px;" id="order_item_sum_{{ order_item.item.article }}" colspan="2">{{ order_item.get_cool_price }}</td>

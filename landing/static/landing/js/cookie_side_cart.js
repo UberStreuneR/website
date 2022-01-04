@@ -3,6 +3,9 @@ script.src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js';
 script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
 console.log("cookie side cart script");
+
+var is_mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -71,6 +74,11 @@ function get_cart_items() {
     var dict_string = getCookie("cart");
     return JSON.parse(dict_string);
 }
+function get_amount_of_cart_items() {
+    var dict_string = getCookie("cart");
+    dict_string = JSON.parse(dict_string);
+    return Object.keys(dict_string).length;
+}
 function delete_cart_item(id) {
     var dict = get_cart_items();
     delete dict[id];
@@ -82,6 +90,9 @@ function clear_cart() {
 function load_side_cart() {
     var tbody = $("#table-body")[0];
     tbody.innerHTML = "";
+    var tbody_elem = $("#table-body");
+    // tbody_elem.css("overflow-y", "scroll");
+    // tbody_elem.css("height", "10rem");
     var cart = get_cart_items();
     var counter_span = $("#side-cart-count");
     if (Object.entries(cart).length > 0) {
@@ -108,14 +119,23 @@ function load_side_cart() {
         else {
             item_price = "цена по запросу"
         }
-
+        var input_width;
+        var price_string = "";
+        if (is_mobile) {
+            input_width = "2rem";
+        }
+        else {
+            input_width = "40px";
+            price_string = "<td>" + numberWithCommas(price) + "</td>";
+        }
         tbody.innerHTML += "<tr>" +
+        // tbody.append("<tr>" +
             "<th scope='row'>" + count + "</th>" +
-            "<td><a style='text-decoration: none; color: black;' href='" + url +  "'>" + name + "</a></td>" +
-                "<td>" + numberWithCommas(price) + "</td>" +
+            "<td><a style='text-decoration: none; color: black;' href='" + url +  "'>" + name + "</a></td>" + price_string +
+                // "<td>" + numberWithCommas(price) + "</td>" +
                 "<td><div>" + "<a style=\"margin-right: 5px;\" id=\"side_decrement_" + article + "\"><i class=\"fas fa-minus text-black\"></i></a>" +
-                "<input value=\"" + value + "\" id=\"side_counter_" + article + "\" name=\"side-cart-counter\" class=\"text-center side\" style=\"width: 40px;\">" +
-                "<a style=\"margin-left: 5px; margin-right: 10px;\" id=\"side_increment_" + article + "\"><i class=\"fas fa-plus text-black\"></i></a>" +
+                "<input value=\"" + value + "\" id=\"side_counter_" + article + "\" name=\"side-cart-counter\" class=\"text-center side\" style='width: " + input_width + "'>" +
+                "<a style=\"margin-left: 5px;\" id=\"side_increment_" + article + "\"><i class=\"fas fa-plus text-black\"></i></a>" +
                 "<div id=\"slug_" + article + "\" style=\"display: none;\">" + slug + "</div>" +
 
             "</div></td>" +
@@ -123,10 +143,9 @@ function load_side_cart() {
                 "<td><a id=\"side_cart_remove_" + article + "\"><i class=\"fas fa-times text-danger\"></i></a></td></tr>"
             ;
         count += 1;
-
     }
     var order_price = $("#order-price");
-    order_price.text("Итого: " + numberWithCommas(sum_price) + " руб.")
+    order_price.text("Итого: " + numberWithCommas(sum_price) + " руб.");
     var allCountersList = [].slice.call(document.querySelectorAll('input[name=side-cart-counter]'));
     var countersList = allCountersList.map((counter) => {
         var id = counter.getAttribute("id");

@@ -1,0 +1,25 @@
+#fixed-offcanvas-btn {
+    position: fixed;
+    top: 0;
+    right: 45%;
+    transition: transform .3s ease-in-out, opacity .3s ease-in-out;
+    z-index: 1041;
+    opacity: 0;
+}
+#fixed-offcanvas-btn.btn-visible{
+    opacity: 1;
+}
+#fixed-offcanvas-btn.btn-visible.button-activated {
+    transform: translateY(calc(10rem + 20px)); /* 10 rem is a sum of rows in the grid, 20px is a sum of paddings*/
+    /*transform: translateY(33vh);*/
+}
+.offcanvas-body {
+    padding: 0;
+}
+.offcanvas-top {
+    /*height: 33vh;*/
+    height: calc(10rem + 20px);
+}
+#dropdown-ul-offcanvas {
+    overflow-y: visible;
+}

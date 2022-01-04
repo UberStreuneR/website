@@ -1,31 +1,6 @@
 {% load static %}
 
-    <style>
-
-        #fixed-offcanvas-btn {
-            position: fixed;
-            top: 0;
-            right: 46%;
-            transition: transform .3s ease-in-out, opacity .3s ease-in-out;
-            z-index: 1041;
-            opacity: 0;
-        }
-        #fixed-offcanvas-btn.btn-visible{
-            opacity: 1;
-        }
-        #fixed-offcanvas-btn.btn-visible.button-activated {
-            transform: translateY(12.5rem);
-        }
-        .offcanvas-body {
-            padding: 0;
-        }
-        .offcanvas-top {
-            height: 33vh;
-        }
-        #dropdown-ul-offcanvas {
-            overflow-y: visible;
-        }
-    </style>
+<link rel="stylesheet" href="{% static 'landing/css/offcanvas-header.css' %}">
 
 {#</head>#}
 {#<body>#}

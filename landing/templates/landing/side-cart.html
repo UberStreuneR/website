@@ -1,10 +1,11 @@
 {% load cart_template_tags %}
 {% load static %}
+{% if not request.user_agent.is_mobile and not request.user_agent.is_tablet %}
 <div class="position-fixed d-flex align-items-start border-box-sizing" id="side-cart" style="top: 64px; right:0; z-index:10;">
-    <div id="buttons">
-        <a id="side-cart-icon" class="text-decoration-none text-white bg-dark" style="display: block; padding: 20px;">
+    <div id="buttons" class="bg-white">
+        <a id="side-cart-icon" class="text-decoration-none text-white" style="display: block; padding: 20px;">
             <div class="d-flex align-items-center">
-                <i class="fas fa-2x fa-shopping-cart nav-icon"></i>
+                <i class="fas fa-2x fa-shopping-cart side-cart-icon" style="color: black;"></i>
                 <span class="badge rounded-pill {% if request|cart_item_count > 0 %}bg-danger{% else %}bg-dark{% endif %}" id="side-cart-count"> {{ request|cart_item_count }} </span>
             </div>
         </a>
@@ -64,12 +65,133 @@
         cart_content.toggleClass("inactive");
     });
 </script>
-<script>
+{% comment %}<script>
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
         $("#side-cart").removeClass("d-flex").addClass("d-none");
     }
-</script>
+</script>{% endcomment %}
 <script src="{% static 'landing/js/cookie_side_cart.js' %}"></script>
 <script>load_side_cart()</script>
+{% else %}
+    <script src="{% static 'landing/js/cookie_side_cart.js' %}"></script>
 
+    {% comment %}<div id="buttons-mobile" class="bg-white">
+        <a id="side-cart-icon-mobile" class="text-decoration-none text-white">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-2x fa-shopping-cart side-cart-icon" style="color: black;"></i>
+                <span class="badge rounded-pill {% if request|cart_item_count > 0 %}bg-danger{% else %}bg-dark{% endif %}" id="side-cart-count"> {{ request|cart_item_count }} </span>
+            </div>
+        </a>
+    </div>{% endcomment %}
+    <button id="fixed-offcanvas-bottom-cart-btn" class="bg-white border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">
+        <a id="side-cart-icon-mobile" class="text-decoration-none text-white">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-2x fa-shopping-cart side-cart-icon" style="color: black;"></i>
+                <span class="badge rounded-pill {% if request|cart_item_count > 0 %}bg-danger{% else %}bg-dark{% endif %}" id="side-cart-count"> {{ request|cart_item_count }} </span>
+            </div>
+        </a>
+    </button>
+    <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
+        <div class="bg-white" id="cart-content-mobile">
+            <div id="table-div-mobile" style="height: 15rem; overflow-y: scroll;">
+            {% comment %}{% if request|cart_items != 0 %}{% endcomment %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th scope="col">Наименование</th>
+                            <th scope="col">Количество </th>
+                            <th class="float-end" scope="col">Сумма</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    {% if request|cart_items != 0 %}
+                        {% for order_item in request|cart_items %}
+                            <tr>
+                                <th scope="row">{{ forloop.counter }}</th>
+                                <td><a style="text-decoration: none; color: black;" href="{{ order_item.item.get_absolute_url }}">{{ order_item.item.name }}</a></td>
+                                <td>
+                                    <div>
+                                        <a style="margin-right: 5px;" id="side_decrement_{{ order_item.item.article }}"><i class="fas fa-minus text-black"></i></a>
+                                        {% comment %}{{ h_form }}{% endcomment %}
+                                        <input value="{{ order_item.quantity }}" id="side_counter_{{ order_item.item.article }}" name="side-cart-counter" class="text-center side my-input">
+                                        <a style="margin-left: 5px; margin-right: 10px;" id="side_increment_{{ order_item.item.article }}"><i class="fas fa-plus text-black"></i></a>
+                                        <div id="slug_{{ order_item.item.article }}" style="display: none;">{{ order_item.item.slug }}</div>
+                                    </div>
+                                </td>
+                                <td align="right" style="width: 100px;"><span id="order_item_sum_{{ order_item.item.article }}">{{ order_item.get_cool_price }}</span></td>
+                                <td><a id="side_cart_remove_{{ order_item.item.article }}"><i class="fas fa-times text-danger"></i></a></td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                    </tbody>
+                </table>
+            {% comment %}{% endif %}{% endcomment %}
+            </div>
+            <hr>
+                <div class="d-flex align-items-center mt-2">
+                    <a class="btn btn-sm btn-success mx-3" href="/cart/" id="go-to-cart">Оформить</a>
+                    <h4 id="order-price">Итого: {{ request|cart_sum }} руб.<a id="side-cart-save" class="btn btn-sm text-white" style="background-color: #c44620; margin-left: 10px; visibility: hidden;">Пересчитать</a></h4>
+                    <div class="d-none" id="hidden-side-cart-sum">{{ request|cart_sum }}</div>
+                </div>
+        </div>
+    </div>
+    <link rel="stylesheet" href="{% static 'landing/css/bottom-side-cart.css' %}">
+    <script>
+        let bottom_cart_button = $("#fixed-offcanvas-bottom-cart-btn");
+        load_side_cart();
+        bottom_cart_button.on("click", () => {
+            console.log("button toggle");
+            bottom_cart_button.toggleClass("button-activated");
+            if (bottom_cart_button.hasClass("button-activated")) {
+                bottom_cart_button.html("<i class=\"fas fa-arrow-down\"></i>")
+            }
+            else {
+                bottom_cart_button.html("<a id=\"side-cart-icon-mobile\" class=\"text-decoration-none text-white\">\n" +
+                    "            <div class=\"d-flex align-items-center\">\n" +
+                    "                <i class=\"fas fa-2x fa-shopping-cart side-cart-icon\" style=\"color: black;\"></i>\n" +
+                    "                <span class=\"badge rounded-pill\" id=\"side-cart-count\"></span>\n" +
+                    "            </div>\n" +
+                    "        </a>");
+                load_side_cart();
+            }
+        });
+        $(document).on("click", e => {
+            console.log(!e.target.matches("#fixed-offcanvas-bottom-cart-btn"), !e.target.matches(".fas.fa-shopping-cart"), bottom_cart_button.hasClass("button-activated"), e.target.closest(".offcanvas-bottom"), !e.target.matches(".text-danger"));
+            if (!e.target.matches("#fixed-offcanvas-bottom-cart-btn") && !e.target.matches(".fas.fa-shopping-cart") && bottom_cart_button.hasClass("button-activated") && (e.target.closest(".offcanvas-bottom") == null) && !e.target.matches(".text-danger")) { // element is not a button
+                console.log("document toggle");
+                bottom_cart_button.toggleClass("button-activated");                                                                                    // not an icon inside button
+                if (bottom_cart_button.hasClass("button-activated")) {                                                                               // button is activated
+                    bottom_cart_button.html("<i class=\"fas fa-arrow-up\"></i>")
+                }
+                else {
+                    console.log("hereee");
+                    bottom_cart_button.html("<a id=\"side-cart-icon-mobile\" class=\"text-decoration-none text-white\">\n" +
+                    "            <div class=\"d-flex align-items-center\">\n" +
+                    "                <i class=\"fas fa-2x fa-shopping-cart side-cart-icon\" style=\"color: black;\"></i>\n" +
+                    "                <span class=\"badge rounded-pill\" id=\"side-cart-count\">' + '</span>\n" +
+                    "            </div>\n" +
+                    "        </a>")
+                }
+            }
+            load_side_cart();
 
+        });
+        {% comment %}function update_count_span() {
+            var cart_item_count = get_amount_of_cart_items();
+            var side_cart_count_span = $("#side-cart-count");
+            side_cart_count_span.text(cart_item_count);
+            if (cart_item_count > 1) {
+                side_cart_count_span.removeClass("bg-dark").addClass("bg-danger");
+            }
+            else {
+                side_cart_count_span.removeClass("bg-danger").addClass("bg-dark");
+            }
+            return cart_item_count;
+        }{% endcomment %}
+    </script>
+    <script>
+
+    </script>
+<script>load_side_cart()</script>
+{% endif %}
