@@ -65,13 +65,13 @@ function load_cart() {
     if (is_mobile) {
         tbody.innerHTML += "<tr>\n" +
             "                    <td colspan=\"2\"><b><h3>Сумма заказа</h3></b></td>\n" +
-            "                    <td colspan=\"2\"><b><h3 id=\"order_price\">" + sum_with_delivery + " руб.</h3></b></td>\n" +
+            "                    <td colspan=\"2\"><b><h3 id=\"order_price\">" + numberWithCommas(sum_with_delivery) + " руб.</h3></b></td>\n" +
             "                </tr>";
     }
     else {
         tbody.innerHTML += "<tr>\n" +
         "                    <td colspan=\"3\"><b><h3>Сумма заказа</h3></b></td>\n" +
-        "                    <td colspan=\"2\"><b><h3 id=\"order_price\">" + sum_with_delivery + " руб.</h3></b></td>\n" +
+        "                    <td colspan=\"2\"><b><h3 id=\"order_price\">" + numberWithCommas(sum_with_delivery) + " руб.</h3></b></td>\n" +
         "                </tr>";
     }
 
