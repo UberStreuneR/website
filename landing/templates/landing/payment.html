@@ -18,6 +18,9 @@
                     {% for item in items %}
                         <li>{{ item.quantity }} x {{ item.item.name }} -- {{ item.get_cool_price }} руб.</li>
                     {% endfor %}
+                    {% if price < 10800 %}
+                        <li>Доставка в пределах МКАД -- 800 руб.</li>
+                    {% endif %}
                 </ul>
             {% comment %}<form id="confirm-payment"
                 method="post"
@@ -27,7 +30,8 @@
             </form>{% endcomment %}
             <div
                 id="alfa-payment-button"
-                data-token="osl65n7epa6eafnoop1a77maic"
+{#                data-token="osl65n7epa6eafnoop1a77maic"#}
+                data-token="qh95m15h106pir5njq3kn5l07r"
                 data-language="ru"
                 data-stages="1"
                 data-amount-format="rubli"
@@ -44,7 +48,7 @@
     <script
         id="alfa-payment-script"
         type="text/javascript"
-        src="https://testpay.alfabank.ru/assets/alfa-payment.js">
+        src="https://pay2.alfabank.ru/assets/alfa-payment.js">
     </script>
     <script>
         console.log("before interval");

@@ -32,7 +32,8 @@ function numberWithCommas(x) {
     if (x === -1) {
         return "нет в наличии";
     }
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    // return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
 function update_cart_item(id, values) {
     var dict_string = getCookie("cart");
@@ -101,6 +102,22 @@ function cart_sum() {
     // console.log(items);
 }
 function load_side_cart() {
+    if (is_mobile) {
+        if (get_amount_of_cart_items() === 0) {
+            $("#fixed-offcanvas-bottom-cart-btn").removeClass("d-flex").addClass("d-none");
+        }
+        else {
+            $("#fixed-offcanvas-bottom-cart-btn").removeClass("d-none").addClass("d-flex");
+        }
+    }
+    else {
+        if (get_amount_of_cart_items() === 0) {
+            $("#side-cart").removeClass("d-flex").addClass("d-none");
+        }
+        else {
+            $("#side-cart").removeClass("d-none").addClass("d-flex");
+        }
+    }
     var tbody = $("#table-body")[0];
     tbody.innerHTML = "";
     var tbody_elem = $("#table-body");
@@ -328,4 +345,5 @@ function load_side_cart() {
             }
         });
     });
+
 }

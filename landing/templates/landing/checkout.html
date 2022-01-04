@@ -10,14 +10,13 @@
                 <label for="name" class="form-label">Ваше имя</label>
                 <input type="text" name="name" class="form-control mb-2" id="name" placeholder="Иван Иванов">
                 <label for="email" class="form-label">Ваша почта</label>
-                <input type="email" name="email" class="form-control mb-2" id="email" placeholder="abc@gmail.com">
+                <input type="email" name="email" class="form-control mb-2" id="email" placeholder="abc@gmail.com" required>
                 <label for="phone" class="form-label">Ваш телефон</label>
-                <input type="text" name="phone" class="form-control" id="phone" placeholder="Ваш телефон">
-                <div class="d-flex justify-content-around mt-5">
-                    <a href="{% url 'cart' %}" class="btn btn-lg btn-danger">Назад</a>
-                    <button type="submit" class="btn btn-lg btn-success">Подтвердить</button>
+                <input type="text" name="phone" class="form-control" id="phone" placeholder="Ваш телефон" required>
+                <div class="d-flex justify-content-around mt-5"> {% comment %}оплатить картой, получить счет{% endcomment %}
+                    <button type="submit" class="btn" style="background-color: #247abf; color: white;" name="pay_card">Оплатить картой</button>
+                    <button type="submit" class="btn btn-success" name="get_check">Получить счёт</button>
                 </div>
-
             </form>
         </div>
     </div>

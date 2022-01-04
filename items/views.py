@@ -122,14 +122,15 @@ class CategoryListView(View):
 
         try :
             tile_view = self.request.GET['tile_view']
-            paginator = Paginator(items, 6)
-            try:
-                page_number = self.request.GET.get('page')
-            except KeyError:
-                page_number = 1
-            page_obj = paginator.get_page(page_number)
         except:
-            tile_view = False
+            tile_view = 'True'
+
+        paginator = Paginator(items, 6)
+        try:
+            page_number = self.request.GET.get('page')
+        except KeyError:
+            page_number = 1
+        page_obj = paginator.get_page(page_number)
 
         s_form = SearchForm()
         h_form = HowMuchCounterForm()

@@ -48,16 +48,28 @@ function load_cart() {
         ;
         count += 1;
     }
+    if (sum_price < 10000) {
+        tbody.innerHTML +=  "<tr>\n" +
+            "<th scope='row'>" + count + "</th>" +
+        "                    <td colspan=\"3\">Доставка в пределах МКАД для заказа до 10000 руб.</td>\n" +
+        "                    <td align='right' colspan=\"1\">800</td>\n" +
+            "<td style='visibility: hidden;'><a style='pointer-events: none;'><i class=\"fas fa-times text-danger\"></i></a></td></tr>" +
+        "                </tr>";
+    }
+    var sum_with_delivery = parseInt(cart_sum());
+    if (cart_sum() < 10000) {
+        sum_with_delivery += 800;
+    }
     if (is_mobile) {
         tbody.innerHTML += "<tr>\n" +
-        "                    <td colspan=\"2\"><b><h3>Сумма заказа</h3></b></td>\n" +
-        "                    <td colspan=\"2\"><b><h3 id=\"order_price\">" + cart_sum() + " руб.</h3></b></td>\n" +
-        "                </tr>";
+            "                    <td colspan=\"2\"><b><h3>Сумма заказа</h3></b></td>\n" +
+            "                    <td colspan=\"2\"><b><h3 id=\"order_price\">" + sum_with_delivery + " руб.</h3></b></td>\n" +
+            "                </tr>";
     }
     else {
         tbody.innerHTML += "<tr>\n" +
         "                    <td colspan=\"3\"><b><h3>Сумма заказа</h3></b></td>\n" +
-        "                    <td colspan=\"2\"><b><h3 id=\"order_price\">" + cart_sum() + " руб.</h3></b></td>\n" +
+        "                    <td colspan=\"2\"><b><h3 id=\"order_price\">" + sum_with_delivery + " руб.</h3></b></td>\n" +
         "                </tr>";
     }
 

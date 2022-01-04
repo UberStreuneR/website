@@ -137,8 +137,10 @@ class CheckoutView(View):
         return render(self.request, "landing/checkout.html", context)
 
     def post(self, *args, **kwargs):
+
         form = CheckoutForm(self.request.POST)
         if form.is_valid():
+
             try:
                 client = self.request.user.client
             except:
@@ -225,7 +227,12 @@ class CheckoutView(View):
                 except Exception as e:
                     print('Failed to delete %s. Reason: %s' % (file_path, e))
 
-            return redirect('/payment/')
+            if 'pay_card' in self.request.POST:
+                return redirect('/payment/')
+            elif 'get_check' in self.request.POST:
+                order.paid = True
+                order.save()
+                return redirect('/')
 
         else:
             messages.error(self.request, "Введите корректные данные")
@@ -244,10 +251,13 @@ class PaymentView(View):
         except ObjectDoesNotExist:
             messages.error(self.request, "Добавь сначала что-нибудь в корзину")
             return redirect('/')
+        price = order.get_total()
+        if price < 10000:
+            price += 800
         context = {
             'title': 'payment',
             'order': order,
-            'price': order.get_cool_price(),
+            'price': int(price),
             'items': order.items.all()
         }
 
@@ -264,6 +274,7 @@ class PaymentView(View):
         except ObjectDoesNotExist:
             messages.error(self.request, "Добавь сначала что-нибудь в корзину")
             return redirect('/')
+
 
 
 class PaymentInfoView(View):
