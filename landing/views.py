@@ -13,6 +13,7 @@ from items.forms import SearchForm, HowMuchCounterForm
 from .forms import CheckoutForm, OrderDetailsForm, OrderFilesForm, PaymentDetailsForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import EmailMessage
+from django.http import HttpResponseRedirect
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 import os, shutil
@@ -226,13 +227,16 @@ class CheckoutView(View):
                         shutil.rmtree(file_path)
                 except Exception as e:
                     print('Failed to delete %s. Reason: %s' % (file_path, e))
-
             if 'pay_card' in self.request.POST:
-                return redirect('/payment/')
+                response = HttpResponseRedirect('/payment/')
+                response.delete_cookie("cart")
+                return response
             elif 'get_check' in self.request.POST:
                 order.paid = True
                 order.save()
-                return redirect('/')
+                response = HttpResponseRedirect('/')
+                response.delete_cookie("cart")
+                return response
 
         else:
             messages.error(self.request, "Введите корректные данные")
