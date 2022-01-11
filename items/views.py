@@ -10,7 +10,7 @@ from django.contrib import messages
 from .forms import ExcelItemsForm, SearchForm, HowMuchCounterForm
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 import pandas as pd
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.templatetags.static import static
 from landing.forms import OrderDetailsForm, OrderFilesForm
 from landing.serializers import OrderSerializer, ItemSerializer, OrderItemSerializer
@@ -377,36 +377,58 @@ def add_item_to_cart(request, slug):
             device = request.COOKIES['device']
             client, created = Client.objects.get_or_create(device=device)
 
-        order, created = Order.objects.get_or_create(client=client, complete=False)
-        order_item, created = OrderItem.objects.get_or_create(
-            item=item,
-            ordered=False
-        )
+        cart_cookie = request.COOKIES['cart']
+        response = HttpResponseRedirect(f"/items/{item.company}/category/?category={item.category}&subcategory={item.subcategory}")
+        loaded_cookie = json.loads(cart_cookie)
+        loaded_cookie[item.article] = {'value': str(by_how_much), 'name': item.name.strip(), 'price': int(item.price), 'url': item.get_absolute_url(), 'slug': item.slug}
+        # for key, value in loaded_cookie.items():
+        #     print(key, value)
+        print()
+        print()
+        print()
+        print()
+        print(json.dumps(loaded_cookie, ensure_ascii=False).encode("utf-8").decode('utf-8'))
+        print()
+        print(loaded_cookie)
+        print()
+        print()
+        print()
+        print()
+        response.set_cookie("cart", "русский язык можно спвасибо")
+        # response.set_cookie("cart", json.dumps(loaded_cookie, ensure_ascii=False).encode("utf-8").decode('utf-8'))
+        return response
 
-        try:
-            redirect_to = request.GET['redirect_to']
-        except:
-            redirect_to = None
+
+        # order, created = Order.objects.get_or_create(client=client, complete=False)
+        # order_item, created = OrderItem.objects.get_or_create(
+        #     item=item,
+        #     ordered=False
+        # )
+
+        # try:
+        #     redirect_to = request.GET['redirect_to']
+        # except:
+        #     redirect_to = None
 
 
-        if order.items.filter(item__slug=slug).exists():
-            order_item.quantity += by_how_much
-            order_item.save()
-            messages.success(request, "Количество товара в корзине было обновлено")
-
-            if redirect_to is not None:
-                return redirect(redirect_to)
-            return redirect(f"/items/{item.company}/category/?category={item.category}&subcategory={item.subcategory}")
-        else:
-            order.items.add(order_item)
-            order_item.quantity += by_how_much - 1
-            order_item.save()
-            messages.success(request, "Товар был добавлен в корзину")
-            # TODO
-            # return redirect("comm", slug=slug)
-            if redirect_to is not None:
-                return redirect(redirect_to)
-            return redirect(f"/items/{item.company}/category/?category={item.category}&subcategory={item.subcategory}")
+        # if order.items.filter(item__slug=slug).exists():
+        #     order_item.quantity += by_how_much
+        #     order_item.save()
+        #     messages.success(request, "Количество товара в корзине было обновлено")
+        #
+        #     if redirect_to is not None:
+        #         return redirect(redirect_to)
+        #     return redirect(f"/items/{item.company}/category/?category={item.category}&subcategory={item.subcategory}")
+        # else:
+        #     order.items.add(order_item)
+        #     order_item.quantity += by_how_much - 1
+        #     order_item.save()
+        #     messages.success(request, "Товар был добавлен в корзину")
+        #     # TODO
+        #     # return redirect("comm", slug=slug)
+        #     if redirect_to is not None:
+        #         return redirect(redirect_to)
+        #     return redirect(f"/items/{item.company}/category/?category={item.category}&subcategory={item.subcategory}")
 
 
 def discard_cart(request):

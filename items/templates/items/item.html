@@ -10,20 +10,27 @@
         </div>
         <span id="item-name">{{ item.name }} арт.{{ item.article }}</span>
         {% comment %}<span style="color: grey; font-size: 20px;">Артикул: {{ item.article }}</span>{% endcomment %}
-        <div id="item-price">
+        <div id="item-price" style="margin-top: 1rem;">
             <span id="item-price-span">{{ item.get_cool_price }}</span>
             <label for="item-price-span" style="color: grey;">цена за штуку</label>
         </div>
         {% if item.weight > 0 %}<span id="item-weight">Вес: {{ item.weight }} кг</span>{% endif %}
         <div class="d-flex align-items-center mt-3" id="item-add">
-            <form action="{% url 'add-to-cart' item.slug %}" method="POST">
-                {% csrf_token %}
-                <a style="margin-right: 5px; user-select: none;" id="decrement"><i class="fas fa-minus text-black"></i></a>
-                {{ h_form }}
-                <a style="margin-left: 5px; user-select: none;" id="increment"><i class="fas fa-plus text-black"></i></a>
-                <button type="submit" class="btn btn-success">Добавить в корзину</button>
-            </form>
-
+{#            <form action="{% url 'add-to-cart' item.slug %}" method="POST">#}
+{#                {% csrf_token %}#}
+{#                <a style="margin-right: 5px; user-select: none;" id="decrement"><i class="fas fa-minus text-black"></i></a>#}
+{#                {{ h_form }}#}
+{#                <a style="margin-left: 5px; margin-right: 5px; user-select: none;" id="increment"><i class="fas fa-plus text-black"></i></a>#}
+{#                <button type="submit" class="btn btn-sm" style="background-color: #247abf; color: white;">Добавить в корзину</button>#}
+{#            </form>#}
+            <a style="margin-right: 5px; user-select: none;" id="decrement"><i class="fas fa-minus text-black"></i></a>
+            <input type="text" value="1" id="item_counter_{{ item.article }}" name="item-counter" class="text-center" style="width: 40px;">
+            <a style="margin-left: 5px; margin-right: 5px; user-select: none;" id="increment"><i class="fas fa-plus text-black"></i></a>
+            <button id="add_button" class="btn btn-sm" style="background-color: #247abf; color: white;">Добавить в корзину</button>
+            <div class="d-none" id="itemview_price_{{ item.article }}">{{ item.price }}</div>
+            <div class="d-none" id="itemview_url_{{ item.article }}">{{ item.get_absolute_url }}</div>
+            <div class="d-none" id="itemview_slug_{{ item.article }}">{{ item.slug }}</div>
+            <div class="d-none" id="itemview_name_{{ item.article }}">{{ item.name }}</div>
         </div>
         {% if welcome %}
         <div class="d-flex flex-column" id="item-manu-div">
@@ -57,11 +64,14 @@
     </div>
     {% endif %}
 </div>
-
+<script src="{% static 'landing/js/cookie_side_cart.js' %}"></script>
 <script>
     var decrementButton = document.querySelector("a[id=decrement]");
     var incrementButton = document.querySelector("a[id=increment]");
-    var counter = document.querySelector("input[id=counter]");
+    var counter = document.querySelector("input[name=item-counter]");
+    var addButton = document.querySelector("#add_button");
+    var id = counter.getAttribute("id").slice(13);
+    console.log(id);
     decrementButton.addEventListener("click", function() {
         if (counter.value > 1){
             counter.value = parseInt(counter.value) - 1;
@@ -69,6 +79,22 @@
     });
     incrementButton.addEventListener("click", function() {
         counter.value = parseInt(counter.value) + 1;
-    })
+    });
+    addButton.addEventListener("click", () => {
+        var values = {}; // value, name, price, url, slug
+        var value = counter.value;
+        var name = $("#itemview_name_" + id).text();
+        var price = parseInt($("#itemview_price_" + id).text());
+        var url = $("#itemview_url_" + id).text();
+        var slug = $("#itemview_slug_" + id).text();
+        values['value'] = value;
+        values['name'] = name;
+        values['price'] = price;
+        values['url'] = url;
+        values['slug'] = slug;
+
+        update_cart_item(id, values);
+        load_side_cart();
+    });
 </script>
 {% endblock %}

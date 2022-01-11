@@ -13,7 +13,7 @@ from items.forms import SearchForm, HowMuchCounterForm
 from .forms import CheckoutForm, OrderDetailsForm, OrderFilesForm, PaymentDetailsForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import EmailMessage
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 import os, shutil
@@ -315,24 +315,17 @@ class PaymentInfoView(View):
 
 class TestView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
-        dict = {
-                'orderNumber': "47",
-                'userName': 'nvsnab-api',
-                'password': 'nvsnab*?1',
-                'amount': 1000,
-                'returnUrl': 'http://localhost:8000/'}
-
-        # r = requests.get("https://web.rbsuat.com/ab/rest/getOrderStatusExtended.do", data=dict)
-        r = requests.post("https://web.rbsuat.com/ab/rest/getOrderStatusExtended.do", data=dict)
+        cookie = self.request.COOKIES['cart']
         print()
         print()
         print()
-        print(r.content)
-        print(r)
-        print(r.text)
-        print(json.loads(r.text)['errorMessage'])
+        print(cookie)
         print()
         print()
+        print()
+        # response = HttpResponseRedirect("/cart/")
+        # response.set_cookie("cart", "ahahah")
+        # return response
         context = {
             's_form': SearchForm()
         }
