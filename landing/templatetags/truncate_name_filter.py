@@ -7,4 +7,4 @@ def truncate_name(name):
 
 @register.filter
 def truncate_name_payment(name):
-    return name[:80] + "..."
+    return name[:30] + "..."
