@@ -173,15 +173,6 @@ class DeleteCompanyView(UserPassesTestMixin, LoginRequiredMixin, View):
 
 class SearchView(View):
     def get(self, *args, **kwargs):
-        print()
-        print()
-        print()
-        print()
-        print(self.request.GET)
-        print()
-        print()
-        print()
-        print()
         try:
             text = self.request.GET['text']
             if " " in text:
@@ -712,11 +703,17 @@ def ajax_get_all_partners(request):
         partners = Partner.objects.all()
         partners_list = []
         for partner in partners:
+            categories = []
+            for category in Category.objects.filter(company=partner.name):
+                first = category.subcategories.first()
+                categories.append({category.name: f"{first.get_absolute_url()}?category={first.category.name}&subcategory={first.name}"})
+                # categories.append({category.name: f"{category.subcategories.first().name}"})
             if partner.name not in companies:
                 name = translit(partner.name, 'ru').replace("_", " ")
             else:
                 name = partner.name
-            partners_list.append({name: f'/items/{partner.name}'})
+            partners_list.append({name: f'/items/{partner.name}', "categories": categories})
+            print(categories)
         return JsonResponse({'partners': partners_list})
 
 def update_order_from_listview(request):

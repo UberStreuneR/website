@@ -25,34 +25,26 @@
             <button class="btn btn-sm btn-light dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
             Каталог
             </button>
-            <ul class="dropdown-menu" id="dropdown-ul" aria-labelledby="dropdownMenuButton1">
-            </ul>
+
+
+            {% if request.user_agent.is_mobile or request.user_agent.is_tablet %}
+                <ul class="dropdown-menu" id="dropdown-ul" aria-labelledby="dropdownMenuButton1">
+                </ul>
+            {% else %}
+                <div class="dropdown-menu" id="dropdown-div" aria-labelledby="dropdownMenuButton1">
+                    <div style="height: 80vh; padding: 2rem 5rem; box-sizing: border-box;" id="dropdown-content">
+                        <div class="row" style="width: 80vw;" id="dropdown-row">
+                            <div class="col-4 d-flex flex-column" id="dropdown-column-0"></div>
+                            <div class="col-4 d-flex flex-column" id="dropdown-column-1"></div>
+                            <div class="col-4 d-flex flex-column" id="dropdown-column-2"></div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
         </div>
         <a id="about" class="btn btn-sm btn-light" href="/about/">О нас</a>
         <a id="contacts" class="btn btn-sm btn-light" href="/contacts/">Контакты</a>
     </div>
 </div>
-{##}
-{#<script>#}
-{#    $.ajax({#}
-{#        url: '/ajax-get-all-partners/',#}
-{#        type: 'GET',#}
-{#        success : function(json) {#}
-{#            for (let i = 0; i < json['partners'].length; i++){#}
-{#                var key = Object.keys(json['partners'][i])[0];#}
-{#                var value = Object.values(json['partners'][i])[0];#}
-{#                $("#dropdown-ul")[0].innerHTML += "<li><a class=\"dropdown-item text-decoration-none\" href=\"" + value + "\">" + key + "</a></li>";#}
-{#            }#}
-{#        },#}
-{#        error : function(xhr, errmsg, err){#}
-{#            console.log(xhr.status + ": " + xhr.responseText);#}
-{#        }#}
-{#    });#}
-{##}
-{#</script>#}
-{#<script>#}
-{#    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {#}
-{#        $("html").addClass("mobile");#}
-{#        $(".screen").addClass("mobile");#}
-{#    }#}
-{#</script>#}
+<script src="{% static 'landing/js/header.js' %}"></script>
+<script>load_header_dropdown()</script>

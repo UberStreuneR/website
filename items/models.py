@@ -77,6 +77,9 @@ class Subcategory(models.Model):
     def __str__(self):
         return f"{self.name}, {self.comment}, subcategory"
 
+    def get_absolute_url(self):
+        return reverse("categories", kwargs={'company': self.category.company})
+
     class Meta:
         verbose_name_plural = 'subcategories'
 

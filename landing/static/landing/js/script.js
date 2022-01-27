@@ -4,13 +4,6 @@ function get_order_items(){
         type: 'GET',
         success : function(json) {
             console.log(json);
-            /*if (json['empty'] == 'True'){
-                console.log("Empty");
-                $("#side-cart-count").text("0").removeClass("bg-danger").addClass("bg-dark");
-            }
-            else {
-                console.log("Not empty");
-            }*/
             if ($("#table-body").length){
                 $("#table-body")[0].innerHTML = "";
             }
