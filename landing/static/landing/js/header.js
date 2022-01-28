@@ -43,7 +43,7 @@ function load_header_dropdown() {
                     // console.log(j, category_key, category_value);
                     flex.innerHTML += "<a class=\"text-decoration-none text-black px-0\" href=\"" + category_value + "\">" + category_key + "</a>";
                 }
-                div.innerHTML += "<h3 class='mb-1'>" + key + "</h3>";
+                div.innerHTML += "<h5 class='mb-1'>" + key + "</h5>";
                 div.append(flex);
             }
         },
